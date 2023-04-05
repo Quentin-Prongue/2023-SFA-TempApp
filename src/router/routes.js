@@ -1,22 +1,25 @@
-
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
+        // Route de l'accueil
         path: '',
         component: () => import('pages/IndexPage.vue')
       },
       {
+        // Route de connexion
         path: '/login',
         component: () => import('pages/ConnexionPage.vue')
       },
       {
+        // Route des capteurs
         path: '/sensors',
         component: () => import('pages/SensorsPage.vue')
       },
       {
+        // Route des salles
         path: '/rooms',
         component: () => import('pages/RoomsPage.vue')
       }

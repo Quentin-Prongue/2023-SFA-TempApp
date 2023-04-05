@@ -2,7 +2,7 @@
 import { Dialog } from 'quasar'
 
 // Exporte notre fonction
-export function afficherMessageErreur (message, erreurs) {
+export function displayErrorMessage (message, erreurs) {
   // Si un tableau d'erreurs est envoyé, crée une liste <ul> avec les erreurs
   if (Array.isArray(erreurs) && erreurs.length) {
     message += '<ul><li>' + erreurs.join('</li><li>') + '</li></ul>'

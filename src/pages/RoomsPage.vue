@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <h1>Page des salles</h1>
-    <!-- Spinner -->
+    <!-- SPINNER -->
     <div
       v-if="!roomsLoaded"
       class="q-pa-lg text-center"
@@ -9,6 +9,7 @@
       <q-spinner-radio color="primary" size="4em"/>
     </div>
 
+    <!-- COMPOSANT SALLE -->
     <div class="row">
       <class-component
         v-for="room in rooms"
@@ -16,6 +17,7 @@
         :room="room">
       </class-component>
 
+      <!-- SI AUCUNE SALLE -->
       <p v-if="!roomsLoaded" v-show="roomsLoaded">Aucun capteurs</p>
     </div>
   </q-page>
@@ -30,6 +32,7 @@ export default defineComponent({
   computed: {
     // Mappage des getters
     ...mapGetters('rooms', ['rooms']),
+    // Mappage des données
     ...mapState('rooms', ['roomsLoaded'])
   },
   methods: {

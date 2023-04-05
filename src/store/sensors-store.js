@@ -1,5 +1,5 @@
 import { api } from 'boot/axios'
-import { afficherMessageErreur } from 'src/functions/message-erreur'
+import { displayErrorMessage } from 'src/functions/error-message'
 
 // State : données du magasin
 const state = {
@@ -38,7 +38,7 @@ const actions = {
         commit('SET_SENSORS_LOADED', true)
       })
       .catch(function (error) {
-        afficherMessageErreur(
+        displayErrorMessage(
           'Erreur lors de la récupération des capteurs !'
         )
         throw error

@@ -1,14 +1,15 @@
 <template>
+  <!-- TABLEAU DES MESURES -->
   <q-table
-    :rows="this.measures.slice(0, this.pagination.rowsPerPage)"
-    :columns="columns"
-    row-key="id"
-    :loading="loading"
     v-model:pagination="pagination"
-    @update:pagination="onUpdatePagination"
-    :rows-per-page-options="[3, 5, 10]"
-    :rows-per-page-label="'Lignes par page'"
+    :columns="columns"
+    :loading="loading"
     :no-data-label="'Aucune donnée à afficher'"
+    :rows="this.measures.slice(0, this.pagination.rowsPerPage)"
+    :rows-per-page-label="'Lignes par page'"
+    :rows-per-page-options="[3, 5, 10]"
+    row-key="id"
+    @update:pagination="onUpdatePagination"
   >
   </q-table>
 </template>
@@ -25,12 +26,14 @@ export default {
   data () {
     return {
       loading: false,
+      // Pagination
       pagination: {
         sortBy: 'date',
         descending: true,
         page: 1,
         rowsPerPage: 5
       },
+      // Toutes les colonnes
       columns: [
         {
           // Colonne date

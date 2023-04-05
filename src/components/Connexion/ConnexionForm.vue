@@ -1,28 +1,32 @@
 <template>
+  <!-- FORMULAIRE -->
   <q-form @submit.prevent="submitForm">
+    <!-- EMAIL -->
     <q-input
-      outlined
       v-model="form.email"
-      label="E-mail"
-      class="q-my-md"
       :rules="[val => validateEmail(val) || 'Email invalide']"
-      lazy-rules
-    />
-
-    <q-input
-      type="password"
-      outlined
-      v-model="form.password"
-      label="Mot de passe"
       class="q-my-md"
-      :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
+      label="E-mail"
       lazy-rules
+      outlined
     />
 
+    <!-- MOT DE PASSE -->
+    <q-input
+      v-model="form.password"
+      :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
+      class="q-my-md"
+      label="Mot de passe"
+      lazy-rules
+      outlined
+      type="password"
+    />
+
+    <!-- BOUTON SE CONNECTER -->
     <q-btn
-      type="submit"
       color="primary"
       label="Se connecter"
+      type="submit"
     />
   </q-form>
 </template>

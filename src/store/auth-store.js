@@ -1,5 +1,5 @@
 import { api } from 'boot/axios'
-import { afficherMessageErreur } from 'src/functions/message-erreur'
+import { displayErrorMessage } from 'src/functions/error-message'
 import { Loading, LocalStorage, QSpinnerCube } from 'quasar'
 
 // State : données du magasin
@@ -40,7 +40,7 @@ const actions = {
       })
       .catch(function (error) {
         Loading.hide()
-        afficherMessageErreur(
+        displayErrorMessage(
           'Connexion impossible !',
           Object.values(error.response.data)
         )
@@ -78,7 +78,7 @@ const actions = {
     // Déconnexion de l'API
     api.post('/logout', {}, config)
       .catch(function (error) {
-        afficherMessageErreur(
+        displayErrorMessage(
           'Erreur lors de la déconnexion'
         )
         throw error

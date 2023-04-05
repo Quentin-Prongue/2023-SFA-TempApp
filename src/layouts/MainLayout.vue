@@ -3,11 +3,11 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
-          flat
-          dense
-          round
-          icon="menu"
           aria-label="Menu"
+          dense
+          flat
+          icon="menu"
+          round
           @click="toggleLeftDrawer"
         />
         <q-toolbar-title class="absolute-center">
@@ -16,16 +16,16 @@
         <!-- BOUTON CONNEXION -->
         <q-btn
           v-if="!user"
-          to="/login"
+          class="absolute-right"
           flat
           icon-right="account_circle"
           label="Se connecter"
-          class="absolute-right"
+          to="/login"
         />
 
         <!-- BOUTON GÉRER COMPTE -->
         <div class="q-pa-md">
-          <q-btn flat rounded icon="manage_accounts" class="absolute-right" v-if="user">
+          <q-btn v-if="user" class="absolute-right" flat icon="manage_accounts" rounded>
             <q-menu>
               <div class="row no-wrap q-pa-md">
                 <div class="column">
@@ -33,39 +33,42 @@
                   <div class="cursor-pointer">
                     Réinitialiser mot de passe
                     <q-popup-edit
-                      buttons
-                      label-set="Save"
-                      label-cancel="Close"
                       v-slot="scope"
+                      buttons
+                      label-cancel="Close"
+                      label-set="Save"
                     >
+                      <!-- INPUT MOT DE PASSE -->
                       <q-input
-                        type="password"
                         v-model.number="scope.value"
-                        dense
                         autofocus
+                        dense
+                        type="password"
                         @keyup.enter="scope.set"
                       />
                     </q-popup-edit>
                   </div>
                 </div>
 
-                <q-separator vertical inset class="q-mx-lg"/>
+                <q-separator class="q-mx-lg" inset vertical/>
 
+                <!-- PHOTO DE PROFIL -->
                 <div class="column items-center">
                   <q-avatar size="72px">
                     <img :src="user.photo" alt="Photo de profil">
                   </q-avatar>
 
+                  <!-- NOM COMPLET -->
                   <div class="text-subtitle1 q-mt-md q-mb-xs">{{ fullName }}</div>
 
                   <!-- BOUTON DÉCONNEXION -->
                   <q-btn
-                    @click="logout"
+                    v-close-popup
                     color="primary"
                     label="Se déconnecter"
                     push
                     size="sm"
-                    v-close-popup
+                    @click="logout"
                   />
 
                 </div>
@@ -77,18 +80,18 @@
     </q-header>
 
     <q-drawer
-      breakpoint="767"
       v-model="leftDrawerOpen"
-      show-if-above
       bordered
-      width="250"
-      dark
+      breakpoint="767"
       class="bg-primary"
+      dark
+      show-if-above
+      width="250"
     >
       <q-list>
         <q-item-label
-          header
           class="text-white"
+          header
         >
           Menu de navigation
         </q-item-label>
@@ -96,9 +99,9 @@
           v-for="link in links"
           :key="link.id"
           :to="link.path"
-          exact
-          clickable
           class="text-grey-4"
+          clickable
+          exact
         >
           <q-item-section avatar>
             <q-icon :name="link.icon"/>
@@ -120,9 +123,9 @@
         <q-route-tab
           v-for="link in links"
           :key="link.id"
-          :to="link.route"
           :icon="link.icon"
           :label="link.text"
+          :to="link.route"
           exact
         />
       </q-tabs>
@@ -142,18 +145,21 @@ export default defineComponent({
       // Tableau des liens de l'application
       links: [
         {
+          // Lien pour l'accueil
           id: 1,
           text: 'Accueil',
           icon: 'home',
           path: '/'
         },
         {
+          // Lien pour les capteurs
           id: 2,
           text: 'Capteurs',
           icon: 'sensors',
           path: '/sensors'
         },
         {
+          // Lien pour les salles
           id: 3,
           text: 'Salles',
           icon: 'meeting_room',
@@ -182,7 +188,11 @@ export default defineComponent({
     }
   },
   methods: {
+    // Mappage des actions
     ...mapActions('auth', ['disconnectUser']),
+    /**
+     * Permet de déconnecter l'utilisateur
+     */
     logout () {
       Dialog.create({
         title: 'Déconnexion',

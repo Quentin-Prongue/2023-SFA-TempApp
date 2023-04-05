@@ -6,17 +6,17 @@
       </div>
 
       <div class="text-h2" style="opacity:.4">
-        Oops. Nothing here...
+        Oups. Rien ici...
       </div>
 
       <q-btn
         class="q-mt-xl"
         color="white"
-        text-color="blue"
-        unelevated
-        to="/"
-        label="Go Home"
+        label="Aller à l'accueil"
         no-caps
+        text-color="blue"
+        to="/"
+        unelevated
       />
     </div>
   </div>
