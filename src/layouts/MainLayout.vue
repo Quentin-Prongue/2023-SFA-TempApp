@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh lpr fFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -10,107 +10,135 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-
-        <q-toolbar-title>
-          Quasar App
+        <q-toolbar-title class="absolute-center">
+          Temp App
         </q-toolbar-title>
+        <q-btn
+          v-if="!user"
+          to="/login"
+          flat
+          icon-right="account_circle"
+          label="Se connecter"
+          class="absolute-right"
+        />
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn
+          v-else
+          @click="disconnectUser"
+          flat
+          icon-right="account_circle"
+          label="Se déconnecter"
+          class="absolute-right"
+        />
       </q-toolbar>
     </q-header>
 
     <q-drawer
+      breakpoint="767"
       v-model="leftDrawerOpen"
       show-if-above
       bordered
+      width="250"
+      dark
+      class="bg-primary"
     >
       <q-list>
         <q-item-label
           header
+          class="text-white"
         >
-          Essential Links
+          Menu de navigation
         </q-item-label>
+        <q-item
+          v-for="link in links"
+          :key="link.id"
+          :to="link.path"
+          exact
+          clickable
+          class="text-grey-4"
+        >
+          <q-item-section avatar>
+            <q-icon :name="link.icon"/>
+          </q-item-section>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+          <q-item-section>
+            <q-item-label>{{ link.text }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
+
+    <q-footer elevated>
+      <q-tabs>
+        <q-route-tab
+          v-for="link in links"
+          :key="link.id"
+          :to="link.route"
+          :icon="link.icon"
+          :label="link.text"
+          exact
+        />
+      </q-tabs>
+    </q-footer>
   </q-layout>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+import { mapState, mapActions } from 'vuex'
 
 export default defineComponent({
   name: 'MainLayout',
-
-  components: {
-    EssentialLink
+  data () {
+    return {
+      // Tableau des liens de l'application
+      links: [
+        {
+          id: 1,
+          text: '...',
+          icon: 'list',
+          path: '/'
+        },
+        {
+          id: 2,
+          text: '...',
+          icon: 'settings',
+          path: '/'
+        }
+      ]
+    }
   },
-
   setup () {
     const leftDrawerOpen = ref(false)
-
     return {
-      essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
+  },
+  computed: {
+    ...mapState('auth', ['user'])
+  },
+  methods: {
+    ...mapActions('auth', ['disconnectUser'])
   }
 })
 </script>
+
+<style lang="sass">
+/* Applique les règles de ce bloc uniquement aux écrans >= 768px */
+@media screen and (min-width: 768px)
+  /* Cache les éléments avec la classe CSS q-footer */
+  .q-footer
+    display: none
+
+/* Lien actif du menu latéral */
+.q-drawer
+  .q-router-link--exact-active
+    color: white !important
+</style>
