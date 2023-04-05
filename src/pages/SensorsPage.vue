@@ -16,7 +16,7 @@
         :sensor="sensor">
       </sensor-component>
 
-      <p v-if="!sensorsLoaded" v-show="sensorsLoaded">Aucun capteurs</p>
+      <p v-if="sensors.length" v-show="!sensorsLoaded">Aucun capteurs</p>
     </div>
   </q-page>
 </template>

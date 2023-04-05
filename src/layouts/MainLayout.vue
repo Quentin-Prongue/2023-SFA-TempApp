@@ -157,7 +157,7 @@ export default defineComponent({
           id: 3,
           text: 'Salles',
           icon: 'meeting_room',
-          path: '/class'
+          path: '/rooms'
         }
       ]
     }

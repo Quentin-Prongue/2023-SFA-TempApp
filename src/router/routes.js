@@ -17,8 +17,8 @@ const routes = [
         component: () => import('pages/SensorsPage.vue')
       },
       {
-        path: '/class',
-        component: () => import('pages/ClassPage.vue')
+        path: '/rooms',
+        component: () => import('pages/RoomsPage.vue')
       }
     ]
   },

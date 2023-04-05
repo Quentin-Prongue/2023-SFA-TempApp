@@ -4,6 +4,7 @@ import { createStore } from 'vuex'
 // Récupère les magasins nécessaires
 import sensors from './sensors-store'
 import auth from './auth-store'
+import rooms from './rooms-store'
 
 /*
  * If not building with SSR mode, you can
@@ -18,6 +19,7 @@ export default store(function (/* { ssrContext } */) {
   return createStore({
     modules: {
       sensors,
+      rooms,
       auth
     },
 
