@@ -7,7 +7,6 @@ export default ({ router }) => {
   router.beforeEach((to, from, next) => {
     // Récupère l'utilisateur
     const user = LocalStorage.getItem('user')
-    console.log(LocalStorage.getAll)
     // Si PAS connecté et ne vas par vers /login, on force la redirection
     if (!user && to.path !== '/login') {
       // Affiche un message d'erreur uniquement si utilisateur tente d'accéder

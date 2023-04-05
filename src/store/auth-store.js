@@ -1,6 +1,6 @@
 import { api } from 'boot/axios'
 import { afficherMessageErreur } from 'src/functions/message-erreur'
-import { Loading, LocalStorage } from 'quasar'
+import { Loading, LocalStorage, QSpinnerCube } from 'quasar'
 
 // State : données du magasin
 const state = {
@@ -22,15 +22,20 @@ const mutations = {
 }
 
 /*
-Actions : méthodes du magasin qui font appel aux mutations
+Actions : méthodes du magasin qui font appel aux mutations.
 Elles peuvent être asynchrones !
  */
 const actions = {
-  connectUser ({ commit, dispatch }, payload) {
-    Loading.show()
+  connectUser ({
+    commit,
+    dispatch
+  }, payload) {
+    Loading.show({
+      spinner: QSpinnerCube,
+      message: 'Connexion en cours'
+    })
     api.post('/login', payload)
       .then(function (response) {
-        console.log(response.data)
         dispatch('setUser', response.data)
       })
       .catch(function (error) {
@@ -42,7 +47,11 @@ const actions = {
         throw error
       })
   },
-  setUser ({ commit, dispatch, state }, data) {
+  setUser ({
+    commit,
+    dispatch,
+    state
+  }, data) {
     // Sauvegarde, commite, les données dans le magasin
     commit('SET_USER', data.user)
     commit('SET_TOKEN', data.access_token)
@@ -53,8 +62,14 @@ const actions = {
     // Cache la fenêtre de chargement
     Loading.hide()
   },
-  disconnectUser ({ commit, state, dispatch }) {
-    Loading.show()
+  disconnectUser ({
+    commit,
+    state
+  }) {
+    Loading.show({
+      spinner: QSpinnerCube,
+      message: 'Déconnexion en cours'
+    })
     const that = this
     // Configuration du header avec token
     const config = {
@@ -87,9 +102,7 @@ Getters : retourne les données du magasin
 Fonctionne comme les propriétés calculées
 Sert à calculer, trier, filtrer ou formater les données
  */
-const getters = {
-
-}
+const getters = {}
 
 /*
 Exporte les constantes, variables du fichier

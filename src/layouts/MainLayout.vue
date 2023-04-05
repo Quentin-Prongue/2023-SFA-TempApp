@@ -13,6 +13,7 @@
         <q-toolbar-title class="absolute-center">
           Temp App
         </q-toolbar-title>
+        <!-- BOUTON CONNEXION -->
         <q-btn
           v-if="!user"
           to="/login"
@@ -22,14 +23,56 @@
           class="absolute-right"
         />
 
-        <q-btn
-          v-else
-          @click="disconnectUser"
-          flat
-          icon-right="account_circle"
-          label="Se déconnecter"
-          class="absolute-right"
-        />
+        <!-- BOUTON GÉRER COMPTE -->
+        <div class="q-pa-md">
+          <q-btn flat rounded icon="manage_accounts" class="absolute-right" v-if="user">
+            <q-menu>
+              <div class="row no-wrap q-pa-md">
+                <div class="column">
+                  <div class="text-h6 q-mb-md">Paramètres</div>
+                  <div class="cursor-pointer">
+                    Réinitialiser mot de passe
+                    <q-popup-edit
+                      buttons
+                      label-set="Save"
+                      label-cancel="Close"
+                      v-slot="scope"
+                    >
+                      <q-input
+                        type="password"
+                        v-model.number="scope.value"
+                        dense
+                        autofocus
+                        @keyup.enter="scope.set"
+                      />
+                    </q-popup-edit>
+                  </div>
+                </div>
+
+                <q-separator vertical inset class="q-mx-lg"/>
+
+                <div class="column items-center">
+                  <q-avatar size="72px">
+                    <img :src="user.photo" alt="Photo de profil">
+                  </q-avatar>
+
+                  <div class="text-subtitle1 q-mt-md q-mb-xs">{{ fullName }}</div>
+
+                  <!-- BOUTON DÉCONNEXION -->
+                  <q-btn
+                    @click="logout"
+                    color="primary"
+                    label="Se déconnecter"
+                    push
+                    size="sm"
+                    v-close-popup
+                  />
+
+                </div>
+              </div>
+            </q-menu>
+          </q-btn>
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -90,6 +133,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { mapState, mapActions } from 'vuex'
+import { Dialog } from 'quasar'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -128,10 +172,32 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState('auth', ['user'])
+    ...mapState('auth', ['user']),
+    /**
+     * Permet d'obtenir le nom complet de l'utilisateur
+     * @returns {string} le nom complet de l'utilisateur
+     */
+    fullName () {
+      return this.user.nom + ' ' + this.user.prenom
+    }
   },
   methods: {
-    ...mapActions('auth', ['disconnectUser'])
+    ...mapActions('auth', ['disconnectUser']),
+    logout () {
+      Dialog.create({
+        title: 'Déconnexion',
+        message: 'Voulez-vous vraiment vous déconnecter',
+        cancel: {
+          label: 'Annuler',
+          focus: true,
+          color: 'negative'
+        },
+        ok: 'Oui',
+        persistent: true
+      }).onOk(() => {
+        this.disconnectUser()
+      })
+    }
   }
 })
 </script>
