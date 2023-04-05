@@ -1,6 +1,6 @@
 # Temp App (ch.divtec.2023-sfa-tempapp)
 
-A Quasar Project
+Application qui permet la gestion de températures
 
 ## Install the dependencies
 ```bash
