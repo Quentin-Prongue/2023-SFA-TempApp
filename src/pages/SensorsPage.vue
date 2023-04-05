@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <h1>Page d'accueil</h1>
+    <h1>Page des capteurs</h1>
   </q-page>
 </template>
 
@@ -8,6 +8,6 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'IndexPage'
+  name: 'SensorsPage'
 })
 </script>

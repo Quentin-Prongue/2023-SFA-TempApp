@@ -99,15 +99,21 @@ export default defineComponent({
       links: [
         {
           id: 1,
-          text: '...',
-          icon: 'list',
+          text: 'Accueil',
+          icon: 'home',
           path: '/'
         },
         {
           id: 2,
-          text: '...',
-          icon: 'settings',
-          path: '/'
+          text: 'Capteurs',
+          icon: 'sensors',
+          path: '/sensors'
+        },
+        {
+          id: 3,
+          text: 'Salles',
+          icon: 'meeting_room',
+          path: '/class'
         }
       ]
     }
