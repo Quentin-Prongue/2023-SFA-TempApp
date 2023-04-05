@@ -1,4 +1,4 @@
-# Quasar App (ch.divtec.2023-sfa-tempapp)
+# Temp App (ch.divtec.2023-sfa-tempapp)
 
 A Quasar Project
 

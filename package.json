@@ -2,7 +2,7 @@
   "name": "ch.divtec.2023-sfa-tempapp",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "productName": "Temp App",
   "author": "Quentin Prongué <quentin.prongue@divtec.ch>",
   "private": true,
   "scripts": {

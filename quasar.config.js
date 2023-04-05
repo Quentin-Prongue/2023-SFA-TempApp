@@ -151,9 +151,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'Quasar App',
-        short_name: 'Quasar App',
-        description: 'A Quasar Project',
+        name: 'Temp App',
+        short_name: 'Temp App',
+        description: 'Application qui permet de gérer des températures',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

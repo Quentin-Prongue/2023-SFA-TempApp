@@ -1,5 +1,8 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
+
+// Récupère les magasins nécessaires
+import sensors from './sensors-store'
 import auth from './auth-store'
 
 /*
@@ -14,6 +17,7 @@ import auth from './auth-store'
 export default store(function (/* { ssrContext } */) {
   return createStore({
     modules: {
+      sensors,
       auth
     },
 
