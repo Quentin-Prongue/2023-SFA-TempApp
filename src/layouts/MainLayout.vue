@@ -1,117 +1,130 @@
 <template>
-  <q-layout view="hHh lpr fFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn aria-label="Menu" dense flat icon="menu" round @click="toggleLeftDrawer" />
-        <q-toolbar-title class="absolute-center">
-          Temp App
-        </q-toolbar-title>
-        <!-- BOUTON CONNEXION -->
-        <q-btn v-if="!user" class="absolute-right" flat icon-right="account_circle" label="Se connecter" to="/login" />
+  <div class="q-pa-md">
+    <q-layout view="hHh Lpr lff">
+      <q-header elevated>
+        <q-toolbar>
+          <q-btn aria-label="Menu" dense flat icon="menu" round @click="toggleLeftDrawer"/>
+          <q-toolbar-title class="absolute-center">
+            Temp App
+          </q-toolbar-title>
+          <!-- BOUTON CONNEXION -->
+          <q-btn v-if="!user" class="absolute-right" flat icon-right="account_circle" label="Se connecter" to="/login"/>
 
-        <!-- BOUTON GÉRER COMPTE -->
-        <div class="q-pa-md">
-          <q-btn v-if="user" class="absolute-right" flat icon="manage_accounts" rounded>
-            <q-menu>
-              <div class="row no-wrap q-pa-md">
-                <div class="column">
-                  <div class="text-h6 q-mb-md">Paramètres</div>
-                  <div class="cursor-pointer" @click="prompt = true">
-                    Réinitialiser mot de passe
-                    <q-dialog v-model="prompt" persistent>
-                      <q-card style="min-width: 350px">
-                        <q-card-section>
-                          <div class="text-h6">Nouveau mot de passe</div>
-                        </q-card-section>
+          <!-- BOUTON GÉRER COMPTE -->
+          <div class="q-pa-md">
+            <q-btn v-if="user" class="absolute-right" flat icon="manage_accounts" rounded>
+              <q-menu>
+                <div class="row no-wrap q-pa-md">
+                  <div class="column">
+                    <div class="text-h6 q-mb-md">Paramètres</div>
+                    <div class="cursor-pointer" @click="prompt = true">
+                      Réinitialiser mot de passe
+                      <q-dialog v-model="prompt" persistent>
+                        <q-card style="min-width: 350px">
+                          <q-card-section>
+                            <div class="text-h6">Nouveau mot de passe</div>
+                          </q-card-section>
 
-                        <q-card-section class="q-pt-none">
-                          <!-- NOM -->
-                          <q-input
-                            class="q-my-md"
-                            label="Nom"
-                            lazy-rules
-                            outlined
-                            v-model="user.nom"
-                          />
+                          <q-card-section class="q-pt-none">
+                            <!-- NOM -->
+                            <q-input
+                              class="q-my-md"
+                              label="Nom"
+                              lazy-rules
+                              outlined
+                              v-model="user.nom"
+                            />
 
-                          <!-- PRENOM -->
-                          <q-input
-                            class="q-my-md"
-                            label="Prénom"
-                            lazy-rules
-                            outlined
-                            v-model="user.prenom"
-                          />
+                            <!-- PRENOM -->
+                            <q-input
+                              class="q-my-md"
+                              label="Prénom"
+                              lazy-rules
+                              outlined
+                              v-model="user.prenom"
+                            />
 
-                          <!-- MOT DE PASSE -->
-                          <q-input class="q-my-md" label="Mot de passe" lazy-rules outlined
-                            v-model="password" :type="isPwd ? 'password' : 'text'" autofocus
-                            @keyup.enter="prompt = false">
-                            <template v-slot:append>
-                              <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
-                                @click="isPwd = !isPwd" />
-                            </template>
-                          </q-input>
-                        </q-card-section>
+                            <!-- MOT DE PASSE -->
+                            <q-input class="q-my-md" label="Mot de passe" lazy-rules outlined
+                                     v-model="password" :type="isPwd ? 'password' : 'text'" autofocus
+                                     @keyup.enter="prompt = false">
+                              <template v-slot:append>
+                                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                                        @click="isPwd = !isPwd"/>
+                              </template>
+                            </q-input>
+                          </q-card-section>
 
-                        <q-card-actions align="right" class="text-primary">
-                          <q-btn flat color="red" label="Annuler" v-close-popup />
-                          <q-btn flat label="Sauvegarder" v-close-popup @click="editPassword"/>
-                        </q-card-actions>
-                      </q-card>
-                    </q-dialog>
+                          <q-card-actions align="right" class="text-primary">
+                            <q-btn flat color="red" label="Annuler" v-close-popup/>
+                            <q-btn flat label="Sauvegarder" v-close-popup @click="editPassword"/>
+                          </q-card-actions>
+                        </q-card>
+                      </q-dialog>
+                    </div>
+                  </div>
+
+                  <q-separator class="q-mx-lg" inset vertical/>
+
+                  <!-- PHOTO DE PROFIL -->
+                  <div class="column items-center">
+                    <q-avatar size="72px">
+                      <img :src="user.photo" alt="Photo de profil">
+                    </q-avatar>
+
+                    <!-- NOM COMPLET -->
+                    <div class="text-subtitle1 q-mt-md q-mb-xs">{{ fullName }}</div>
+
+                    <!-- BOUTON DÉCONNEXION -->
+                    <q-btn v-close-popup color="primary" label="Se déconnecter" push size="sm" @click="logout"/>
+
                   </div>
                 </div>
+              </q-menu>
+            </q-btn>
+          </div>
+        </q-toolbar>
+      </q-header>
 
-                <q-separator class="q-mx-lg" inset vertical />
+      <q-drawer
+        v-model="leftDrawerOpen"
+        show-if-above
 
-                <!-- PHOTO DE PROFIL -->
-                <div class="column items-center">
-                  <q-avatar size="72px">
-                    <img :src="user.photo" alt="Photo de profil">
-                  </q-avatar>
+        :mini="miniState"
+        @mouseover="miniState = false"
+        @mouseout="miniState = true"
+        mini-to-overlay
 
-                  <!-- NOM COMPLET -->
-                  <div class="text-subtitle1 q-mt-md q-mb-xs">{{ fullName }}</div>
+        :width="200"
+        :breakpoint="500"
+        bordered
+        class="bg-primary"
+      >
+        <q-list>
+          <q-item v-for="link in links" :key="link.id" :to="link.path" class="text-grey-4" clickable exact>
+            <q-item-section avatar>
+              <q-icon :name="link.icon"/>
+            </q-item-section>
 
-                  <!-- BOUTON DÉCONNEXION -->
-                  <q-btn v-close-popup color="primary" label="Se déconnecter" push size="sm" @click="logout" />
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-drawer>
 
-                </div>
-              </div>
-            </q-menu>
-          </q-btn>
-        </div>
-      </q-toolbar>
-    </q-header>
+      <q-page-container>
+        <router-view/>
+      </q-page-container>
 
-    <q-drawer v-model="leftDrawerOpen" bordered breakpoint="767" class="bg-primary" dark show-if-above width="250">
-      <q-list>
-        <q-item-label class="text-white" header>
-          Menu de navigation
-        </q-item-label>
-        <q-item v-for="link in links" :key="link.id" :to="link.path" class="text-grey-4" clickable exact>
-          <q-item-section avatar>
-            <q-icon :name="link.icon" />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>{{ link.text }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-drawer>
-
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-
-    <q-footer elevated>
-      <q-tabs>
-        <q-route-tab v-for="link in links" :key="link.id" :icon="link.icon" :label="link.text" :to="link.route" exact />
-      </q-tabs>
-    </q-footer>
-  </q-layout>
+      <q-footer elevated>
+        <q-tabs>
+          <q-route-tab v-for="link in links" :key="link.id" :icon="link.icon" :label="link.text" :to="link.route"
+                       exact/>
+        </q-tabs>
+      </q-footer>
+    </q-layout>
+  </div>
 </template>
 
 <script>
@@ -158,15 +171,17 @@ export default defineComponent({
       },
       prompt: ref(false),
       password: ref(''),
-      isPwd: ref(true)
+      isPwd: ref(true),
+      drawer: ref(false),
+      miniState: ref(true)
     }
   },
   computed: {
     ...mapState('auth', ['user']),
     /**
-    * Permet d'obtenir le nom complet de l'utilisateur
-    * @returns {string} le nom complet de l'utilisateur
-    */
+     * Permet d'obtenir le nom complet de l'utilisateur
+     * @returns {string} le nom complet de l'utilisateur
+     */
     fullName () {
       return this.user.nom + ' ' + this.user.prenom
     }
@@ -175,8 +190,8 @@ export default defineComponent({
     // Mappage des actions
     ...mapActions('auth', ['disconnectUser', 'editUserPassword']),
     /**
-    * Permet de déconnecter l'utilisateur
-    */
+     * Permet de déconnecter l'utilisateur
+     */
     logout () {
       Dialog.create({
         title: 'Déconnexion',
@@ -214,6 +229,7 @@ export default defineComponent({
 
 /* Lien actif du menu latéral */
 .q-drawer
+
 .q-router-link--exact-active
   color: white !important
 </style>

@@ -8,9 +8,8 @@
       class="q-my-md"
       label="E-mail"
       lazy-rules
-      outlined
     >
-      <template v-slot:prepend>
+      <template v-slot:append>
         <q-icon name="email"/>
       </template>
     </q-input>
@@ -22,24 +21,23 @@
       class="q-my-md"
       label="Mot de passe"
       lazy-rules
-      outlined
       :type="isPwd ? 'password' : 'text'"
     >
-      <template v-slot:prepend>
-        <q-icon name="lock"/>
-      </template>
       <template v-slot:append>
         <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
                 @click="isPwd = !isPwd"/>
+        <q-icon name="lock"/>
       </template>
     </q-input>
 
     <!-- BOUTON SE CONNECTER -->
-    <q-btn
-      color="primary"
-      label="Se connecter"
-      type="submit"
-    />
+    <div class="row flex-center">
+      <q-btn
+        color="primary"
+        label="Se connecter"
+        type="submit"
+      />
+    </div>
   </q-form>
 </template>
 
