@@ -9,26 +9,50 @@
       <q-spinner-radio color="primary" size="4em"/>
     </div>
 
-    <!-- COMPOSANT SALLE -->
-    <div class="row">
-      <class-component
-        v-for="room in rooms"
-        :key="room.id"
-        :room="room">
-      </class-component>
+    <div class="q-pa-md absolute-bottom">
+      <div class="q-gutter-y-md">
+        <q-card>
+          <q-tab-panels v-model="tab" animated>
+            <q-tab-panel v-for="room in rooms" :key="room.id" :name="room.nom">
+              <div class="text-h6">{{ room.nom }}</div>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </q-tab-panel>
+          </q-tab-panels>
 
-      <!-- SI AUCUNE SALLE -->
-      <p v-if="!roomsLoaded" v-show="roomsLoaded">Aucun capteurs</p>
+          <q-separator/>
+
+          <q-tabs
+            v-model="tab"
+            dense
+            class="text-grey"
+            active-color="primary"
+            indicator-color="primary"
+            align="justify"
+            narrow-indicator
+          >
+            <q-tab v-for="room in rooms" :key="room.id" :name="room.nom" :label="room.nom"/>
+          </q-tabs>
+        </q-card>
+      </div>
     </div>
+
+    <!-- SI AUCUNE SALLE -->
+    <p v-if="!roomsLoaded" v-show="roomsLoaded">Aucun capteurs</p>
+
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default defineComponent({
   name: 'ClassesPage',
+  setup () {
+    return {
+      tab: ref('B1-01')
+    }
+  },
   computed: {
     // Mappage des getters
     ...mapGetters('rooms', ['rooms']),
@@ -38,9 +62,6 @@ export default defineComponent({
   methods: {
     // Mappage des actions
     ...mapActions('rooms', ['getAllRoomsApi'])
-  },
-  components: {
-    classComponent: require('components/Rooms/RoomComponent.vue').default
   },
   mounted () {
     // Récupère toutes les salles de l'api

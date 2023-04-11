@@ -9,7 +9,11 @@
       label="E-mail"
       lazy-rules
       outlined
-    />
+    >
+      <template v-slot:prepend>
+        <q-icon name="email"/>
+      </template>
+    </q-input>
 
     <!-- MOT DE PASSE -->
     <q-input
@@ -19,8 +23,16 @@
       label="Mot de passe"
       lazy-rules
       outlined
-      type="password"
-    />
+      :type="isPwd ? 'password' : 'text'"
+    >
+      <template v-slot:prepend>
+        <q-icon name="lock"/>
+      </template>
+      <template v-slot:append>
+        <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                @click="isPwd = !isPwd"/>
+      </template>
+    </q-input>
 
     <!-- BOUTON SE CONNECTER -->
     <q-btn
@@ -32,7 +44,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { mapActions } from 'vuex'
 
 export default defineComponent({
@@ -43,6 +55,11 @@ export default defineComponent({
         email: '',
         password: ''
       }
+    }
+  },
+  setup () {
+    return {
+      isPwd: ref(true)
     }
   },
   methods: {
