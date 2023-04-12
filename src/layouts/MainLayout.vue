@@ -17,47 +17,54 @@
                 <div class="row no-wrap q-pa-md">
                   <div class="column">
                     <div class="text-h6 q-mb-md">Paramètres</div>
-                    <div class="cursor-pointer" @click="prompt = true">
+                    <div class="cursor-pointer text-primary" @click="prompt = true">
                       Réinitialiser mot de passe
                       <q-dialog v-model="prompt" persistent>
                         <q-card style="min-width: 350px">
                           <q-card-section>
-                            <div class="text-h6">Nouveau mot de passe</div>
+                            <div class="text-h6">Modification mot de passe</div>
                           </q-card-section>
 
                           <q-card-section class="q-pt-none">
                             <!-- NOM -->
                             <q-input
+                              v-model="user.nom"
                               class="q-my-md"
                               label="Nom"
                               lazy-rules
-                              outlined
-                              v-model="user.nom"
-                            />
+                            >
+                              <template v-slot:append>
+                                <q-icon name="person"/>
+                              </template>
+                            </q-input>
 
                             <!-- PRENOM -->
                             <q-input
+                              v-model="user.prenom"
                               class="q-my-md"
                               label="Prénom"
                               lazy-rules
-                              outlined
-                              v-model="user.prenom"
-                            />
+                            >
+                              <template v-slot:append>
+                                <q-icon name="person"/>
+                              </template>
+                            </q-input>
 
                             <!-- MOT DE PASSE -->
-                            <q-input class="q-my-md" label="Mot de passe" lazy-rules outlined
-                                     v-model="password" :type="isPwd ? 'password' : 'text'" autofocus
+                            <q-input v-model="password" :type="isPwd ? 'password' : 'text'" autofocus
+                                     class="q-my-md" label="Mot de passe" lazy-rules
                                      @keyup.enter="prompt = false">
                               <template v-slot:append>
                                 <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
                                         @click="isPwd = !isPwd"/>
+                                <q-icon name="lock"/>
                               </template>
                             </q-input>
                           </q-card-section>
 
                           <q-card-actions align="right" class="text-primary">
-                            <q-btn flat color="red" label="Annuler" v-close-popup/>
-                            <q-btn flat label="Sauvegarder" v-close-popup @click="editPassword"/>
+                            <q-btn v-close-popup color="red" label="Annuler" outline/>
+                            <q-btn v-close-popup color="primary" label="Modifier" @click="editPassword"/>
                           </q-card-actions>
                         </q-card>
                       </q-dialog>
@@ -88,17 +95,17 @@
 
       <q-drawer
         v-model="leftDrawerOpen"
-        show-if-above
+        :breakpoint="500"
 
         :mini="miniState"
-        @mouseover="miniState = false"
-        @mouseout="miniState = true"
-        mini-to-overlay
-
         :width="200"
-        :breakpoint="500"
         bordered
         class="bg-primary"
+
+        mini-to-overlay
+        show-if-above
+        @mouseout="miniState = true"
+        @mouseover="miniState = false"
       >
         <q-list>
           <q-item v-for="link in links" :key="link.id" :to="link.path" class="text-grey-4" clickable exact>
@@ -129,7 +136,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { mapState, mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { Dialog } from 'quasar'
 
 export default defineComponent({
