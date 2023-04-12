@@ -1,6 +1,7 @@
 import { api } from 'boot/axios'
 import { displayErrorMessage } from 'src/functions/error-message'
-import { Loading, LocalStorage, Notify, QSpinnerCube } from 'quasar'
+import { Loading, LocalStorage, QSpinnerCube } from 'quasar'
+import { displaySuccessMessage } from 'src/functions/success-message'
 
 // State : données du magasin
 const state = {
@@ -56,9 +57,14 @@ const actions = {
     api.post('/login', payload)
       .then(function (response) {
         dispatch('setUser', response.data)
+        // Affiche un message de succès
+        displaySuccessMessage(
+          'Bienvenue' + response.data.user.prenom
+        )
       })
       .catch(function (error) {
         Loading.hide()
+        // Affiche un message d'erreur
         displayErrorMessage(
           'Connexion impossible !',
           Object.values(error.response.data)
@@ -97,6 +103,7 @@ const actions = {
     // Déconnexion de l'API
     api.post('/logout', {}, config)
       .catch(function (error) {
+        // Affiche un message d'erreur
         displayErrorMessage(
           'Erreur lors de la déconnexion'
         )
@@ -130,13 +137,13 @@ const actions = {
       .then(function (response) {
         payload = response.data
         commit('EDIT_USER', payload)
-        Notify.create({
-          type: 'positive',
-          message: 'Mot de passe modifié avec succès'
-        })
+        // Affiche un message de succès
+        displaySuccessMessage(
+          'Mot de passe modifié avec succès'
+        )
       })
       .catch(function (error) {
-        Loading.hide()
+        // Affiche un message d'erreur
         displayErrorMessage(
           'Erreur lors du changement de mot de passe',
           Object.values(error.response.data)

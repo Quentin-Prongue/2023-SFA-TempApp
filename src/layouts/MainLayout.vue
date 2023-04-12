@@ -28,10 +28,10 @@
                           <q-card-section class="q-pt-none">
                             <!-- NOM -->
                             <q-input
-                              v-model="user.nom"
                               class="q-my-md"
                               label="Nom"
                               lazy-rules
+                              v-model="user.nom"
                             >
                               <template v-slot:append>
                                 <q-icon name="person"/>
@@ -40,10 +40,10 @@
 
                             <!-- PRENOM -->
                             <q-input
-                              v-model="user.prenom"
                               class="q-my-md"
                               label="Prénom"
                               lazy-rules
+                              v-model="user.prenom"
                             >
                               <template v-slot:append>
                                 <q-icon name="person"/>
@@ -95,17 +95,17 @@
 
       <q-drawer
         v-model="leftDrawerOpen"
-        :breakpoint="500"
+        show-if-above
 
         :mini="miniState"
+        @mouseover="miniState = false"
+        @mouseout="miniState = true"
+        mini-to-overlay
+
         :width="200"
+        :breakpoint="500"
         bordered
         class="bg-primary"
-
-        mini-to-overlay
-        show-if-above
-        @mouseout="miniState = true"
-        @mouseover="miniState = false"
       >
         <q-list>
           <q-item v-for="link in links" :key="link.id" :to="link.path" class="text-grey-4" clickable exact>
@@ -136,7 +136,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { mapActions, mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { Dialog } from 'quasar'
 
 export default defineComponent({
@@ -206,9 +206,12 @@ export default defineComponent({
         cancel: {
           label: 'Annuler',
           focus: true,
-          color: 'negative'
+          color: 'negative',
+          outline: true
         },
-        ok: 'Oui',
+        ok: {
+          label: 'Oui'
+        },
         persistent: true
       }).onOk(() => {
         this.disconnectUser()
