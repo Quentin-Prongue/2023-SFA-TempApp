@@ -9,7 +9,8 @@ import { mapActions } from 'vuex'
 export default defineComponent({
   name: 'App',
   methods: {
-    ...mapActions('auth', ['setUser'])
+    ...mapActions('auth', ['setUser']),
+    ...mapActions('sensors', ['setFavoritesSensors'])
   },
   mounted () {
     // Récupère les données du localStorage
@@ -24,6 +25,14 @@ export default defineComponent({
       }
       // Définit l'utilisateur en cours
       this.setUser(data)
+    }
+
+    // Récupère les capteurs favoris du localStorage
+    const favoritesSensors = this.$q.localStorage.getItem('favoritesSensors')
+    // Si il y a des capteurs favoris
+    if (favoritesSensors) {
+      // Défini les capteurs favoris
+      this.setFavoritesSensors(favoritesSensors)
     }
   }
 })

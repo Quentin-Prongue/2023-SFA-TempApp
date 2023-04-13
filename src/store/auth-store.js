@@ -59,7 +59,7 @@ const actions = {
         dispatch('setUser', response.data)
         // Affiche un message de succès
         displaySuccessMessage(
-          'Bienvenue' + response.data.user.prenom
+          'Bienvenue ' + response.data.user.prenom
         )
       })
       .catch(function (error) {
