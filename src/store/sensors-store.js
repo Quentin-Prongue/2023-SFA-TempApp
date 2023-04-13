@@ -160,7 +160,7 @@ const getters = {
    * @returns {[]} les capteurs favoris
    */
   favoritesSensors: (state) => {
-    return state.favoritesSensors
+    return state.sensors.filter((sensor) => state.favoritesSensors.includes(sensor.id))
   }
 }
 

@@ -34,7 +34,7 @@
 
 <script>
 import { ref } from 'vue'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'SensorComponent',
@@ -61,14 +61,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('sensors', ['favoritesSensors']),
+    ...mapGetters('sensors', ['favoritesSensors']),
 
     /**
      * Teste si le capteur fait partie des favoris
      * @returns {*} un booléen avec la réponse
      */
     isSensorFavorite () {
-      return this.favoritesSensors.includes(this.sensor.id)
+      return this.favoritesSensors.includes(this.sensor)
     }
   },
   props: {
@@ -81,7 +81,6 @@ export default {
     measureComponent: require('components/Measures/MeasureComponent.vue').default
   },
   mounted () {
-    console.log(this.favoritesSensors)
     // Teste si le capteur fait partie des favoris
     if (this.isSensorFavorite) {
       // Change la valeur de fav
