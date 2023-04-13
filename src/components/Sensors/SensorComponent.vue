@@ -1,17 +1,30 @@
 <template>
   <div class="q-pa-md row items-start q-gutter-md">
-    <q-card class="sensor-card" flat bordered>
+    <q-card bordered class="sensor-card">
       <q-card-section vertical>
+        <!-- NOM DU CAPTEUR -->
         <div class="text-h6">{{ sensor.nom }}</div>
+        <!-- NOM DE LA SALLE -->
         <div class="text-subtitle2">Salle : {{ sensor.salle.nom }}</div>
       </q-card-section>
 
-      <q-card-actions vertical class="justify-around q-px-md">
-        <q-btn flat round color="red" icon="favorite"/>
+      <!-- AJOUTER AUX FAVORIS -->
+      <q-card-actions class="justify-around q-px-md" vertical>
+        <q-checkbox
+          size="lg"
+          class="flex-center"
+          v-model="fav"
+          checked-icon="favorite"
+          unchecked-icon="favorite_border"
+          indeterminate-icon="help"
+          color="red"
+          @click="toggleFavorite(this.sensor.id)"
+        />
       </q-card-actions>
 
-      <q-separator inset />
+      <q-separator inset/>
 
+      <!-- COMPOSANT DES MESURES -->
       <measure-component :measures="sensor.mesures">
       </measure-component>
 
@@ -20,8 +33,44 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'SensorComponent',
+  setup () {
+    return {
+      fav: ref(false)
+    }
+  },
+  methods: {
+    ...mapActions('sensors', ['addSensorToFavorites', 'removeSensorFromFavorites']),
+
+    /**
+     * Permet d'ajouter ou de supprimer un capteur des favoris
+     * @param sensorID l'id du capteur
+     */
+    toggleFavorite (sensorID) {
+      // Ajoute le capteur aux favoris
+      if (this.fav) {
+        this.addSensorToFavorites(sensorID)
+      } else {
+        // Supprime le capteur des favoris
+        this.removeSensorFromFavorites(sensorID)
+      }
+    }
+  },
+  computed: {
+    ...mapState('sensors', ['favoritesSensors']),
+
+    /**
+     * Teste si le capteur fait partie des favoris
+     * @returns {*} un booléen avec la réponse
+     */
+    isSensorFavorite () {
+      return this.favoritesSensors.includes(this.sensor.id)
+    }
+  },
   props: {
     sensor: {
       type: Object,
@@ -30,6 +79,14 @@ export default {
   },
   components: {
     measureComponent: require('components/Measures/MeasureComponent.vue').default
+  },
+  mounted () {
+    console.log(this.favoritesSensors)
+    // Teste si le capteur fait partie des favoris
+    if (this.isSensorFavorite) {
+      // Change la valeur de fav
+      this.fav = true
+    }
   }
 }
 </script>
@@ -38,4 +95,8 @@ export default {
 .sensor-card
   width: 100%
   max-width: 450px
+  border-color: $primary
+  border-radius: 15px
+  text-align: center
+  box-shadow: 9px 7px 10px -6px rgba(0, 0, 0, 0.25)
 </style>

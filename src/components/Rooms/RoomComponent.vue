@@ -1,7 +1,8 @@
 <template>
   <div class="q-pa-md row items-start q-gutter-md">
-    <q-card class="room-card" flat bordered>
+    <q-card bordered class="room-card" flat>
       <q-card-section vertical>
+        <!-- NOM DE LA SALLE -->
         <div class="text-h6">{{ room.nom }}</div>
       </q-card-section>
 

@@ -1,34 +1,48 @@
 <template>
+  <!-- FORMULAIRE -->
   <q-form @submit.prevent="submitForm">
+    <!-- EMAIL -->
     <q-input
-      outlined
       v-model="form.email"
-      label="E-mail"
-      class="q-my-md"
       :rules="[val => validateEmail(val) || 'Email invalide']"
-      lazy-rules
-    />
-
-    <q-input
-      type="password"
-      outlined
-      v-model="form.password"
-      label="Mot de passe"
       class="q-my-md"
-      :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
+      label="E-mail"
       lazy-rules
-    />
+    >
+      <template v-slot:append>
+        <q-icon name="email"/>
+      </template>
+    </q-input>
 
-    <q-btn
-      type="submit"
-      color="primary"
-      label="Se connecter"
-    />
+    <!-- MOT DE PASSE -->
+    <q-input
+      v-model="form.password"
+      :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
+      class="q-my-md"
+      label="Mot de passe"
+      lazy-rules
+      :type="isPwd ? 'password' : 'text'"
+    >
+      <template v-slot:append>
+        <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                @click="isPwd = !isPwd"/>
+        <q-icon name="lock"/>
+      </template>
+    </q-input>
+
+    <!-- BOUTON SE CONNECTER -->
+    <div class="row flex-center">
+      <q-btn
+        color="primary"
+        label="Se connecter"
+        type="submit"
+      />
+    </div>
   </q-form>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { mapActions } from 'vuex'
 
 export default defineComponent({
@@ -39,6 +53,11 @@ export default defineComponent({
         email: '',
         password: ''
       }
+    }
+  },
+  setup () {
+    return {
+      isPwd: ref(true)
     }
   },
   methods: {

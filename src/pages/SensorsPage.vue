@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <h2>Page des capteurs</h2>
-    <!-- Spinner -->
+    <!-- SPINNER -->
     <div
       v-if="!sensorsLoaded"
       class="q-pa-lg text-center"
@@ -9,6 +9,7 @@
       <q-spinner-radio color="primary" size="4em"/>
     </div>
 
+    <!-- COMPOSANT CAPTEUR -->
     <div class="row">
       <sensor-component
         v-for="sensor in sensors"
@@ -16,7 +17,8 @@
         :sensor="sensor">
       </sensor-component>
 
-      <p v-if="sensors.length" v-show="!sensorsLoaded">Aucun capteurs</p>
+      <!-- SI AUCUN CAPTEUR -->
+      <p v-if="sensors.length" v-show="!sensorsLoaded">Aucun capteur</p>
     </div>
   </q-page>
 </template>
@@ -30,6 +32,7 @@ export default defineComponent({
   computed: {
     // Mappage des getters
     ...mapGetters('sensors', ['sensors']),
+    // Mappage des données
     ...mapState('sensors', ['sensorsLoaded'])
   },
   methods: {

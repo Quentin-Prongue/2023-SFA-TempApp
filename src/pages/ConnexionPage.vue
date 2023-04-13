@@ -1,6 +1,7 @@
 <template>
   <q-page padding>
     <q-card class="connexion q-pa-md">
+      <!-- FORMULAIRE DE CONNEXION -->
       <connexion-form/>
     </q-card>
   </q-page>

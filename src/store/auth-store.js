@@ -1,6 +1,7 @@
 import { api } from 'boot/axios'
-import { afficherMessageErreur } from 'src/functions/message-erreur'
+import { displayErrorMessage } from 'src/functions/error-message'
 import { Loading, LocalStorage, QSpinnerCube } from 'quasar'
+import { displaySuccessMessage } from 'src/functions/success-message'
 
 // State : données du magasin
 const state = {
@@ -13,11 +14,30 @@ Mutations : méthode qui manipule les données
 Les mutations ne peuvent pas être asynchrones !!!
  */
 const mutations = {
+  /**
+   * Assigne l'utilisateur
+   * @param state l'état
+   * @param user l'utilisateur
+   */
   SET_USER (state, user) {
     state.user = user
   },
+  /**
+   * Assigne le token
+   * @param state l'état
+   * @param token le token
+   */
   SET_TOKEN (state, token) {
     state.token = token
+  },
+  /**
+   * Modifie l'utilisateur
+   * @param state l'état
+   * @param payload le payload
+   */
+  EDIT_USER (state, payload) {
+    state.user = structuredClone(payload)
+    LocalStorage.set('user', payload)
   }
 }
 
@@ -37,10 +57,15 @@ const actions = {
     api.post('/login', payload)
       .then(function (response) {
         dispatch('setUser', response.data)
+        // Affiche un message de succès
+        displaySuccessMessage(
+          'Bienvenue ' + response.data.user.prenom
+        )
       })
       .catch(function (error) {
         Loading.hide()
-        afficherMessageErreur(
+        // Affiche un message d'erreur
+        displayErrorMessage(
           'Connexion impossible !',
           Object.values(error.response.data)
         )
@@ -78,7 +103,8 @@ const actions = {
     // Déconnexion de l'API
     api.post('/logout', {}, config)
       .catch(function (error) {
-        afficherMessageErreur(
+        // Affiche un message d'erreur
+        displayErrorMessage(
           'Erreur lors de la déconnexion'
         )
         throw error
@@ -94,22 +120,55 @@ const actions = {
         // location.reload() // recharge la page du navigateur
         Loading.hide()
       })
+  },
+  editUserPassword ({
+    commit,
+    state
+  }, payload) {
+    Loading.show({
+      spinner: QSpinnerCube,
+      message: 'Changement du mot de passe en cours'
+    })
+    const config = {
+      headers: { Authorization: 'Bearer ' + state.token }
+    }
+    // Appel à l'API pour changer le mot de passe
+    api.put('/updateme', payload, config)
+      .then(function (response) {
+        payload = response.data
+        commit('EDIT_USER', payload)
+        // Affiche un message de succès
+        displaySuccessMessage(
+          'Mot de passe modifié avec succès'
+        )
+      })
+      .catch(function (error) {
+        // Affiche un message d'erreur
+        displayErrorMessage(
+          'Erreur lors du changement de mot de passe',
+          Object.values(error.response.data)
+        )
+        throw error
+      })
+      .finally(function () {
+        Loading.hide()
+      })
   }
 }
 
 /*
-Getters : retourne les données du magasin
-Fonctionne comme les propriétés calculées
-Sert à calculer, trier, filtrer ou formater les données
- */
+  Getters : retourne les données du magasin
+  Fonctionne comme les propriétés calculées
+  Sert à calculer, trier, filtrer ou formater les données
+   */
 const getters = {}
 
 /*
-Exporte les constantes, variables du fichier
-On pourra ainsi les récupérer, les importer dans un autre fichier JS.
+  Exporte les constantes, variables du fichier
+  On pourra ainsi les récupérer, les importer dans un autre fichier JS.
 
-namespace: true, ajoute un namespace à notre objet retourné.
- */
+  namespace: true, ajoute un namespace à notre objet retourné.
+   */
 export default {
   namespaced: true,
   state,
