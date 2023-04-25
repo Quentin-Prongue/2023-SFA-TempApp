@@ -238,8 +238,6 @@ export default defineComponent({
   display: none
 
 /* Lien actif du menu latéral */
-.q-drawer
-
 .q-router-link--exact-active
-  color: white !important
+  color: $secondary !important
 </style>
