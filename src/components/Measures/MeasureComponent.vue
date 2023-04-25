@@ -50,7 +50,7 @@ export default {
           required: true,
           label: 'Température',
           align: 'center',
-          field: row => row.temperature,
+          field: row => row.temperature + ' °C',
           sortable: true
         },
         {
@@ -59,7 +59,7 @@ export default {
           required: true,
           label: 'Humidité',
           align: 'center',
-          field: row => row.humidite,
+          field: row => row.humidite + ' %',
           sortable: true
         }
       ]
