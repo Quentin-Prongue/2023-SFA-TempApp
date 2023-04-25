@@ -1,7 +1,7 @@
 <template>
   <q-page v-if="currentSensor !== null" padding>
-    <q-btn color="primary" flat icon="arrow_back"/>
-    <sensor-component :sensor="currentSensor" :full="true"/>
+    <q-btn color="primary" flat icon="arrow_back" @click="this.$router.go(-1)"/>
+    <sensor-component :full="true" :sensor="currentSensor"/>
   </q-page>
 </template>
 
