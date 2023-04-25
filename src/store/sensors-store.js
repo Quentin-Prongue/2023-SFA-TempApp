@@ -1,13 +1,16 @@
 import { api } from 'boot/axios'
 import { displayErrorMessage } from 'src/functions/error-message'
-import { LocalStorage } from 'quasar'
+import { Loading, LocalStorage } from 'quasar'
 import { displaySuccessMessage } from 'src/functions/success-message'
 
 // State : données du magasin
 const state = {
   sensors: [],
   sensorsLoaded: false,
-  favoritesSensors: []
+  sensorsOfRoomLoaded: false,
+  favoritesSensors: [],
+  sensorsOfRoom: [],
+  currentSensor: null
 }
 
 /*
@@ -30,6 +33,9 @@ const mutations = {
    */
   SET_SENSORS_LOADED (state, valeur) {
     state.sensorsLoaded = valeur
+  },
+  SET_SENSORS_OF_ROOM_LOADED (state, valeur) {
+    state.sensorsOfRoomLoaded = valeur
   },
   /**
    * Défini les capteurs favoris
@@ -60,6 +66,18 @@ const mutations = {
     state.favoritesSensors.splice(state.favoritesSensors.indexOf(sensorID), 1)
     // Met à jour les capteurs favoris dans le LocalStorage
     LocalStorage.set('favoritesSensors', state.favoritesSensors)
+  },
+  SET_SENSORS_OF_ROOM (state, sensorsOfRoom) {
+    state.sensorsOfRoom = sensorsOfRoom
+  },
+  /**
+   * Change le capteur actuel
+   * @param state
+   * @param sensor le capteur actuel
+   */
+  SET_CURRENT_SENSOR (state, sensor) {
+    state.currentSensor = sensor
+    Loading.hide()
   }
 }
 /*
@@ -137,6 +155,57 @@ const actions = {
       const sensorName = state.sensors.find(sensor => sensor.id === sensorID).nom
       displaySuccessMessage('Le capteur ' + sensorName + ' a bien été supprimé des favoris')
     }
+  },
+  getSensorsOfRoom ({
+    commit,
+    rootState
+  }, roomID) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    api.get(`salles/${roomID}/capteurs`, config)
+      .then(function (response) {
+        commit('SET_SENSORS_OF_ROOM', response.data.capteurs)
+        commit('SET_SENSORS_OF_ROOM_LOADED', true)
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de la récupération des capteurs de la salle !'
+        )
+        throw error
+      })
+  },
+  /**
+   * Permet d'obtenir le capteur actuel
+   * @param commit
+   * @param rootState
+   * @param sensorID l'id du capteur
+   */
+  getCurrentSensor ({
+    commit,
+    rootState
+  }, sensorID) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    // Teste s'il y a un capteur actuel et que son id est pareil que l'id du capteur
+    if ((state.currentSensor && state.currentSensor.id.toString() !== sensorID) || !state.currentSensor) {
+      // Affiche un loading
+      Loading.show()
+    }
+
+    api.get(`capteurs/${sensorID}/all`, config)
+      .then(function (response) {
+        commit('SET_CURRENT_SENSOR', response.data)
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de la récupération du capteur actuel !'
+        )
+        throw error
+      })
   }
 }
 
@@ -161,6 +230,10 @@ const getters = {
    */
   favoritesSensors: (state) => {
     return state.sensors.filter((sensor) => state.favoritesSensors.includes(sensor.id))
+  },
+  sensorsOfRoom: (state) => {
+    console.log(state.sensorsOfRoom)
+    return state.sensorsOfRoom
   }
 }
 

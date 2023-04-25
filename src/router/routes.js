@@ -19,6 +19,11 @@ const routes = [
         component: () => import('pages/SensorsPage.vue')
       },
       {
+        // Route des détails d'un capteur
+        path: '/sensor/:id',
+        component: () => import('pages/SensorsDetailsPage.vue')
+      },
+      {
         // Route des salles
         path: '/rooms',
         component: () => import('pages/RoomsPage.vue')
