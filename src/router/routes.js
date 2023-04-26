@@ -4,23 +4,27 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
-        // Route de l'accueil
-        path: '',
-        component: () => import('pages/IndexPage.vue')
-      },
-      {
         // Route de connexion
         path: '/login',
         component: () => import('pages/ConnexionPage.vue')
       },
       {
-        // Route des capteurs
-        path: '/sensors',
+        // Route de l'accueil
+        path: '',
         component: () => import('pages/SensorsPage.vue')
+      },
+      {
+        // Route des détails d'un capteur
+        path: '/sensor/:id',
+        component: () => import('pages/SensorsDetailsPage.vue')
       },
       {
         // Route des salles
         path: '/rooms',
+        component: () => import('pages/RoomsPage.vue')
+      },
+      {
+        path: '/rooms/:roomName',
         component: () => import('pages/RoomsPage.vue')
       }
     ]

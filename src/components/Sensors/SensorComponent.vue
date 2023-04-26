@@ -1,23 +1,29 @@
 <template>
   <div class="q-pa-md row items-start q-gutter-md">
-    <q-card bordered class="sensor-card">
+    <q-card :class="full ? 'sensor-card-full' : 'sensor-card-base'" bordered>
       <q-card-section vertical>
         <!-- NOM DU CAPTEUR -->
-        <div class="text-h6">{{ sensor.nom }}</div>
+        <div :class="full ? 'text-h4 sensor-clickable' : 'text-h6 sensor-clickable'"
+             @click="showSensorDetails(sensor.id)">{{ sensor.nom }}
+        </div>
+
         <!-- NOM DE LA SALLE -->
-        <div class="text-subtitle2">Salle : {{ sensor.salle.nom }}</div>
+        <div :class="full ? 'text-h6 sensor-clickable' : 'text-subtitle2 sensor-clickable'"
+             @click="this.$router.push('/rooms/' + sensor.salle.nom)">Salle
+          : {{ sensor.salle.nom }}
+        </div>
       </q-card-section>
 
       <!-- AJOUTER AUX FAVORIS -->
       <q-card-actions class="justify-around q-px-md" vertical>
         <q-checkbox
-          size="lg"
-          class="flex-center"
           v-model="fav"
           checked-icon="favorite"
-          unchecked-icon="favorite_border"
-          indeterminate-icon="help"
+          class="flex-center"
           color="red"
+          indeterminate-icon="help"
+          size="lg"
+          unchecked-icon="favorite_border"
           @click="toggleFavorite(this.sensor.id)"
         />
       </q-card-actions>
@@ -25,7 +31,7 @@
       <q-separator inset/>
 
       <!-- COMPOSANT DES MESURES -->
-      <measure-component :measures="sensor.mesures">
+      <measure-component :full="full" :measures="sensor.mesures">
       </measure-component>
 
     </q-card>
@@ -34,7 +40,7 @@
 
 <script>
 import { ref } from 'vue'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'SensorComponent',
@@ -44,6 +50,7 @@ export default {
     }
   },
   methods: {
+    // Mappage des actions
     ...mapActions('sensors', ['addSensorToFavorites', 'removeSensorFromFavorites']),
 
     /**
@@ -58,45 +65,68 @@ export default {
         // Supprime le capteur des favoris
         this.removeSensorFromFavorites(sensorID)
       }
+    },
+
+    /**
+     * Permet d'ouvrir la page qui affiche les details du capteur
+     * @param sensorID l'id du capteur
+     */
+    showSensorDetails (sensorID) {
+      this.$router.push({
+        path: `/sensor/${sensorID}`
+      })
     }
   },
   computed: {
-    ...mapState('sensors', ['favoritesSensors']),
+    ...mapGetters('sensors', ['favoritesSensors']),
 
     /**
      * Teste si le capteur fait partie des favoris
      * @returns {*} un booléen avec la réponse
      */
     isSensorFavorite () {
-      return this.favoritesSensors.includes(this.sensor.id)
+      return this.favoritesSensors.includes(this.sensor)
     }
   },
   props: {
     sensor: {
       type: Object,
       required: true
+    },
+    full: {
+      Type: Boolean
     }
   },
-  components: {
-    measureComponent: require('components/Measures/MeasureComponent.vue').default
-  },
   mounted () {
-    console.log(this.favoritesSensors)
     // Teste si le capteur fait partie des favoris
     if (this.isSensorFavorite) {
       // Change la valeur de fav
       this.fav = true
     }
+  },
+  components: {
+    measureComponent: require('components/Measures/MeasureComponent.vue').default
   }
 }
 </script>
 
 <style lang="sass" scoped>
-.sensor-card
+.sensor-card-base
   width: 100%
   max-width: 450px
   border-color: $primary
   border-radius: 15px
   text-align: center
   box-shadow: 9px 7px 10px -6px rgba(0, 0, 0, 0.25)
+
+.sensor-card-full
+  width: 100%
+  border-color: $primary
+  border-radius: 15px
+  text-align: center
+
+.sensor-clickable
+  &:hover
+    cursor: pointer
+    color: $primary
 </style>
