@@ -146,22 +146,15 @@ export default defineComponent({
       // Tableau des liens de l'application
       links: [
         {
-          // Lien pour l'accueil
+          // Lien pour les capteurs
           id: 1,
-          text: 'Accueil',
-          icon: 'home',
+          text: 'Capteurs',
+          icon: 'sensors',
           path: '/'
         },
         {
-          // Lien pour les capteurs
-          id: 2,
-          text: 'Capteurs',
-          icon: 'sensors',
-          path: '/sensors'
-        },
-        {
           // Lien pour les salles
-          id: 3,
+          id: 2,
           text: 'Salles',
           icon: 'meeting_room',
           path: '/rooms'
