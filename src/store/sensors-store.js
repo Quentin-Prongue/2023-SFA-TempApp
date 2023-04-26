@@ -29,13 +29,18 @@ const mutations = {
   /**
    * Défini si les capteurs sont chargés
    * @param state
-   * @param valeur si les capteurs sont chargés
+   * @param value si les capteurs sont chargés
    */
-  SET_SENSORS_LOADED (state, valeur) {
-    state.sensorsLoaded = valeur
+  SET_SENSORS_LOADED (state, value) {
+    state.sensorsLoaded = value
   },
-  SET_SENSORS_OF_ROOM_LOADED (state, valeur) {
-    state.sensorsOfRoomLoaded = valeur
+  /**
+   * Défini si les capteurs d'une salle sont chargés
+   * @param state
+   * @param value si les capteurs sont chargés
+   */
+  SET_SENSORS_OF_ROOM_LOADED (state, value) {
+    state.sensorsOfRoomLoaded = value
   },
   /**
    * Défini les capteurs favoris
@@ -67,8 +72,15 @@ const mutations = {
     // Met à jour les capteurs favoris dans le LocalStorage
     LocalStorage.set('favoritesSensors', state.favoritesSensors)
   },
+  /**
+   * Défini les capteurs d'une salle
+   * @param state
+   * @param sensorsOfRoom les capteurs d'une salle
+   */
   SET_SENSORS_OF_ROOM (state, sensorsOfRoom) {
     state.sensorsOfRoom = sensorsOfRoom
+    // Cache le loading
+    Loading.hide()
   },
   /**
    * Change le capteur actuel
@@ -77,6 +89,7 @@ const mutations = {
    */
   SET_CURRENT_SENSOR (state, sensor) {
     state.currentSensor = sensor
+    // Cache le loading
     Loading.hide()
   }
 }
@@ -95,9 +108,11 @@ const actions = {
     rootState
   }) {
     commit('SET_SENSORS_LOADED', false)
+
     const config = {
       headers: { Authorization: 'Bearer ' + rootState.auth.token }
     }
+
     api.get('/capteurs', config)
       .then(function (response) {
         commit('SET_SENSORS', response.data)
@@ -156,17 +171,31 @@ const actions = {
       displaySuccessMessage('Le capteur ' + sensorName + ' a bien été supprimé des favoris')
     }
   },
+  /**
+   * Permet d'obtenir tous les capteurs d'une salle
+   * @param commit
+   * @param rootState
+   * @param roomID l'id de la salle
+   */
   getSensorsOfRoom ({
     commit,
     rootState
   }, roomID) {
+    commit('SET_SENSORS_OF_ROOM_LOADED', false)
+
     const config = {
       headers: { Authorization: 'Bearer ' + rootState.auth.token }
     }
 
+    // Teste s'il y a des capteurs dans la salle et si l'id de la salle est différent que l'id actuel
+    if (state.sensorsOfRoom.length === 0 || (state.sensorsOfRoom.length !== 0 && state.sensorsOfRoom.id !== roomID)) {
+      // Affiche un loading
+      Loading.show()
+    }
+
     api.get(`salles/${roomID}/capteurs`, config)
       .then(function (response) {
-        commit('SET_SENSORS_OF_ROOM', response.data.capteurs)
+        commit('SET_SENSORS_OF_ROOM', response.data)
         commit('SET_SENSORS_OF_ROOM_LOADED', true)
       })
       .catch(function (error) {
@@ -231,9 +260,17 @@ const getters = {
   favoritesSensors: (state) => {
     return state.sensors.filter((sensor) => state.favoritesSensors.includes(sensor.id))
   },
+  /**
+   * Permet d'obtenir les capteurs d'une salle
+   * @param state
+   * @returns {*[]} les capteurs d'une salle
+   */
   sensorsOfRoom: (state) => {
-    console.log(state.sensorsOfRoom)
-    return state.sensorsOfRoom
+    // Récupère l'id de chaque capteur de la salle
+    const sensorsIdOfRoom = state.sensorsOfRoom.capteurs.map(sensor => sensor.id)
+
+    // Filtre la liste des capteurs et retourne seulement ceux qui ont le même id que ceux de la liste sensorsIdOfRoom
+    return state.sensors.filter(sensor => sensorsIdOfRoom.includes(sensor.id))
   }
 }
 

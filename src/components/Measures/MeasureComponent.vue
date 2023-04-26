@@ -12,7 +12,7 @@
     row-key="id"
   >
     <!-- RECHERCHE -->
-    <template v-slot:top-right>
+    <template v-if="full" v-slot:top-right>
       <q-input v-model="filter" borderless debounce="300" dense placeholder="Recherche">
         <template v-slot:append>
           <q-icon name="search"/>

@@ -3,12 +3,15 @@
     <q-card :class="full ? 'sensor-card-full' : 'sensor-card-base'" bordered>
       <q-card-section vertical>
         <!-- NOM DU CAPTEUR -->
-        <div :class="full ? 'text-h4 div-sensor-name' : 'text-h6 div-sensor-name'"
+        <div :class="full ? 'text-h4 sensor-clickable' : 'text-h6 sensor-clickable'"
              @click="showSensorDetails(sensor.id)">{{ sensor.nom }}
         </div>
 
         <!-- NOM DE LA SALLE -->
-        <div :class="full ? 'text-h6' : 'text-subtitle2'">Salle : {{ sensor.salle.nom }}</div>
+        <div :class="full ? 'text-h6 sensor-clickable' : 'text-subtitle2 sensor-clickable'"
+             @click="this.$router.push('/rooms/' + sensor.salle.nom)">Salle
+          : {{ sensor.salle.nom }}
+        </div>
       </q-card-section>
 
       <!-- AJOUTER AUX FAVORIS -->
@@ -74,15 +77,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('sensors', ['favoritesSensors']),
-
-    /**
-     * Teste si le capteur fait partie des favoris
-     * @returns {*} un booléen avec la réponse
-     */
-    isSensorFavorite () {
-      return this.favoritesSensors.includes(this.sensor)
-    }
+    ...mapGetters('sensors', ['favoritesSensors'])
   },
   props: {
     sensor: {
@@ -95,13 +90,6 @@ export default {
   },
   components: {
     measureComponent: require('components/Measures/MeasureComponent.vue').default
-  },
-  mounted () {
-    // Teste si le capteur fait partie des favoris
-    if (this.isSensorFavorite) {
-      // Change la valeur de fav
-      this.fav = true
-    }
   }
 }
 </script>
@@ -121,7 +109,7 @@ export default {
   border-radius: 15px
   text-align: center
 
-.div-sensor-name
+.sensor-clickable
   &:hover
     cursor: pointer
     color: $primary

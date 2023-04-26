@@ -1,7 +1,5 @@
 <template>
   <q-page padding>
-    <h3>Page des capteurs</h3>
-
     <!-- SPINNER -->
     <div
       v-if="!sensorsLoaded"
@@ -12,23 +10,21 @@
 
     <div class="q-pa-md">
       <q-tabs
-        v-model="tab"
-        class="text-grey"
-        active-color="primary"
-        indicator-color="primary"
-        align="justify"
-        narrow-indicator
         v-if="sensors.length > 0"
+        v-model="sensorsTab"
+        active-color="primary"
+        align="justify"
+        class="text-grey"
+        indicator-color="primary"
+        narrow-indicator
       >
-        <q-tab name="favorites" icon="favorite" label="Capteurs favoris" v-if="favoritesSensors.length > 0"/>
-        <q-tab name="all" icon="sensors" label="Tous les capteurs"/>
+        <q-tab v-if="favoritesSensors.length > 0" icon="favorite" label="Capteurs favoris" name="favorites"/>
+        <q-tab icon="sensors" label="Tous les capteurs" name="all"/>
       </q-tabs>
 
-      <q-separator/>
-
-      <q-tab-panels v-model="tab" animated>
+      <q-tab-panels v-model="sensorsTab" animated>
         <!-- CAPTEURS FAVORIS -->
-        <q-tab-panel name="favorites">
+        <q-tab-panel v-if="favoritesSensors.length > 0" name="favorites">
           <!-- COMPOSANT CAPTEUR -->
           <div class="row">
             <sensor-component
@@ -53,7 +49,7 @@
       </q-tab-panels>
 
       <!-- SI AUCUN CAPTEUR -->
-      <p v-if="sensors.length === 0" v-show="sensorsLoaded">Aucun capteur</p>
+      <p v-if="sensorsLoaded && sensors.length === 0">Aucun capteur</p>
     </div>
 
   </q-page>
@@ -67,7 +63,7 @@ export default defineComponent({
   name: 'SensorsPage',
   setup () {
     return {
-      tab: ref('all')
+      sensorsTab: ref('all')
     }
   },
   computed: {
@@ -86,6 +82,10 @@ export default defineComponent({
   mounted () {
     // Récupère les capteurs de l'api
     this.getAllSensorsApi()
+
+    if (this.favoritesSensors.length > 0) {
+      this.sensorsTab = 'favorites'
+    }
   }
 })
 </script>
