@@ -13,62 +13,116 @@
           <!-- BOUTON GÉRER COMPTE -->
           <div class="q-pa-md">
             <q-btn v-if="user" class="absolute-right" flat icon="manage_accounts" rounded>
-              <q-menu>
+              <q-menu
+                transition-hide="jump-up"
+                transition-show="jump-down">
                 <div class="row no-wrap q-pa-md">
                   <div class="column">
                     <div class="text-h6 q-mb-md">Paramètres</div>
                     <div class="cursor-pointer text-primary" @click="prompt = true">
-                      Réinitialiser mot de passe
+                      Modifier mon compte
                       <q-dialog v-model="prompt" persistent>
-                        <q-card style="min-width: 350px">
-                          <q-card-section>
-                            <div class="text-h6">Modification mot de passe</div>
-                          </q-card-section>
+                        <q-card style="min-width: 800px">
+                          <q-form @submit.prevent="submitForm">
+                            <q-card-section>
+                              <div class="text-h5">Modification de compte</div>
+                            </q-card-section>
 
-                          <q-card-section class="q-pt-none">
-                            <!-- NOM -->
-                            <q-input
-                              v-model="user.nom"
-                              class="q-my-md"
-                              label="Nom"
-                              lazy-rules
-                            >
-                              <template v-slot:append>
-                                <q-icon name="person"/>
-                              </template>
-                            </q-input>
+                            <q-card-section>
+                              <div class="q-gutter-xl row q-pa-md">
+                                <!-- NOM -->
+                                <q-input
+                                  v-model="lastName"
+                                  :rules="[ val => val.length >= 1 || 'Minimum 1 caractère']"
+                                  class="col"
+                                  label="Nom"
+                                  lazy-rules
+                                >
+                                  <template v-slot:append>
+                                    <q-icon name="person"/>
+                                  </template>
+                                </q-input>
 
-                            <!-- PRENOM -->
-                            <q-input
-                              v-model="user.prenom"
-                              class="q-my-md"
-                              label="Prénom"
-                              lazy-rules
-                            >
-                              <template v-slot:append>
-                                <q-icon name="person"/>
-                              </template>
-                            </q-input>
+                                <!-- PRENOM -->
+                                <q-input
+                                  v-model="firstName"
+                                  :rules="[ val => val.length >= 1 || 'Minimum 1 caractère']"
+                                  class="col"
+                                  label="Prénom"
+                                  lazy-rules
+                                >
+                                  <template v-slot:append>
+                                    <q-icon name="person"/>
+                                  </template>
+                                </q-input>
+                              </div>
 
-                            <!-- MOT DE PASSE -->
-                            <q-input v-model="password" :type="isPwd ? 'password' : 'text'" autofocus
-                                     class="q-my-md" label="Mot de passe" lazy-rules
-                                     @keyup.enter="prompt = false">
-                              <template v-slot:append>
-                                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
-                                        @click="isPwd = !isPwd"/>
-                                <q-icon name="lock"/>
-                              </template>
-                            </q-input>
-                          </q-card-section>
+                              <div class="q-gutter-xl row q-pa-md">
+                                <!-- EMAIL -->
+                                <q-input
+                                  v-model="email"
+                                  :rules="[val => validateEmail(val) || 'Email invalide']"
+                                  class="col"
+                                  label="Email"
+                                  lazy-rules
+                                >
+                                  <template v-slot:append>
+                                    <q-icon name="email"/>
+                                  </template>
+                                </q-input>
 
-                          <q-card-actions align="right" class="text-primary">
-                            <q-btn v-close-popup color="red" label="Annuler" outline/>
-                            <q-btn v-close-popup color="primary" label="Modifier" @click="editPassword"/>
-                          </q-card-actions>
+                                <!-- MOT DE PASSE -->
+                                <q-input v-model="password" :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
+                                         :type="isPwd ? 'password' : 'text'" class="col" label="Mot de passe"
+                                         lazy-rules
+                                         @keyup.enter="prompt = false">
+                                  <template v-slot:append>
+                                    <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                                            @click="isPwd = !isPwd"/>
+                                    <q-icon name="lock"/>
+                                  </template>
+                                </q-input>
+                              </div>
+
+                              <!-- PHOTO -->
+                              <q-input
+                                v-model="picture"
+                                bottom-slots
+                                class="row q-pa-md"
+                                label="Photo"
+                                lazy-rules
+                              >
+                                <template v-slot:before>
+                                  <q-avatar>
+                                    <img :src="user.photo" alt="Photo de profil">
+                                  </q-avatar>
+                                </template>
+
+                                <template v-slot:append>
+                                  <q-icon v-if="picture !== ''" class="cursor-pointer" name="close"
+                                          @click="picture = ''"/>
+                                  <q-icon name="image"/>
+                                </template>
+
+                                <template v-slot:hint>
+                                  URL de la photo
+                                </template>
+                              </q-input>
+                            </q-card-section>
+
+                            <q-card-actions align="right" class="text-primary">
+                              <q-btn v-close-popup color="red" label="Annuler" outline/>
+                              <q-btn v-close-popup color="primary" label="Modifier" @click="submitForm"/>
+                            </q-card-actions>
+                          </q-form>
                         </q-card>
                       </q-dialog>
                     </div>
+
+                    <!-- BOUTON DÉCONNEXION -->
+                    <q-btn v-close-popup class="bt-logout" color="primary" label="Se déconnecter" size="sm"
+                           @click="logout"/>
+
                   </div>
 
                   <q-separator class="q-mx-lg" inset vertical/>
@@ -81,9 +135,6 @@
 
                     <!-- NOM COMPLET -->
                     <div class="text-subtitle1 q-mt-md q-mb-xs">{{ fullName }}</div>
-
-                    <!-- BOUTON DÉCONNEXION -->
-                    <q-btn v-close-popup color="primary" label="Se déconnecter" push size="sm" @click="logout"/>
 
                   </div>
                 </div>
@@ -170,10 +221,14 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
       prompt: ref(false),
-      password: ref(''),
       isPwd: ref(true),
       drawer: ref(false),
-      miniState: ref(true)
+      miniState: ref(true),
+      firstName: ref(''),
+      lastName: ref(''),
+      email: ref(''),
+      password: ref(''),
+      picture: ref('')
     }
   },
   computed: {
@@ -188,7 +243,7 @@ export default defineComponent({
   },
   methods: {
     // Mappage des actions
-    ...mapActions('auth', ['disconnectUser', 'editUserPassword']),
+    ...mapActions('auth', ['disconnectUser', 'editUser']),
     /**
      * Permet de déconnecter l'utilisateur
      */
@@ -210,14 +265,30 @@ export default defineComponent({
         this.disconnectUser()
       })
     },
-    editPassword () {
+    submitForm () {
+      // Construction du payload
       const payload = {
-        nom: this.user.nom,
-        prenom: this.user.prenom,
-        password: this.password
+        nom: this.lastName,
+        prenom: this.firstName,
+        email: this.email,
+        photo: this.picture
       }
 
-      this.editUserPassword(payload)
+      this.editUser(payload)
+    },
+    validateEmail (email) {
+      // Source : https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return re.test(String(email).toLowerCase())
+    }
+  },
+  mounted () {
+    if (this.user !== null) {
+      // Initialise chaque valeur avec les valeurs de l'utilisateur
+      this.firstName = this.user.prenom
+      this.lastName = this.user.nom
+      this.email = this.user.email
+      this.picture = this.user.photo
     }
   }
 })
@@ -233,4 +304,8 @@ export default defineComponent({
 /* Lien actif du menu latéral */
 .q-router-link--exact-active
   color: $secondary !important
+
+.bt-logout
+  position: absolute
+  bottom: 20px
 </style>
