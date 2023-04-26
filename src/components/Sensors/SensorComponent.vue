@@ -21,6 +21,7 @@
           checked-icon="favorite"
           class="flex-center"
           color="red"
+          indeterminate-icon="help"
           size="lg"
           unchecked-icon="favorite_border"
           @click="toggleFavorite(this.sensor.id)"
@@ -77,7 +78,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('sensors', ['favoritesSensors'])
+    ...mapGetters('sensors', ['favoritesSensors']),
+
+    /**
+     * Teste si le capteur fait partie des favoris
+     * @returns {*} un booléen avec la réponse
+     */
+    isSensorFavorite () {
+      return this.favoritesSensors.includes(this.sensor)
+    }
   },
   props: {
     sensor: {
@@ -86,6 +95,13 @@ export default {
     },
     full: {
       Type: Boolean
+    }
+  },
+  mounted () {
+    // Teste si le capteur fait partie des favoris
+    if (this.isSensorFavorite) {
+      // Change la valeur de fav
+      this.fav = true
     }
   },
   components: {
