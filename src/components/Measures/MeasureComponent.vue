@@ -130,13 +130,12 @@ export default {
       ]
     }
   },
-  methods: {
-    /**
-     * Agit quand la pagination est mise à jour, met à jour le nombre de lignes par page
-     * @param pagination la nouvelle pagination
-     */
-    onUpdatePagination (pagination) {
-      this.pagination.rowsPerPage = pagination.rowsPerPage
+  mounted () {
+    // Si l'écran est plus petit que 767px, met des icônes à la place des labels
+    if (this.$q.screen.width < 767) {
+      this.baseColumns[0].label = '📅'
+      this.baseColumns[1].label = '🌡️'
+      this.baseColumns[2].label = '💧'
     }
   }
 }

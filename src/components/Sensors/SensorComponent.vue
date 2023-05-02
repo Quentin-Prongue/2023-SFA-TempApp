@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md row items-start q-gutter-md">
+  <div :class="classes()">
     <q-card :class="full ? 'sensor-card-full' : 'sensor-card-base'" bordered>
       <q-card-section vertical>
         <!-- NOM DU CAPTEUR -->
@@ -75,6 +75,16 @@ export default {
       this.$router.push({
         path: `/sensor/${sensorID}`
       })
+    },
+    classes () {
+      return {
+        'q-pa-md': this.$q.screen.width > 767,
+        row: this.$q.screen.width > 767,
+        'items-start': this.$q.screen.width > 767,
+        'q-gutter-md': this.$q.screen.width > 767,
+        'q-gutter-sm': this.$q.screen.width < 767,
+        'q-py-sm': this.$q.screen.width < 767
+      }
     }
   },
   computed: {
@@ -111,19 +121,31 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.sensor-card-base
-  width: 100%
-  max-width: 450px
-  border-color: $primary
-  border-radius: 15px
-  text-align: center
-  box-shadow: 9px 7px 10px -6px rgba(0, 0, 0, 0.25)
+/* Applique les règles de ce bloc uniquement aux écrans >= 768px */
+@media screen and (min-width: 768px)
+  .sensor-card-base
+    width: 100%
+    max-width: 450px
+    border-color: $primary
+    border-radius: 15px
+    text-align: center
+    box-shadow: 9px 7px 10px -6px rgba(0, 0, 0, 0.25)
 
-.sensor-card-full
-  width: 100%
-  border-color: $primary
-  border-radius: 15px
-  text-align: center
+  .sensor-card-full
+    width: 100%
+    border-color: $primary
+    border-radius: 15px
+    text-align: center
+
+/* Applique les règles de ce bloc uniquement aux écrans <= 768px */
+@media screen and (max-width: 767px)
+  .sensor-card-base
+    width: 100%
+    max-width: max-content
+    border-color: $primary
+    border-radius: 15px
+    text-align: center
+    box-shadow: 9px 7px 10px -6px rgba(0, 0, 0, 0.25)
 
 .sensor-clickable
   &:hover

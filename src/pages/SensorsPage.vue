@@ -1,14 +1,14 @@
 <template>
-  <q-page padding>
+  <q-page>
     <!-- SPINNER -->
     <div
       v-if="!sensorsLoaded"
       class="q-pa-lg text-center"
     >
-      <q-spinner-radio color="primary" size="4em"/>
+      <q-spinner-hourglass color="primary" size="4em"/>
     </div>
 
-    <div class="q-pa-md">
+    <div>
       <q-tabs
         v-if="sensors.length > 0"
         v-model="sensorsTab"
@@ -89,3 +89,8 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="sass" scoped>
+.div-sensors
+  text-align: center
+</style>
