@@ -1,0 +1,107 @@
+<template>
+  <!-- NOM -->
+  <q-input
+    v-model="form.nom"
+    :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
+    class="q-my-md"
+    label="Nom"
+    lazy-rules
+  >
+    <template v-slot:append>
+      <q-icon name="sensors"/>
+    </template>
+  </q-input>
+
+  <!-- PHOTO -->
+  <q-input
+    v-model="form.logo"
+    bottom-slots
+    class="q-my-md"
+    label="Photo"
+    lazy-rules
+  >
+    <template v-slot:before>
+      <q-avatar>
+        <img :src="sensor.logo" alt="Photo du capteur">
+      </q-avatar>
+    </template>
+
+    <template v-slot:append>
+      <q-icon v-if="picture !== ''" class="cursor-pointer" name="close"
+              @click="picture = ''"/>
+      <q-icon name="image"/>
+    </template>
+
+    <template v-slot:hint>
+      URL du logo
+    </template>
+  </q-input>
+
+  <!-- CODE -->
+  <q-input
+    v-model="form.code"
+    :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
+    class="q-my-md"
+    label="Code"
+    lazy-rules
+  >
+    <template v-slot:append>
+      <q-icon name="tag"/>
+    </template>
+  </q-input>
+
+  <div class="q-mt-md q-gutter-md" style="text-align: right">
+    <q-btn v-close-popup color="red" label="Annuler" outline/>
+    <q-btn v-close-popup color="primary" label="Enregistrer" @click="saveEdit"/>
+  </div>
+</template>
+
+<script>
+import { defineComponent, ref } from 'vue'
+import { mapActions } from 'vuex'
+
+export default defineComponent({
+  name: 'EditSensorForm',
+  props: {
+    sensor: {
+      Type: Object,
+      Required: true
+    }
+  },
+  setup () {
+    return {
+      picture: ref('')
+    }
+  },
+  data () {
+    return {
+      form: {
+        nom: '',
+        logo: '',
+        code: ''
+      }
+    }
+  },
+  methods: {
+    ...mapActions('sensors', ['editSensor']),
+    saveEdit () {
+      // Appeler la méthode submitForm avec les données du formulaire
+      const payload = {
+        nom: this.form.nom,
+        logo: this.form.logo,
+        code: this.form.code,
+        sensorID: this.sensor.id
+      }
+      console.log(payload)
+      this.editSensor(payload)
+    }
+  },
+  mounted () {
+    if (this.sensor !== null) {
+      this.form.nom = this.sensor.nom
+      this.form.logo = this.sensor.logo
+      this.form.code = this.sensor.code
+    }
+  }
+})
+</script>

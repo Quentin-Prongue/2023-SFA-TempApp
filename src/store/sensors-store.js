@@ -236,6 +236,39 @@ const actions = {
         )
         throw error
       })
+  },
+  /**
+   * Permet de modifier un capteur
+   * @param dispatch
+   * @param rootState
+   * @param payload payload qui contient les données
+   */
+  editSensor ({
+    dispatch,
+    rootState
+  }, payload) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    // Récupère et supprime l'id du capteur du payload
+    const {
+      sensorID,
+      ...newPayload
+    } = payload
+
+    api.put(`capteurs/${sensorID}`, newPayload, config)
+      .then(function (response) {
+        dispatch('getAllSensorsApi')
+        displaySuccessMessage('Le capteur ' + newPayload.nom + ' a bien été modifié')
+        return response
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de la modification du capteur !'
+        )
+        throw error
+      })
   }
 }
 

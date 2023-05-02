@@ -9,6 +9,22 @@
           <q-tooltip :offset="[0, 0]" class="bg-primary">Afficher les détails du capteur</q-tooltip>
         </div>
 
+        <!-- BOUTON MODIFIER -->
+        <q-btn v-show="isAdmin()" class="absolute-top-right bt-edit-sensor" color="primary" flat icon="edit"
+               @click="displayForm = true"/>
+
+        <q-dialog v-model="displayForm">
+          <q-card style="min-width: 350px">
+            <q-card-section>
+              <div class="text-h6">Modification de {{ sensor.nom }}</div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              <edit-sensor-form :sensor="sensor"/>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+
         <!-- NOM DE LA SALLE -->
         <div :class="full ? 'text-h6 sensor-clickable' : 'text-subtitle2 sensor-clickable'"
              @click="this.$router.push('/rooms/' + sensor.salle.nom)">
@@ -44,17 +60,21 @@
 <script>
 import { ref } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
+import EditSensorForm from 'components/Sensors/EditSensorForm.vue'
 
 export default {
   name: 'SensorComponent',
   setup () {
     return {
-      fav: ref(false)
+      fav: ref(false),
+      displayForm: ref(false)
     }
   },
   methods: {
     // Mappage des actions
     ...mapActions('sensors', ['addSensorToFavorites', 'removeSensorFromFavorites']),
+    // Mappage des getters
+    ...mapGetters('auth', ['isAdmin']),
 
     /**
      * Permet d'ajouter ou de supprimer un capteur des favoris
@@ -79,6 +99,10 @@ export default {
         path: `/sensor/${sensorID}`
       })
     },
+    /**
+     * Change les classes en fonction de la taille de l'écran
+     * @returns {{'items-start': boolean, 'q-pa-md': boolean, 'q-gutter-sm': boolean, row: boolean, 'q-gutter-md': boolean, 'q-py-sm': boolean}}
+     */
     classes () {
       return {
         'q-pa-md': this.$q.screen.width > 767,
@@ -91,8 +115,8 @@ export default {
     }
   },
   computed: {
+    // Mappage des getters
     ...mapGetters('sensors', ['favoritesSensors']),
-
     /**
      * Teste si le capteur fait partie des favoris
      * @returns {*} un booléen avec la réponse
@@ -118,6 +142,7 @@ export default {
     }
   },
   components: {
+    EditSensorForm,
     measureComponent: require('components/Measures/MeasureComponent.vue').default
   }
 }
@@ -154,4 +179,8 @@ export default {
   &:hover
     cursor: pointer
     color: $primary
+
+.bt-edit-sensor
+  margin-top: 10px
+  margin-right: 10px
 </style>

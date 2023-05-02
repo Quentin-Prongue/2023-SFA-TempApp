@@ -263,6 +263,9 @@ export default defineComponent({
         this.disconnectUser()
       })
     },
+    /**
+     * Méthode qui s'exécute quand le formulaire est soumis
+     */
     submitForm () {
       // Construction du payload
       const payload = {
@@ -274,6 +277,11 @@ export default defineComponent({
 
       this.editUser(payload)
     },
+    /**
+     * Permet de valider un email
+     * @param email l'email
+     * @returns {boolean} la réponse de la validation
+     */
     validateEmail (email) {
       // Source : https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

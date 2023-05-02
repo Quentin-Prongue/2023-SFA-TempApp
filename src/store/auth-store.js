@@ -185,7 +185,19 @@ const actions = {
   Fonctionne comme les propriétés calculées
   Sert à calculer, trier, filtrer ou formater les données
    */
-const getters = {}
+const getters = {
+  /**
+   * Permet de savoir si l'utilisateur est administrateur
+   * @param state
+   * @returns {*} un booléen si l'utilisateur est administrateur
+   */
+  isAdmin: (state) => {
+    if (state.user) {
+      // Retourne la valeur convertie en booléen (!!)
+      return !!state.user.is_admin
+    }
+  }
+}
 
 /*
   Exporte les constantes, variables du fichier
