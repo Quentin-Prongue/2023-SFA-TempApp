@@ -92,7 +92,6 @@ export default defineComponent({
         code: this.form.code,
         sensorID: this.sensor.id
       }
-      console.log(payload)
       this.editSensor(payload)
     }
   },

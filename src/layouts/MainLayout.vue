@@ -28,85 +28,8 @@
                           </q-card-section>
 
                           <q-card-section>
-                            <div class="q-gutter-xl row q-pa-md">
-                              <!-- NOM -->
-                              <q-input
-                                v-model="lastName"
-                                :rules="[ val => val.length >= 1 || 'Minimum 1 caractère']"
-                                class="col"
-                                label="Nom"
-                                lazy-rules
-                              >
-                                <template v-slot:append>
-                                  <q-icon name="person"/>
-                                </template>
-                              </q-input>
-
-                              <!-- PRENOM -->
-                              <q-input
-                                v-model="firstName"
-                                :rules="[ val => val.length >= 1 || 'Minimum 1 caractère']"
-                                class="col"
-                                label="Prénom"
-                                lazy-rules
-                              >
-                                <template v-slot:append>
-                                  <q-icon name="person"/>
-                                </template>
-                              </q-input>
-                            </div>
-
-                            <div class="q-gutter-xl row q-pa-md">
-                              <!-- EMAIL -->
-                              <q-input
-                                v-model="email"
-                                :rules="[val => validateEmail(val) || 'Email invalide']"
-                                class="col"
-                                label="Email"
-                                lazy-rules
-                              >
-                                <template v-slot:append>
-                                  <q-icon name="email"/>
-                                </template>
-                              </q-input>
-
-                              <!-- MOT DE PASSE -->
-                              <q-input v-model="password" :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
-                                       :type="isPwd ? 'password' : 'text'" class="col" label="Mot de passe"
-                                       lazy-rules
-                                       @keyup.enter="prompt = false">
-                                <template v-slot:append>
-                                  <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
-                                          @click="isPwd = !isPwd"/>
-                                  <q-icon name="lock"/>
-                                </template>
-                              </q-input>
-                            </div>
-
-                            <!-- PHOTO -->
-                            <q-input
-                              v-model="picture"
-                              bottom-slots
-                              class="row q-pa-md"
-                              label="Photo"
-                              lazy-rules
-                            >
-                              <template v-slot:before>
-                                <q-avatar>
-                                  <img :src="user.photo" alt="Photo de profil">
-                                </q-avatar>
-                              </template>
-
-                              <template v-slot:append>
-                                <q-icon v-if="picture !== ''" class="cursor-pointer" name="close"
-                                        @click="picture = ''"/>
-                                <q-icon name="image"/>
-                              </template>
-
-                              <template v-slot:hint>
-                                URL de la photo
-                              </template>
-                            </q-input>
+                            <!-- FORMULAIRE DE MODIFICATION DE L'UTILISATEUR -->
+                            <edit-user-form :user="user"/>
                           </q-card-section>
 
                           <q-card-actions align="right" class="text-primary">
@@ -219,17 +142,12 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
       prompt: ref(false),
-      isPwd: ref(true),
       drawer: ref(false),
-      miniState: ref(true),
-      firstName: ref(''),
-      lastName: ref(''),
-      email: ref(''),
-      password: ref(''),
-      picture: ref('')
+      miniState: ref(true)
     }
   },
   computed: {
+    // Mappage des données
     ...mapState('auth', ['user']),
     /**
      * Permet d'obtenir le nom complet de l'utilisateur
@@ -296,6 +214,9 @@ export default defineComponent({
       this.email = this.user.email
       this.picture = this.user.photo
     }
+  },
+  components: {
+    EditUserForm: require('components/User/EditUserForm.vue').default
   }
 })
 </script>
