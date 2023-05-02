@@ -1,7 +1,8 @@
 import { api } from 'boot/axios'
+import { Loading, LocalStorage } from 'quasar'
 import { displayErrorMessage } from 'src/functions/error-message'
-import { Loading, LocalStorage, QSpinnerCube } from 'quasar'
 import { displaySuccessMessage } from 'src/functions/success-message'
+import { displayLoadingMessage } from 'src/functions/loading-message'
 
 // State : données du magasin
 const state = {
@@ -56,10 +57,9 @@ const actions = {
     commit,
     dispatch
   }, payload) {
-    Loading.show({
-      spinner: QSpinnerCube,
-      message: 'Connexion en cours'
-    })
+    // Affiche un loading
+    displayLoadingMessage('Connexion en cours')
+
     api.post('/login', payload)
       .then(function (response) {
         dispatch('setUser', response.data)
@@ -109,10 +109,9 @@ const actions = {
     commit,
     state
   }) {
-    Loading.show({
-      spinner: QSpinnerCube,
-      message: 'Déconnexion en cours'
-    })
+    // Affiche un loading
+    displayLoadingMessage('Déconnexion en cours')
+
     const that = this
     // Configuration du header avec token
     const config = {
@@ -150,10 +149,8 @@ const actions = {
     commit,
     state
   }, payload) {
-    Loading.show({
-      spinner: QSpinnerCube,
-      message: 'Application des modifications en cours'
-    })
+    // Affiche un loading
+    displayLoadingMessage('Application des modifications en cours')
 
     const config = {
       headers: { Authorization: 'Bearer ' + state.token }

@@ -5,7 +5,7 @@
       v-if="!roomsLoaded"
       class="q-pa-lg text-center"
     >
-      <q-spinner-radio color="primary" size="4em"/>
+      <q-spinner-hourglass color="primary" size="4em"/>
     </div>
 
     <!-- SALLES -->

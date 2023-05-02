@@ -2,6 +2,7 @@ import { api } from 'boot/axios'
 import { displayErrorMessage } from 'src/functions/error-message'
 import { Loading, LocalStorage } from 'quasar'
 import { displaySuccessMessage } from 'src/functions/success-message'
+import { displayLoadingMessage } from 'src/functions/loading-message'
 
 // State : données du magasin
 const state = {
@@ -190,7 +191,7 @@ const actions = {
     // Teste s'il y a des capteurs dans la salle et si l'id de la salle est différent que l'id actuel
     if (state.sensorsOfRoom.length === 0 || (state.sensorsOfRoom.length !== 0 && state.sensorsOfRoom.id !== roomID)) {
       // Affiche un loading
-      Loading.show()
+      displayLoadingMessage('')
     }
 
     api.get(`salles/${roomID}/capteurs`, config)
@@ -222,7 +223,7 @@ const actions = {
     // Teste s'il y a un capteur actuel et que son id est pareil que l'id du capteur
     if ((state.currentSensor && state.currentSensor.id.toString() !== sensorID) || !state.currentSensor) {
       // Affiche un loading
-      Loading.show()
+      displayLoadingMessage('')
     }
 
     api.get(`capteurs/${sensorID}/all`, config)

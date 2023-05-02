@@ -1,188 +1,186 @@
 <template>
-  <div class="q-pa-md">
-    <q-layout view="hHh Lpr lff">
-      <q-header elevated>
-        <q-toolbar>
-          <q-btn aria-label="Menu" dense flat icon="menu" round @click="toggleLeftDrawer"/>
-          <q-toolbar-title class="absolute-center">
-            Temp App
-          </q-toolbar-title>
-          <!-- BOUTON CONNEXION -->
-          <q-btn v-if="!user" class="absolute-right" flat icon-right="account_circle" label="Se connecter" to="/login"/>
+  <q-layout view="hHh Lpr lff">
+    <q-header elevated>
+      <q-toolbar>
+        <q-btn aria-label="Menu" class="bt-menu" dense flat icon="menu" round @click="toggleLeftDrawer"/>
+        <q-toolbar-title class="absolute-center">
+          Temp App
+        </q-toolbar-title>
+        <!-- BOUTON CONNEXION -->
+        <q-btn v-if="!user" class="absolute-right" flat icon-right="account_circle" label="Se connecter" to="/login"/>
 
-          <!-- BOUTON GÉRER COMPTE -->
-          <div class="q-pa-md">
-            <q-btn v-if="user" class="absolute-right" flat icon="manage_accounts" rounded>
-              <q-menu
-                transition-hide="jump-up"
-                transition-show="jump-down">
-                <div class="row no-wrap q-pa-md">
-                  <div class="column">
-                    <div class="text-h6 q-mb-md">Paramètres</div>
-                    <div class="cursor-pointer text-primary" @click="prompt = true">
-                      Modifier mon compte
-                      <q-dialog v-model="prompt" persistent>
-                        <q-card style="min-width: 800px">
-                          <q-form @submit.prevent="submitForm">
-                            <q-card-section>
-                              <div class="text-h5">Modification de compte</div>
-                            </q-card-section>
+        <!-- BOUTON GÉRER COMPTE -->
+        <div class="q-pa-md">
+          <q-btn v-if="user" class="absolute-right" flat icon="manage_accounts" rounded>
+            <q-menu
+              transition-hide="jump-up"
+              transition-show="jump-down">
+              <div class="row no-wrap q-pa-md">
+                <div class="column">
+                  <div class="text-h6 q-mb-md">Paramètres</div>
+                  <div class="cursor-pointer text-primary" @click="prompt = true">
+                    Modifier mon compte
+                    <q-dialog v-model="prompt" persistent>
+                      <q-card style="min-width: 800px">
+                        <q-form @submit.prevent="submitForm">
+                          <q-card-section>
+                            <div class="text-h5">Modification de compte</div>
+                          </q-card-section>
 
-                            <q-card-section>
-                              <div class="q-gutter-xl row q-pa-md">
-                                <!-- NOM -->
-                                <q-input
-                                  v-model="lastName"
-                                  :rules="[ val => val.length >= 1 || 'Minimum 1 caractère']"
-                                  class="col"
-                                  label="Nom"
-                                  lazy-rules
-                                >
-                                  <template v-slot:append>
-                                    <q-icon name="person"/>
-                                  </template>
-                                </q-input>
-
-                                <!-- PRENOM -->
-                                <q-input
-                                  v-model="firstName"
-                                  :rules="[ val => val.length >= 1 || 'Minimum 1 caractère']"
-                                  class="col"
-                                  label="Prénom"
-                                  lazy-rules
-                                >
-                                  <template v-slot:append>
-                                    <q-icon name="person"/>
-                                  </template>
-                                </q-input>
-                              </div>
-
-                              <div class="q-gutter-xl row q-pa-md">
-                                <!-- EMAIL -->
-                                <q-input
-                                  v-model="email"
-                                  :rules="[val => validateEmail(val) || 'Email invalide']"
-                                  class="col"
-                                  label="Email"
-                                  lazy-rules
-                                >
-                                  <template v-slot:append>
-                                    <q-icon name="email"/>
-                                  </template>
-                                </q-input>
-
-                                <!-- MOT DE PASSE -->
-                                <q-input v-model="password" :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
-                                         :type="isPwd ? 'password' : 'text'" class="col" label="Mot de passe"
-                                         lazy-rules
-                                         @keyup.enter="prompt = false">
-                                  <template v-slot:append>
-                                    <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
-                                            @click="isPwd = !isPwd"/>
-                                    <q-icon name="lock"/>
-                                  </template>
-                                </q-input>
-                              </div>
-
-                              <!-- PHOTO -->
+                          <q-card-section>
+                            <div class="q-gutter-xl row q-pa-md">
+                              <!-- NOM -->
                               <q-input
-                                v-model="picture"
-                                bottom-slots
-                                class="row q-pa-md"
-                                label="Photo"
+                                v-model="lastName"
+                                :rules="[ val => val.length >= 1 || 'Minimum 1 caractère']"
+                                class="col"
+                                label="Nom"
                                 lazy-rules
                               >
-                                <template v-slot:before>
-                                  <q-avatar>
-                                    <img :src="user.photo" alt="Photo de profil">
-                                  </q-avatar>
-                                </template>
-
                                 <template v-slot:append>
-                                  <q-icon v-if="picture !== ''" class="cursor-pointer" name="close"
-                                          @click="picture = ''"/>
-                                  <q-icon name="image"/>
-                                </template>
-
-                                <template v-slot:hint>
-                                  URL de la photo
+                                  <q-icon name="person"/>
                                 </template>
                               </q-input>
-                            </q-card-section>
 
-                            <q-card-actions align="right" class="text-primary">
-                              <q-btn v-close-popup color="red" label="Annuler" outline/>
-                              <q-btn v-close-popup color="primary" label="Modifier" @click="submitForm"/>
-                            </q-card-actions>
-                          </q-form>
-                        </q-card>
-                      </q-dialog>
-                    </div>
+                              <!-- PRENOM -->
+                              <q-input
+                                v-model="firstName"
+                                :rules="[ val => val.length >= 1 || 'Minimum 1 caractère']"
+                                class="col"
+                                label="Prénom"
+                                lazy-rules
+                              >
+                                <template v-slot:append>
+                                  <q-icon name="person"/>
+                                </template>
+                              </q-input>
+                            </div>
 
-                    <!-- BOUTON DÉCONNEXION -->
-                    <q-btn v-close-popup class="bt-logout" color="primary" label="Se déconnecter" size="sm"
-                           @click="logout"/>
+                            <div class="q-gutter-xl row q-pa-md">
+                              <!-- EMAIL -->
+                              <q-input
+                                v-model="email"
+                                :rules="[val => validateEmail(val) || 'Email invalide']"
+                                class="col"
+                                label="Email"
+                                lazy-rules
+                              >
+                                <template v-slot:append>
+                                  <q-icon name="email"/>
+                                </template>
+                              </q-input>
 
+                              <!-- MOT DE PASSE -->
+                              <q-input v-model="password" :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
+                                       :type="isPwd ? 'password' : 'text'" class="col" label="Mot de passe"
+                                       lazy-rules
+                                       @keyup.enter="prompt = false">
+                                <template v-slot:append>
+                                  <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                                          @click="isPwd = !isPwd"/>
+                                  <q-icon name="lock"/>
+                                </template>
+                              </q-input>
+                            </div>
+
+                            <!-- PHOTO -->
+                            <q-input
+                              v-model="picture"
+                              bottom-slots
+                              class="row q-pa-md"
+                              label="Photo"
+                              lazy-rules
+                            >
+                              <template v-slot:before>
+                                <q-avatar>
+                                  <img :src="user.photo" alt="Photo de profil">
+                                </q-avatar>
+                              </template>
+
+                              <template v-slot:append>
+                                <q-icon v-if="picture !== ''" class="cursor-pointer" name="close"
+                                        @click="picture = ''"/>
+                                <q-icon name="image"/>
+                              </template>
+
+                              <template v-slot:hint>
+                                URL de la photo
+                              </template>
+                            </q-input>
+                          </q-card-section>
+
+                          <q-card-actions align="right" class="text-primary">
+                            <q-btn v-close-popup color="red" label="Annuler" outline/>
+                            <q-btn v-close-popup color="primary" label="Modifier" @click="submitForm"/>
+                          </q-card-actions>
+                        </q-form>
+                      </q-card>
+                    </q-dialog>
                   </div>
 
-                  <q-separator class="q-mx-lg" inset vertical/>
+                  <!-- BOUTON DÉCONNEXION -->
+                  <q-btn v-close-popup class="bt-logout" color="primary" label="Se déconnecter" size="sm"
+                         @click="logout"/>
 
-                  <!-- PHOTO DE PROFIL -->
-                  <div class="column items-center">
-                    <q-avatar size="72px">
-                      <img :src="user.photo" alt="Photo de profil">
-                    </q-avatar>
-
-                    <!-- NOM COMPLET -->
-                    <div class="text-subtitle1 q-mt-md q-mb-xs">{{ fullName }}</div>
-
-                  </div>
                 </div>
-              </q-menu>
-            </q-btn>
-          </div>
-        </q-toolbar>
-      </q-header>
 
-      <q-drawer
-        v-model="leftDrawerOpen"
-        :breakpoint="500"
+                <q-separator class="q-mx-lg" inset vertical/>
 
-        :mini="miniState"
-        :width="200"
-        bordered
-        class="bg-primary"
+                <!-- PHOTO DE PROFIL -->
+                <div class="column items-center">
+                  <q-avatar size="72px">
+                    <img :src="user.photo" alt="Photo de profil">
+                  </q-avatar>
 
-        mini-to-overlay
-        show-if-above
-        @mouseout="miniState = true"
-        @mouseover="miniState = false"
-      >
-        <q-list>
-          <q-item v-for="link in links" :key="link.id" :to="link.path" class="text-grey-4" clickable exact>
-            <q-item-section avatar>
-              <q-icon :name="link.icon"/>
-            </q-item-section>
+                  <!-- NOM COMPLET -->
+                  <div class="text-subtitle1 q-mt-md q-mb-xs">{{ fullName }}</div>
 
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-drawer>
+                </div>
+              </div>
+            </q-menu>
+          </q-btn>
+        </div>
+      </q-toolbar>
+    </q-header>
 
-      <q-page-container>
-        <router-view/>
-      </q-page-container>
+    <q-drawer
+      v-model="leftDrawerOpen"
+      :breakpoint="500"
 
-      <q-footer elevated>
-        <q-tabs>
-          <q-route-tab v-for="link in links" :key="link.id" :icon="link.icon" :label="link.text" :to="link.route"
-                       exact/>
-        </q-tabs>
-      </q-footer>
-    </q-layout>
-  </div>
+      :mini="miniState"
+      :width="200"
+      bordered
+      class="bg-primary"
+
+      mini-to-overlay
+      show-if-above
+      @mouseout="miniState = true"
+      @mouseover="miniState = false"
+    >
+      <q-list>
+        <q-item v-for="link in links" :key="link.id" :to="link.path" class="text-grey-4" clickable exact>
+          <q-item-section avatar>
+            <q-icon :name="link.icon"/>
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>{{ link.text }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-drawer>
+
+    <q-page-container>
+      <router-view/>
+    </q-page-container>
+
+    <q-footer bordered elevated>
+      <q-tabs>
+        <q-route-tab v-for="link in links" :key="link.id" :label="link.text" :to="link.path"
+                     exact/>
+      </q-tabs>
+    </q-footer>
+  </q-layout>
 </template>
 
 <script>
@@ -278,7 +276,7 @@ export default defineComponent({
     },
     validateEmail (email) {
       // Source : https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(String(email).toLowerCase())
     }
   },
@@ -297,9 +295,17 @@ export default defineComponent({
 <style lang="sass">
 /* Applique les règles de ce bloc uniquement aux écrans >= 768px */
 @media screen and (min-width: 768px)
-/* Cache les éléments avec la classe CSS q-footer */
-.q-footer
-  display: none
+  /* Cache les éléments avec la classe CSS q-footer */
+  .q-footer
+    display: none
+  .bt-menu
+    display: block
+
+@media screen and (max-width: 767px)
+  .q-footer
+    display: block
+  .bt-menu
+    display: none
 
 /* Lien actif du menu latéral */
 .q-router-link--exact-active
