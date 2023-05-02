@@ -4,13 +4,16 @@
       <q-card-section vertical>
         <!-- NOM DU CAPTEUR -->
         <div :class="full ? 'text-h4 sensor-clickable' : 'text-h6 sensor-clickable'"
-             @click="showSensorDetails(sensor.id)">{{ sensor.nom }}
+             @click="showSensorDetails(sensor.id)">
+          {{ sensor.nom }}
+          <q-tooltip :offset="[0, 0]" class="bg-primary">Afficher les détails du capteur</q-tooltip>
         </div>
 
         <!-- NOM DE LA SALLE -->
         <div :class="full ? 'text-h6 sensor-clickable' : 'text-subtitle2 sensor-clickable'"
-             @click="this.$router.push('/rooms/' + sensor.salle.nom)">Salle
-          : {{ sensor.salle.nom }}
+             @click="this.$router.push('/rooms/' + sensor.salle.nom)">
+          Salle : {{ sensor.salle.nom }}
+          <q-tooltip :offset="[0, 0]" class="bg-primary">Afficher la salle</q-tooltip>
         </div>
       </q-card-section>
 
