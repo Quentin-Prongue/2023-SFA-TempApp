@@ -9,18 +9,57 @@
           <q-tooltip :offset="[0, 0]" class="bg-primary">Afficher les détails du capteur</q-tooltip>
         </div>
 
-        <!-- BOUTON MODIFIER -->
-        <q-btn v-show="isAdmin()" class="absolute-top-right bt-edit-sensor" color="primary" flat icon="edit"
-               @click="displayForm = true"/>
+        <!-- BOUTON GERER CAPTEUR -->
+        <q-btn-dropdown class="absolute-top-right bt-manage-sensor" color="primary" flat icon="settings">
+          <q-list>
+            <div class="column">
+              <!-- BOUTON MODIFIER -->
+              <q-btn v-show="isAdmin()" color="primary" flat icon="edit"
+                     @click="displayEditForm = true">
+                <q-tooltip :offset="[0, 0]" class="bg-primary">Modifier le capteur</q-tooltip>
+              </q-btn>
 
-        <q-dialog v-model="displayForm">
+              <!-- BOUTON SUPPRIMER -->
+              <q-btn v-show="isAdmin()" color="red" flat icon="delete"
+                     @click="displayDeleteDialog = true">
+                <q-tooltip :offset="[0, 0]" class="bg-primary">Supprimer le capteur</q-tooltip>
+              </q-btn>
+            </div>
+          </q-list>
+        </q-btn-dropdown>
+
+        <!-- DIALOG POUR MODIFICATION -->
+        <q-dialog v-model="displayEditForm">
           <q-card style="min-width: 350px">
             <q-card-section>
               <div class="text-h6">Modification de {{ sensor.nom }}</div>
             </q-card-section>
 
             <q-card-section class="q-pt-none">
+              <!-- FORMULAIRE DE MODIFICATION -->
               <edit-sensor-form :sensor="sensor"/>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+
+        <!-- DIALOG POUR SUPPRESSION -->
+        <q-dialog v-model="displayDeleteDialog">
+          <q-card style="min-width: 350px">
+            <q-card-section>
+              <div class="text-h6">Suppression de {{ sensor.nom }}</div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              Voulez-vous vraiment supprimer ce capteur ?
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              <div class="q-mt-md q-gutter-md" style="text-align: right">
+                <!-- BOUTON ANNULER -->
+                <q-btn v-close-popup color="primary" label="Annuler" outline/>
+                <!-- BOUTON SUPPRIMER -->
+                <q-btn v-close-popup color="red" label="Supprimer" @click="deleteSensor(this.sensor.id)"/>
+              </div>
             </q-card-section>
           </q-card>
         </q-dialog>
@@ -67,12 +106,13 @@ export default {
   setup () {
     return {
       fav: ref(false),
-      displayForm: ref(false)
+      displayEditForm: ref(false),
+      displayDeleteDialog: ref(false)
     }
   },
   methods: {
     // Mappage des actions
-    ...mapActions('sensors', ['addSensorToFavorites', 'removeSensorFromFavorites']),
+    ...mapActions('sensors', ['addSensorToFavorites', 'removeSensorFromFavorites', 'deleteSensor']),
     // Mappage des getters
     ...mapGetters('auth', ['isAdmin']),
 
@@ -180,7 +220,7 @@ export default {
     cursor: pointer
     color: $primary
 
-.bt-edit-sensor
-  margin-top: 10px
+.bt-manage-sensor
+  margin-top: 15px
   margin-right: 10px
 </style>

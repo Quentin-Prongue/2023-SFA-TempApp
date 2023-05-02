@@ -10,6 +10,12 @@
 
     <!-- SALLES -->
     <div v-if="roomsLoaded" class="q-pa-md absolute-bottom div-rooms">
+
+      <q-fab color="primary" direction="up" icon="settings" class="absolute-bottom-right bt-floating-action">
+        <q-fab-action color="primary" icon="add" @click="addRoom"/>
+        <q-fab-action color="red" icon="delete" @click="deleteRoom"/>
+      </q-fab>
+
       <div class="q-gutter-y-md">
         <!-- CONTENU DES TABS -->
         <q-tab-panels v-model="roomTab" animated>
@@ -84,6 +90,14 @@ export default defineComponent({
      */
     getSensorsOfRoomByID (roomID) {
       this.getSensorsOfRoom(roomID)
+    },
+
+    addRoom () {
+      alert('Ajout ' + this.roomTab)
+    },
+
+    deleteRoom () {
+      alert('Suppression ' + this.roomTab)
     }
   },
   watch: {
@@ -132,4 +146,8 @@ export default defineComponent({
 <style lang="sass" scoped>
 .div-rooms
   margin-bottom: 15px
+
+.bt-floating-action
+  margin-bottom: 100px
+  margin-right: 20px
 </style>

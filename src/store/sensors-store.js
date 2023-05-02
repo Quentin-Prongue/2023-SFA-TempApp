@@ -265,7 +265,34 @@ const actions = {
       })
       .catch(function (error) {
         displayErrorMessage(
-          'Erreur lors de la modification du capteur !'
+          'Erreur lors de la modification du capteur ' + newPayload.nom + ' !'
+        )
+        throw error
+      })
+  },
+  /**
+   * Permet de supprimer un capteur
+   * @param dispatch
+   * @param rootState
+   * @param sensorID l'id du capteur
+   */
+  deleteSensor ({
+    dispatch,
+    rootState
+  }, sensorID) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    api.delete(`capteurs/${sensorID}`, config)
+      .then(function (response) {
+        dispatch('getAllSensorsApi')
+        displaySuccessMessage('Le capteur a bien été supprimé')
+        return response
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de la suppression du capteur !'
         )
         throw error
       })
