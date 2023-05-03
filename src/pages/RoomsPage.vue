@@ -10,70 +10,6 @@
 
     <!-- SALLES -->
     <div v-if="roomsLoaded" class="q-pa-md absolute-bottom div-rooms">
-
-      <!-- BOUTON FLOTTANT -->
-      <q-fab class="absolute-bottom-right bt-floating-action" color="primary" direction="up" icon="settings">
-        <q-fab-action color="primary" icon="edit" @click="editCurrentRoom">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Modifier cette salle</q-tooltip>
-        </q-fab-action>
-        <q-fab-action color="primary" icon="add" @click="addOtherRoom">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Ajouter une salle</q-tooltip>
-        </q-fab-action>
-        <q-fab-action color="red" icon="delete" @click="displayDeleteDialog = true">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Supprimer une salle</q-tooltip>
-        </q-fab-action>
-      </q-fab>
-
-      <!-- DIALOG POUR MODIFICATION -->
-      <q-dialog v-model="displayEditDialog">
-        <q-card style="min-width: 350px">
-          <q-card-section>
-            <div class="text-h6">Modification de {{ roomTab }}</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <!-- FORMULAIRE DE MODIFICATION -->
-            <room-form :action="'edit'" :room="currentRoom"/>
-          </q-card-section>
-        </q-card>
-      </q-dialog>
-
-      <!-- DIALOG POUR AJOUT -->
-      <q-dialog v-model="displayAddDialog">
-        <q-card style="min-width: 350px">
-          <q-card-section>
-            <div class="text-h6">Ajout d'une salle</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <!-- FORMULAIRE D'AJOUT -->
-            <room-form :action="'add'" :room="currentRoom"/>
-          </q-card-section>
-        </q-card>
-      </q-dialog>
-
-      <!-- DIALOG POUR SUPPRESSION -->
-      <q-dialog v-model="displayDeleteDialog">
-        <q-card style="min-width: 350px">
-          <q-card-section>
-            <div class="text-h6">Suppression de {{ roomTab }}</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            Voulez-vous vraiment supprimer cette salle ?
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <div class="q-mt-md q-gutter-md" style="text-align: right">
-              <!-- BOUTON ANNULER -->
-              <q-btn v-close-popup color="primary" label="Annuler" outline/>
-              <!-- BOUTON SUPPRIMER -->
-              <q-btn v-close-popup color="red" label="Supprimer" @click="deleteCurrentRoom"/>
-            </div>
-          </q-card-section>
-        </q-card>
-      </q-dialog>
-
       <div class="q-gutter-y-md">
         <!-- CONTENU DES TABS -->
         <q-tab-panels v-model="roomTab" animated>
@@ -109,6 +45,74 @@
         </q-tabs>
       </div>
     </div>
+
+    <!-- BOUTON FLOTTANT -->
+    <q-page-sticky :offset="[18, 100]" position="bottom-right">
+      <q-fab color="primary" direction="up" icon="settings">
+        <!-- BOUTON MODIFIER -->
+        <q-fab-action color="primary" icon="edit" @click="editCurrentRoom">
+          <q-tooltip :offset="[0, 0]" class="bg-primary">Modifier cette salle</q-tooltip>
+        </q-fab-action>
+        <!-- BOUTON AJOUTER -->
+        <q-fab-action color="primary" icon="add" @click="addOtherRoom">
+          <q-tooltip :offset="[0, 0]" class="bg-primary">Ajouter une salle</q-tooltip>
+        </q-fab-action>
+        <!-- BOUTON SUPPRIMER -->
+        <q-fab-action color="red" icon="delete" @click="displayDeleteDialog = true">
+          <q-tooltip :offset="[0, 0]" class="bg-primary">Supprimer une salle</q-tooltip>
+        </q-fab-action>
+      </q-fab>
+    </q-page-sticky>
+
+    <!-- DIALOG POUR MODIFICATION -->
+    <q-dialog v-model="displayEditDialog">
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Modification de {{ roomTab }}</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <!-- FORMULAIRE DE MODIFICATION -->
+          <room-form :action="'edit'" :room="currentRoom" @close="displayEditDialog = false"/>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
+    <!-- DIALOG POUR AJOUT -->
+    <q-dialog v-model="displayAddDialog">
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Ajout d'une salle</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <!-- FORMULAIRE D'AJOUT -->
+          <room-form :action="'add'" :room="currentRoom" @close="displayAddDialog = false"/>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
+    <!-- DIALOG POUR SUPPRESSION -->
+    <q-dialog v-model="displayDeleteDialog">
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Suppression de {{ roomTab }}</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          Voulez-vous vraiment supprimer cette salle ?
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <div class="q-mt-md q-gutter-md" style="text-align: right">
+            <!-- BOUTON ANNULER -->
+            <q-btn v-close-popup color="primary" label="Annuler" outline/>
+            <!-- BOUTON SUPPRIMER -->
+            <q-btn v-close-popup color="red" label="Supprimer" @click="deleteCurrentRoom"/>
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
 
     <!-- SI AUCUNE SALLE -->
     <p v-if="roomsLoaded && rooms.length === 0">Aucune salle</p>
@@ -240,8 +244,4 @@ export default defineComponent({
 <style lang="sass" scoped>
 .div-rooms
   margin-bottom: 15px
-
-.bt-floating-action
-  margin-bottom: 100px
-  margin-right: 20px
 </style>

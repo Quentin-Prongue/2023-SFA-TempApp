@@ -1,59 +1,61 @@
 <template>
-  <!-- NOM -->
-  <q-input
-    v-model="form.nom"
-    :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
-    class="q-my-md"
-    label="Nom"
-    lazy-rules
-  >
-    <template v-slot:append>
-      <q-icon name="sensors"/>
-    </template>
-  </q-input>
+  <q-form @submit.prevent="submitForm">
+    <!-- NOM -->
+    <q-input
+      v-model="form.nom"
+      :rules="[ val => val.length >= 2 || 'Minimum 2 caractères']"
+      class="q-my-md"
+      label="Nom *"
+      lazy-rules
+    >
+      <template v-slot:append>
+        <q-icon name="sensors"/>
+      </template>
+    </q-input>
 
-  <!-- PHOTO -->
-  <q-input
-    v-model="form.logo"
-    bottom-slots
-    class="q-my-md"
-    label="Photo"
-    lazy-rules
-  >
-    <template v-slot:before>
-      <q-avatar>
-        <img :src="sensor.logo" alt="Photo du capteur">
-      </q-avatar>
-    </template>
+    <!-- PHOTO -->
+    <q-input
+      v-model="form.logo"
+      bottom-slots
+      class="q-my-md"
+      label="Photo"
+      lazy-rules
+    >
+      <template v-slot:before>
+        <q-avatar>
+          <img :src="sensor.logo" alt="Photo du capteur">
+        </q-avatar>
+      </template>
 
-    <template v-slot:append>
-      <q-icon v-if="picture !== ''" class="cursor-pointer" name="close"
-              @click="picture = ''"/>
-      <q-icon name="image"/>
-    </template>
+      <template v-slot:append>
+        <q-icon v-if="picture !== ''" class="cursor-pointer" name="close"
+                @click="picture = ''"/>
+        <q-icon name="image"/>
+      </template>
 
-    <template v-slot:hint>
-      URL du logo
-    </template>
-  </q-input>
+      <template v-slot:hint>
+        URL du logo
+      </template>
+    </q-input>
 
-  <!-- CODE -->
-  <q-input
-    v-model="form.code"
-    :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
-    class="q-my-md"
-    label="Code"
-    lazy-rules
-  >
-    <template v-slot:append>
-      <q-icon name="tag"/>
-    </template>
-  </q-input>
+    <!-- CODE -->
+    <q-input
+      v-model="form.code"
+      :rules="[ val => val.length >= 2 || 'Minimum 2 caractères']"
+      class="q-my-md"
+      label="Code *"
+      lazy-rules
+    >
+      <template v-slot:append>
+        <q-icon name="tag"/>
+      </template>
+    </q-input>
 
-  <div class="q-mt-md q-gutter-md" style="text-align: right">
-    <q-btn v-close-popup color="red" label="Annuler" outline/>
-    <q-btn v-close-popup color="primary" label="Enregistrer" @click="saveEdit"/>
-  </div>
+    <div class="q-mt-md q-gutter-md" style="text-align: right">
+      <q-btn v-close-popup color="red" label="Annuler" outline/>
+      <q-btn color="primary" label="Enregistrer" type="submit"/>
+    </div>
+  </q-form>
 </template>
 
 <script>
@@ -87,7 +89,7 @@ export default defineComponent({
     /**
      * Permet de sauvegarder les modifications
      */
-    saveEdit () {
+    submitForm () {
       const payload = {
         nom: this.form.nom,
         logo: this.form.logo,
@@ -95,6 +97,8 @@ export default defineComponent({
         sensorID: this.sensor.id
       }
       this.editSensor(payload)
+      // Emet un évènement de fermeture
+      this.$emit('close')
     }
   },
   mounted () {

@@ -296,6 +296,34 @@ const actions = {
         )
         throw error
       })
+  },
+  /**
+   * Permet d'ajouter un capteur
+   * @param dispatch
+   * @param rootState
+   * @param payload le payload
+   */
+  addSensor ({
+    dispatch,
+    rootState
+  }, payload) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    console.log(payload)
+    api.post('capteurs', payload, config)
+      .then(function (response) {
+        dispatch('getAllSensorsApi')
+        displaySuccessMessage('Le capteur ' + payload.nom + ' a bien été ajouté')
+        return response
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de l\'ajout du capteur ' + payload.nom + ' !'
+        )
+        throw error
+      })
   }
 }
 

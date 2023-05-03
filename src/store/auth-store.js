@@ -93,6 +93,7 @@ const actions = {
     // Sauvegarde, commite, les données dans le magasin
     commit('SET_USER', data.user)
     commit('SET_TOKEN', data.access_token)
+    console.log(data.access_token)
     // Sauvegarde les données de l'utilisateur dans le localStorage
     LocalStorage.set('user', state.user)
     LocalStorage.set('token', state.token)

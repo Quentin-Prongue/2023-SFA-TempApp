@@ -1,23 +1,25 @@
 <template>
-  <!-- NOM -->
-  <q-input
-    v-model="form.nom"
-    :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
-    autofocus
-    class="q-my-md"
-    label="Nom de la salle"
-    lazy-rules
-  >
-    <template v-slot:append>
-      <q-icon name="meeting_room"/>
-    </template>
-  </q-input>
+  <q-form @submit.prevent="submitForm">
+    <!-- NOM -->
+    <q-input
+      v-model="form.nom"
+      :rules="[ val => val.length >= 2 || 'Minimum 2 caractères']"
+      autofocus
+      class="q-my-md"
+      label="Nom de la salle *"
+      lazy-rules
+    >
+      <template v-slot:append>
+        <q-icon name="meeting_room"/>
+      </template>
+    </q-input>
 
-  <div class="q-mt-md q-gutter-md" style="text-align: right">
-    <q-btn v-close-popup color="red" label="Annuler" outline/>
-    <q-btn v-close-popup :label="action === 'edit' ? 'Modifier' : 'Ajouter'"
-           color="primary" @click="submitForm"/>
-  </div>
+    <div class="q-mt-md q-gutter-md" style="text-align: right">
+      <q-btn v-close-popup color="red" label="Annuler" outline/>
+      <q-btn :label="action === 'edit' ? 'Modifier' : 'Ajouter'"
+             color="primary" type="submit"/>
+    </div>
+  </q-form>
 </template>
 
 <script>
@@ -66,6 +68,8 @@ export default defineComponent({
         // Ajoute une salle
         this.addRoom(payload)
       }
+      // Emet un évènement de fermeture
+      this.$emit('close')
     }
   },
   mounted () {

@@ -37,7 +37,7 @@
 
             <q-card-section class="q-pt-none">
               <!-- FORMULAIRE DE MODIFICATION -->
-              <edit-sensor-form :sensor="sensor"/>
+              <edit-sensor-form :sensor="sensor" @close="displayEditForm = false"/>
             </q-card-section>
           </q-card>
         </q-dialog>

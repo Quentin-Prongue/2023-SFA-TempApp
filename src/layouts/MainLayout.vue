@@ -18,25 +18,18 @@
               <div class="row no-wrap q-pa-md">
                 <div class="column">
                   <div class="text-h6 q-mb-md">Paramètres</div>
-                  <div class="cursor-pointer text-primary" @click="prompt = true">
+                  <div class="cursor-pointer text-primary" @click="displayEditDialog = true">
                     Modifier mon compte
-                    <q-dialog v-model="prompt" persistent>
+                    <q-dialog v-model="displayEditDialog" persistent>
                       <q-card style="min-width: 800px">
-                        <q-form @submit.prevent="submitForm">
-                          <q-card-section>
-                            <div class="text-h5">Modification de compte</div>
-                          </q-card-section>
+                        <q-card-section>
+                          <div class="text-h5">Modification de compte</div>
+                        </q-card-section>
 
-                          <q-card-section>
-                            <!-- FORMULAIRE DE MODIFICATION DE L'UTILISATEUR -->
-                            <edit-user-form :user="user"/>
-                          </q-card-section>
-
-                          <q-card-actions align="right" class="text-primary">
-                            <q-btn v-close-popup color="red" label="Annuler" outline/>
-                            <q-btn v-close-popup color="primary" label="Modifier" @click="submitForm"/>
-                          </q-card-actions>
-                        </q-form>
+                        <q-card-section>
+                          <!-- FORMULAIRE DE MODIFICATION DE L'UTILISATEUR -->
+                          <edit-user-form :user="user" @close="displayEditDialog = false"/>
+                        </q-card-section>
                       </q-card>
                     </q-dialog>
                   </div>
@@ -57,7 +50,6 @@
 
                   <!-- NOM COMPLET -->
                   <div class="text-subtitle1 q-mt-md q-mb-xs">{{ fullName }}</div>
-
                 </div>
               </div>
             </q-menu>
@@ -141,7 +133,7 @@ export default defineComponent({
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
-      prompt: ref(false),
+      displayEditDialog: ref(false),
       drawer: ref(false),
       miniState: ref(true)
     }
@@ -180,39 +172,6 @@ export default defineComponent({
       }).onOk(() => {
         this.disconnectUser()
       })
-    },
-    /**
-     * Méthode qui s'exécute quand le formulaire est soumis
-     */
-    submitForm () {
-      // Construction du payload
-      const payload = {
-        nom: this.lastName,
-        prenom: this.firstName,
-        email: this.email,
-        photo: this.picture
-      }
-
-      this.editUser(payload)
-    },
-    /**
-     * Permet de valider un email
-     * @param email l'email
-     * @returns {boolean} la réponse de la validation
-     */
-    validateEmail (email) {
-      // Source : https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return re.test(String(email).toLowerCase())
-    }
-  },
-  mounted () {
-    if (this.user !== null) {
-      // Initialise chaque valeur avec les valeurs de l'utilisateur
-      this.firstName = this.user.prenom
-      this.lastName = this.user.nom
-      this.email = this.user.email
-      this.picture = this.user.photo
     }
   },
   components: {
