@@ -84,8 +84,10 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('sensors', ['editSensor']),
+    /**
+     * Permet de sauvegarder les modifications
+     */
     saveEdit () {
-      // Appeler la méthode submitForm avec les données du formulaire
       const payload = {
         nom: this.form.nom,
         logo: this.form.logo,
@@ -97,6 +99,7 @@ export default defineComponent({
   },
   mounted () {
     if (this.sensor !== null) {
+      // Charge les données
       this.form.nom = this.sensor.nom
       this.form.logo = this.sensor.logo
       this.form.code = this.sensor.code

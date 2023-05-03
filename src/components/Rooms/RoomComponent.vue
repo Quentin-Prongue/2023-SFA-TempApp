@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'ClassComponent',
+  name: 'RoomComponent',
   props: {
     room: {
       type: Object,
