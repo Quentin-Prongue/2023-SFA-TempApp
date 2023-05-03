@@ -44,7 +44,7 @@
 
       <!-- MOT DE PASSE -->
       <q-input v-model="form.password" :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
-               :type="isPwd ? 'password' : 'text'" class="col" label="Mot de passe"
+               :type="isPwd ? 'password' : 'text'" class="col" label="Mot de passe *"
                lazy-rules
                @keyup.enter="prompt = false">
         <template v-slot:append>

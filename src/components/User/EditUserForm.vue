@@ -128,8 +128,7 @@ export default defineComponent({
         nom: this.form.nom,
         prenom: this.form.prenom,
         email: this.form.email,
-        password: this.form.password,
-        photo: this.form.password
+        photo: this.form.photo
       }
       this.editUser(payload)
       // Emet un évènement de fermeture
