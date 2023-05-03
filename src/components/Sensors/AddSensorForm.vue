@@ -58,7 +58,7 @@
       <q-select v-model="form.salle" :options="this.rooms" :rules="[ val => !!val || 'Ce champ est requis !']"
                 class="col" label="Choix de la salle *"
                 option-label="nom"
-                transition-hide="jump-up"
+                transition-hide="jump-down"
                 transition-show="jump-up">
         <template v-slot:append>
           <q-icon name="meeting_room"/>
@@ -68,7 +68,7 @@
 
     <div class="q-mt-md q-gutter-md" style="text-align: right">
       <q-btn v-close-popup color="red" label="Annuler" outline/>
-      <q-btn color="primary" label="Enregistrer" type="submit"/>
+      <q-btn color="primary" label="Enregistrer" type="submit" outline/>
     </div>
   </q-form>
 </template>

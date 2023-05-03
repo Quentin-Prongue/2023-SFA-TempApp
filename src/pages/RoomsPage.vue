@@ -12,7 +12,7 @@
     <div v-if="roomsLoaded" class="q-pa-md absolute-bottom div-rooms">
       <div class="q-gutter-y-md">
         <!-- CONTENU DES TABS -->
-        <q-tab-panels v-model="roomTab" animated>
+        <q-tab-panels v-model="roomTab" animated transition-next="jump-down" transition-prev="jump-up">
           <q-tab-panel v-for="room in rooms" :key="room.id" :name="room.nom">
 
             <!-- COMPOSANT CAPTEUR -->
@@ -65,7 +65,7 @@
     </q-page-sticky>
 
     <!-- DIALOG POUR MODIFICATION -->
-    <q-dialog v-model="displayEditDialog">
+    <q-dialog v-model="displayEditDialog" transition-hide="jump-down" transition-show="jump-up">
       <q-card style="min-width: 350px">
         <q-card-section>
           <div class="text-h6">Modification de {{ roomTab }}</div>
@@ -79,7 +79,7 @@
     </q-dialog>
 
     <!-- DIALOG POUR AJOUT -->
-    <q-dialog v-model="displayAddDialog">
+    <q-dialog v-model="displayAddDialog" transition-hide="jump-down" transition-show="jump-up">
       <q-card style="min-width: 350px">
         <q-card-section>
           <div class="text-h6">Ajout d'une salle</div>
@@ -93,7 +93,7 @@
     </q-dialog>
 
     <!-- DIALOG POUR SUPPRESSION -->
-    <q-dialog v-model="displayDeleteDialog">
+    <q-dialog v-model="displayDeleteDialog" transition-hide="jump-down" transition-show="jump-up">
       <q-card style="min-width: 350px">
         <q-card-section>
           <div class="text-h6">Suppression de {{ roomTab }}</div>
@@ -108,7 +108,7 @@
             <!-- BOUTON ANNULER -->
             <q-btn v-close-popup color="primary" label="Annuler" outline/>
             <!-- BOUTON SUPPRIMER -->
-            <q-btn v-close-popup color="red" label="Supprimer" @click="deleteCurrentRoom"/>
+            <q-btn v-close-popup color="red" label="Supprimer" outline @click="deleteCurrentRoom"/>
           </div>
         </q-card-section>
       </q-card>

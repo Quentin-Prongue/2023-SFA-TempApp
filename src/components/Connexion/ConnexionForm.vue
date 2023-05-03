@@ -18,10 +18,10 @@
     <q-input
       v-model="form.password"
       :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
+      :type="isPwd ? 'password' : 'text'"
       class="q-my-md"
       label="Mot de passe"
       lazy-rules
-      :type="isPwd ? 'password' : 'text'"
     >
       <template v-slot:append>
         <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
@@ -35,6 +35,7 @@
       <q-btn
         color="primary"
         label="Se connecter"
+        outline
         type="submit"
       />
     </div>

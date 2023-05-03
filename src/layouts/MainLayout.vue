@@ -16,11 +16,12 @@
               transition-hide="jump-up"
               transition-show="jump-down">
               <div class="row no-wrap q-pa-md">
-                <div class="column">
+                <div class="column" style="min-width: fit-content">
                   <div class="text-h6 q-mb-md">Paramètres</div>
                   <div class="cursor-pointer text-primary" @click="displayEditDialog = true">
                     Modifier mon compte
-                    <q-dialog v-model="displayEditDialog" persistent>
+                    <q-dialog v-model="displayEditDialog" persistent transition-hide="jump-down"
+                              transition-show="jump-up">
                       <q-card style="min-width: 800px">
                         <q-card-section>
                           <div class="text-h5">Modification de compte</div>
@@ -35,8 +36,8 @@
                   </div>
 
                   <!-- BOUTON DÉCONNEXION -->
-                  <q-btn v-close-popup class="bt-logout" color="primary" label="Se déconnecter" size="sm"
-                         @click="logout"/>
+                  <q-btn v-close-popup class="bt-logout" color="primary" label="Se déconnecter" outline
+                         size="sm" @click="logout"/>
 
                 </div>
 
@@ -49,7 +50,7 @@
                   </q-avatar>
 
                   <!-- NOM COMPLET -->
-                  <div class="text-subtitle1 q-mt-md q-mb-xs">{{ fullName }}</div>
+                  <div class="text-subtitle1 q-mt-md q-mb-xs text-center">{{ fullName }}</div>
                 </div>
               </div>
             </q-menu>
@@ -194,7 +195,8 @@ export default defineComponent({
           outline: true
         },
         ok: {
-          label: 'Oui'
+          label: 'Oui',
+          outline: true
         },
         persistent: true
       }).onOk(() => {

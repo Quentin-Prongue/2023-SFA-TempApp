@@ -9,7 +9,7 @@
     </div>
 
     <div v-if="users.length > 0">
-      <q-list bordered>
+      <q-list bordered separator>
         <q-item v-for="user in users" :key="user.id">
           <!-- Avatar -->
           <q-item-section avatar>
@@ -32,13 +32,17 @@
             </q-item-label>
           </q-item-section>
 
-          <!-- Icône email -->
-          <q-item-section side>
+          <q-item-section side top>
+            <!-- LABEL ADMINISTRATEUR -->
+            <q-item-label caption>{{ user.is_admin ? 'Administrateur' : 'Utilisateur' }}</q-item-label>
+            <!-- ICONE EMAIL -->
             <q-icon color="primary" name="email"/>
           </q-item-section>
         </q-item>
       </q-list>
     </div>
+
+    <p v-else>Aucun utilisateur</p>
 
     <!-- BOUTON FLOTTANT -->
     <q-page-sticky :offset="[18, 18]" position="bottom-right">
@@ -48,7 +52,7 @@
     </q-page-sticky>
 
     <!-- DIALOG POUR AJOUT -->
-    <q-dialog v-model="displayAddDialog">
+    <q-dialog v-model="displayAddDialog" transition-hide="jump-down" transition-show="jump-up">
       <q-card style="min-width: 800px">
         <q-card-section>
           <div class="text-h6">Ajout d'un utilisateur</div>

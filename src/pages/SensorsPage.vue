@@ -56,7 +56,7 @@
       </q-page-sticky>
 
       <!-- DIALOG POUR AJOUT -->
-      <q-dialog v-model="displayAddDialog">
+      <q-dialog v-model="displayAddDialog" transition-show="jump-up" transition-hide="jump-down">
         <q-card style="min-width: 800px">
           <q-card-section>
             <div class="text-h6">Ajout d'un capteur</div>

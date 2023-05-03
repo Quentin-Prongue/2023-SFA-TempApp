@@ -29,7 +29,7 @@
         </q-btn-dropdown>
 
         <!-- DIALOG POUR MODIFICATION -->
-        <q-dialog v-model="displayEditForm">
+        <q-dialog v-model="displayEditForm" transition-hide="jump-down" transition-show="jump-up">
           <q-card style="min-width: 350px">
             <q-card-section>
               <div class="text-h6">Modification de {{ sensor.nom }}</div>
@@ -43,7 +43,7 @@
         </q-dialog>
 
         <!-- DIALOG POUR SUPPRESSION -->
-        <q-dialog v-model="displayDeleteDialog">
+        <q-dialog v-model="displayDeleteDialog" transition-hide="jump-down" transition-show="jump-up">
           <q-card style="min-width: 350px">
             <q-card-section>
               <div class="text-h6">Suppression de {{ sensor.nom }}</div>
@@ -58,7 +58,7 @@
                 <!-- BOUTON ANNULER -->
                 <q-btn v-close-popup color="primary" label="Annuler" outline/>
                 <!-- BOUTON SUPPRIMER -->
-                <q-btn v-close-popup color="red" label="Supprimer" @click="deleteSensor(this.sensor.id)"/>
+                <q-btn v-close-popup color="red" label="Supprimer" outline @click="deleteSensor(this.sensor.id)"/>
               </div>
             </q-card-section>
           </q-card>

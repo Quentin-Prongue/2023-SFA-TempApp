@@ -62,7 +62,7 @@
 
     <div class="q-mt-md q-gutter-md" style="text-align: right">
       <q-btn v-close-popup color="red" label="Annuler" outline/>
-      <q-btn color="primary" label="Ajouter" type="submit"/>
+      <q-btn color="primary" label="Ajouter" outline type="submit"/>
     </div>
   </q-form>
 </template>
@@ -103,7 +103,6 @@ export default defineComponent({
         password: this.form.password,
         is_admin: parseInt(this.isAdmin)
       }
-      console.log(payload)
       this.addUser(payload)
       // Emet un évènement de fermeture
       this.$emit('close')
