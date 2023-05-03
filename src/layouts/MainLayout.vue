@@ -73,7 +73,8 @@
       @mouseover="miniState = false"
     >
       <q-list>
-        <q-item v-for="link in links" :key="link.id" :to="link.path" class="text-grey-4" clickable exact>
+        <q-item v-for="link in (isAdmin ? adminLinks : userLinks)" :key="link.id" :to="link.path"
+                class="text-grey-4" clickable exact>
           <q-item-section avatar>
             <q-icon :name="link.icon"/>
           </q-item-section>
@@ -91,7 +92,8 @@
 
     <q-footer bordered elevated>
       <q-tabs>
-        <q-route-tab v-for="link in links" :key="link.id" :label="link.text" :to="link.path"
+        <q-route-tab v-for="link in (isAdmin ? adminLinks : userLinks)" :key="link.id" :label="link.text"
+                     :to="link.path"
                      exact/>
       </q-tabs>
     </q-footer>
@@ -100,15 +102,15 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { Dialog } from 'quasar'
 
 export default defineComponent({
   name: 'MainLayout',
   data () {
     return {
-      // Tableau des liens de l'application
-      links: [
+      // Tableau des liens de l'application pour un utilisateur
+      userLinks: [
         {
           // Lien pour les capteurs
           id: 1,
@@ -122,6 +124,30 @@ export default defineComponent({
           text: 'Salles',
           icon: 'meeting_room',
           path: '/rooms'
+        }
+      ],
+      // Tableau des liens de l'application pour un administrateur
+      adminLinks: [
+        {
+          // Lien pour les capteurs
+          id: 1,
+          text: 'Capteurs',
+          icon: 'sensors',
+          path: '/'
+        },
+        {
+          // Lien pour les salles
+          id: 2,
+          text: 'Salles',
+          icon: 'meeting_room',
+          path: '/rooms'
+        },
+        {
+          // Lien pour les utilisateurs
+          id: 3,
+          text: 'Utilisateurs',
+          icon: 'group',
+          path: '/users'
         }
       ]
     }
@@ -141,6 +167,8 @@ export default defineComponent({
   computed: {
     // Mappage des données
     ...mapState('auth', ['user']),
+    // Mappage des getters
+    ...mapGetters('auth', ['isAdmin']),
     /**
      * Permet d'obtenir le nom complet de l'utilisateur
      * @returns {string} le nom complet de l'utilisateur

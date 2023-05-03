@@ -50,7 +50,9 @@
 
       <!-- BOUTON FLOTTANT -->
       <q-page-sticky :offset="[18, 18]" position="bottom-right">
-        <q-btn color="primary" direction="up" fab icon="add" @click="addOtherSensor"/>
+        <q-btn color="primary" direction="up" fab icon="add" @click="addOtherSensor">
+          <q-tooltip :offset="[0, 0]" class="bg-primary">Ajouter un capteur</q-tooltip>
+        </q-btn>
       </q-page-sticky>
 
       <!-- DIALOG POUR AJOUT -->

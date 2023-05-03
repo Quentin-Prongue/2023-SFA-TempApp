@@ -24,8 +24,14 @@ const routes = [
         component: () => import('pages/RoomsPage.vue')
       },
       {
+        // Route par salle
         path: '/rooms/:roomName',
         component: () => import('pages/RoomsPage.vue')
+      },
+      {
+        // Route des utilisateurs
+        path: 'users',
+        component: () => import('pages/UsersPage.vue')
       }
     ]
   },

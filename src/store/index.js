@@ -5,6 +5,7 @@ import { createStore } from 'vuex'
 import sensors from './sensors-store'
 import auth from './auth-store'
 import rooms from './rooms-store'
+import users from './users-store'
 
 /*
  * If not building with SSR mode, you can
@@ -20,7 +21,8 @@ export default store(function (/* { ssrContext } */) {
     modules: {
       sensors,
       rooms,
-      auth
+      auth,
+      users
     },
 
     // enable strict mode (adds overhead!)

@@ -127,7 +127,7 @@ import SensorComponent from 'components/Sensors/SensorComponent.vue'
 import RoomForm from 'components/Rooms/RoomForm.vue'
 
 export default defineComponent({
-  name: 'ClassesPage',
+  name: 'RoomsPage',
   components: {
     RoomForm,
     SensorComponent
@@ -181,8 +181,7 @@ export default defineComponent({
      * Permet d'ouvrir le dialog d'ajout
      */
     addOtherRoom () {
-      // Récupère la salle actuelle
-      this.currentRoom = this.rooms.find(room => room.nom === this.roomTab)
+      // Ouvre le dialog
       this.displayAddDialog = true
     },
     /**
