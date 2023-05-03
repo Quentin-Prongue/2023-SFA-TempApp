@@ -1,5 +1,6 @@
 import { api } from 'boot/axios'
 import { displayErrorMessage } from 'src/functions/error-message'
+import { displaySuccessMessage } from 'src/functions/success-message'
 
 // State : données du magasin
 const state = {
@@ -40,6 +41,93 @@ const actions = {
       .catch(function (error) {
         displayErrorMessage(
           'Erreur lors de la récupération des salles !'
+        )
+        throw error
+      })
+  },
+  /**
+   * Permet de modifier un capteur
+   * @param dispatch
+   * @param rootState
+   * @param payload payload qui contient les données
+   */
+  editRoom ({
+    dispatch,
+    rootState
+  }, payload) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    // Récupère et supprime l'id de la salle du payload
+    const {
+      roomID,
+      ...newPayload
+    } = payload
+
+    api.put(`salles/${roomID}`, newPayload, config)
+      .then(function (response) {
+        dispatch('getAllRoomsApi')
+        displaySuccessMessage('La salle ' + newPayload.nom + ' a bien été modifiée')
+        return response
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de la modification de la salle ' + newPayload.nom + ' !'
+        )
+        throw error
+      })
+  },
+  /**
+   * Permet de supprimer une salle
+   * @param dispatch
+   * @param rootState
+   * @param roomID l'id de la salle
+   */
+  deleteRoom ({
+    dispatch,
+    rootState
+  }, roomID) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    api.delete(`salles/${roomID}`, config)
+      .then(function (response) {
+        dispatch('getAllRoomsApi')
+        displaySuccessMessage('La salle a bien été supprimée')
+        return response
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de la suppression de la salle !'
+        )
+        throw error
+      })
+  },
+  /**
+   * Permet d'ajouter une salle
+   * @param dispatch
+   * @param rootState
+   * @param payload le payload
+   */
+  addRoom ({
+    dispatch,
+    rootState
+  }, payload) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    api.post('salles', payload, config)
+      .then(function (response) {
+        dispatch('getAllRoomsApi')
+        displaySuccessMessage('La salle ' + payload.nom + ' a bien été ajoutée')
+        return response
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de l\'ajout de la salle ' + payload.nom + ' !'
         )
         throw error
       })

@@ -1,16 +1,74 @@
 <template>
-  <div class="q-pa-md row items-start q-gutter-md">
+  <div :class="classes()">
     <q-card :class="full ? 'sensor-card-full' : 'sensor-card-base'" bordered>
       <q-card-section vertical>
         <!-- NOM DU CAPTEUR -->
         <div :class="full ? 'text-h4 sensor-clickable' : 'text-h6 sensor-clickable'"
-             @click="showSensorDetails(sensor.id)">{{ sensor.nom }}
+             @click="showSensorDetails(sensor.id)">
+          {{ sensor.nom }}
+          <q-tooltip :offset="[0, 0]" class="bg-primary">Afficher les détails du capteur</q-tooltip>
         </div>
+
+        <!-- BOUTON GERER CAPTEUR -->
+        <q-btn-dropdown class="absolute-top-right bt-manage-sensor" color="primary" flat icon="settings">
+          <q-list>
+            <div class="column">
+              <!-- BOUTON MODIFIER -->
+              <q-btn v-show="isAdmin()" color="primary" flat icon="edit"
+                     @click="displayEditForm = true">
+                <q-tooltip :offset="[0, 0]" class="bg-primary">Modifier le capteur</q-tooltip>
+              </q-btn>
+
+              <!-- BOUTON SUPPRIMER -->
+              <q-btn v-show="isAdmin()" color="red" flat icon="delete"
+                     @click="displayDeleteDialog = true">
+                <q-tooltip :offset="[0, 0]" class="bg-primary">Supprimer le capteur</q-tooltip>
+              </q-btn>
+            </div>
+          </q-list>
+        </q-btn-dropdown>
+
+        <!-- DIALOG POUR MODIFICATION -->
+        <q-dialog v-model="displayEditForm" transition-hide="jump-down" transition-show="jump-up">
+          <q-card style="min-width: 350px">
+            <q-card-section>
+              <div class="text-h6">Modification de {{ sensor.nom }}</div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              <!-- FORMULAIRE DE MODIFICATION -->
+              <edit-sensor-form :sensor="sensor" @close="displayEditForm = false"/>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+
+        <!-- DIALOG POUR SUPPRESSION -->
+        <q-dialog v-model="displayDeleteDialog" transition-hide="jump-down" transition-show="jump-up">
+          <q-card style="min-width: 350px">
+            <q-card-section>
+              <div class="text-h6">Suppression de {{ sensor.nom }}</div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              Voulez-vous vraiment supprimer ce capteur ?
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              <div class="q-mt-md q-gutter-md" style="text-align: right">
+                <!-- BOUTON ANNULER -->
+                <q-btn v-close-popup color="primary" label="Annuler" outline/>
+                <!-- BOUTON SUPPRIMER -->
+                <q-btn v-close-popup color="red" label="Supprimer" outline @click="deleteSensor(this.sensor.id)"/>
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
 
         <!-- NOM DE LA SALLE -->
         <div :class="full ? 'text-h6 sensor-clickable' : 'text-subtitle2 sensor-clickable'"
-             @click="this.$router.push('/rooms/' + sensor.salle.nom)">Salle
-          : {{ sensor.salle.nom }}
+             @click="this.$router.push('/rooms/' + sensor.salle.nom)">
+          Salle : {{ sensor.salle.nom }}
+          <q-tooltip :offset="[0, 0]" class="bg-primary">Afficher la salle</q-tooltip>
         </div>
       </q-card-section>
 
@@ -41,17 +99,22 @@
 <script>
 import { ref } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
+import EditSensorForm from 'components/Sensors/EditSensorForm.vue'
 
 export default {
   name: 'SensorComponent',
   setup () {
     return {
-      fav: ref(false)
+      fav: ref(false),
+      displayEditForm: ref(false),
+      displayDeleteDialog: ref(false)
     }
   },
   methods: {
     // Mappage des actions
-    ...mapActions('sensors', ['addSensorToFavorites', 'removeSensorFromFavorites']),
+    ...mapActions('sensors', ['addSensorToFavorites', 'removeSensorFromFavorites', 'deleteSensor']),
+    // Mappage des getters
+    ...mapGetters('auth', ['isAdmin']),
 
     /**
      * Permet d'ajouter ou de supprimer un capteur des favoris
@@ -75,11 +138,25 @@ export default {
       this.$router.push({
         path: `/sensor/${sensorID}`
       })
+    },
+    /**
+     * Change les classes en fonction de la taille de l'écran
+     * @returns {{'items-start': boolean, 'q-pa-md': boolean, 'q-gutter-sm': boolean, row: boolean, 'q-gutter-md': boolean, 'q-py-sm': boolean}}
+     */
+    classes () {
+      return {
+        'q-pa-md': this.$q.screen.width > 767,
+        row: this.$q.screen.width > 767,
+        'items-start': this.$q.screen.width > 767,
+        'q-gutter-md': this.$q.screen.width > 767,
+        'q-gutter-sm': this.$q.screen.width < 767,
+        'q-py-sm': this.$q.screen.width < 767
+      }
     }
   },
   computed: {
+    // Mappage des getters
     ...mapGetters('sensors', ['favoritesSensors']),
-
     /**
      * Teste si le capteur fait partie des favoris
      * @returns {*} un booléen avec la réponse
@@ -105,28 +182,45 @@ export default {
     }
   },
   components: {
+    EditSensorForm,
     measureComponent: require('components/Measures/MeasureComponent.vue').default
   }
 }
 </script>
 
 <style lang="sass" scoped>
-.sensor-card-base
-  width: 100%
-  max-width: 450px
-  border-color: $primary
-  border-radius: 15px
-  text-align: center
-  box-shadow: 9px 7px 10px -6px rgba(0, 0, 0, 0.25)
+/* Applique les règles de ce bloc uniquement aux écrans >= 768px */
+@media screen and (min-width: 768px)
+  .sensor-card-base
+    width: 100%
+    max-width: 450px
+    border-color: $primary
+    border-radius: 15px
+    text-align: center
+    box-shadow: 9px 7px 10px -6px rgba(0, 0, 0, 0.25)
 
-.sensor-card-full
-  width: 100%
-  border-color: $primary
-  border-radius: 15px
-  text-align: center
+  .sensor-card-full
+    width: 100%
+    border-color: $primary
+    border-radius: 15px
+    text-align: center
+
+/* Applique les règles de ce bloc uniquement aux écrans <= 768px */
+@media screen and (max-width: 767px)
+  .sensor-card-base
+    width: 100%
+    max-width: max-content
+    border-color: $primary
+    border-radius: 15px
+    text-align: center
+    box-shadow: 9px 7px 10px -6px rgba(0, 0, 0, 0.25)
 
 .sensor-clickable
   &:hover
     cursor: pointer
     color: $primary
+
+.bt-manage-sensor
+  margin-top: 15px
+  margin-right: 10px
 </style>

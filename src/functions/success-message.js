@@ -1,4 +1,4 @@
-// Importation du plugin Dialog de Quasar
+// Importation du plugin Notify de Quasar
 import { Notify } from 'quasar'
 
 // Exporte notre fonction

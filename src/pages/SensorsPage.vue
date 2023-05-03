@@ -1,14 +1,14 @@
 <template>
-  <q-page padding>
+  <q-page>
     <!-- SPINNER -->
     <div
       v-if="!sensorsLoaded"
       class="q-pa-lg text-center"
     >
-      <q-spinner-radio color="primary" size="4em"/>
+      <q-spinner-hourglass color="primary" size="4em"/>
     </div>
 
-    <div class="q-pa-md">
+    <div>
       <q-tabs
         v-if="sensors.length > 0"
         v-model="sensorsTab"
@@ -48,6 +48,27 @@
         </q-tab-panel>
       </q-tab-panels>
 
+      <!-- BOUTON FLOTTANT -->
+      <q-page-sticky :offset="[18, 18]" position="bottom-right">
+        <q-btn color="primary" direction="up" fab icon="add" @click="addOtherSensor">
+          <q-tooltip :offset="[0, 0]" class="bg-primary">Ajouter un capteur</q-tooltip>
+        </q-btn>
+      </q-page-sticky>
+
+      <!-- DIALOG POUR AJOUT -->
+      <q-dialog v-model="displayAddDialog" transition-show="jump-up" transition-hide="jump-down">
+        <q-card style="min-width: 800px">
+          <q-card-section>
+            <div class="text-h6">Ajout d'un capteur</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            <!-- FORMULAIRE D'AJOUT -->
+            <add-sensor-form @close="displayAddDialog = false"/>
+          </q-card-section>
+        </q-card>
+      </q-dialog>
+
       <!-- SI AUCUN CAPTEUR -->
       <p v-if="sensorsLoaded && sensors.length === 0">Aucun capteur</p>
     </div>
@@ -58,12 +79,14 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
+import AddSensorForm from 'components/Sensors/AddSensorForm.vue'
 
 export default defineComponent({
   name: 'SensorsPage',
   setup () {
     return {
-      sensorsTab: ref('all')
+      sensorsTab: ref('all'),
+      displayAddDialog: ref(false)
     }
   },
   computed: {
@@ -74,9 +97,13 @@ export default defineComponent({
   },
   methods: {
     // Mappage des actions
-    ...mapActions('sensors', ['getAllSensorsApi'])
+    ...mapActions('sensors', ['getAllSensorsApi']),
+    addOtherSensor () {
+      this.displayAddDialog = true
+    }
   },
   components: {
+    AddSensorForm,
     sensorComponent: require('components/Sensors/SensorComponent.vue').default
   },
   mounted () {
@@ -89,3 +116,8 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="sass" scoped>
+.div-sensors
+  text-align: center
+</style>

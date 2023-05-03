@@ -2,6 +2,7 @@ import { api } from 'boot/axios'
 import { displayErrorMessage } from 'src/functions/error-message'
 import { Loading, LocalStorage } from 'quasar'
 import { displaySuccessMessage } from 'src/functions/success-message'
+import { displayLoadingMessage } from 'src/functions/loading-message'
 
 // State : données du magasin
 const state = {
@@ -190,7 +191,7 @@ const actions = {
     // Teste s'il y a des capteurs dans la salle et si l'id de la salle est différent que l'id actuel
     if (state.sensorsOfRoom.length === 0 || (state.sensorsOfRoom.length !== 0 && state.sensorsOfRoom.id !== roomID)) {
       // Affiche un loading
-      Loading.show()
+      displayLoadingMessage('')
     }
 
     api.get(`salles/${roomID}/capteurs`, config)
@@ -222,7 +223,7 @@ const actions = {
     // Teste s'il y a un capteur actuel et que son id est pareil que l'id du capteur
     if ((state.currentSensor && state.currentSensor.id.toString() !== sensorID) || !state.currentSensor) {
       // Affiche un loading
-      Loading.show()
+      displayLoadingMessage('')
     }
 
     api.get(`capteurs/${sensorID}/all`, config)
@@ -232,6 +233,94 @@ const actions = {
       .catch(function (error) {
         displayErrorMessage(
           'Erreur lors de la récupération du capteur actuel !'
+        )
+        throw error
+      })
+  },
+  /**
+   * Permet de modifier un capteur
+   * @param dispatch
+   * @param rootState
+   * @param payload payload qui contient les données
+   */
+  editSensor ({
+    dispatch,
+    rootState
+  }, payload) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    // Récupère et supprime l'id du capteur du payload
+    const {
+      sensorID,
+      ...newPayload
+    } = payload
+
+    api.put(`capteurs/${sensorID}`, newPayload, config)
+      .then(function (response) {
+        dispatch('getAllSensorsApi')
+        displaySuccessMessage('Le capteur ' + newPayload.nom + ' a bien été modifié')
+        return response
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de la modification du capteur ' + newPayload.nom + ' !'
+        )
+        throw error
+      })
+  },
+  /**
+   * Permet de supprimer un capteur
+   * @param dispatch
+   * @param rootState
+   * @param sensorID l'id du capteur
+   */
+  deleteSensor ({
+    dispatch,
+    rootState
+  }, sensorID) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    api.delete(`capteurs/${sensorID}`, config)
+      .then(function (response) {
+        dispatch('getAllSensorsApi')
+        displaySuccessMessage('Le capteur a bien été supprimé')
+        return response
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de la suppression du capteur !'
+        )
+        throw error
+      })
+  },
+  /**
+   * Permet d'ajouter un capteur
+   * @param dispatch
+   * @param rootState
+   * @param payload le payload
+   */
+  addSensor ({
+    dispatch,
+    rootState
+  }, payload) {
+    const config = {
+      headers: { Authorization: 'Bearer ' + rootState.auth.token }
+    }
+
+    console.log(payload)
+    api.post('capteurs', payload, config)
+      .then(function (response) {
+        dispatch('getAllSensorsApi')
+        displaySuccessMessage('Le capteur ' + payload.nom + ' a bien été ajouté')
+        return response
+      })
+      .catch(function (error) {
+        displayErrorMessage(
+          'Erreur lors de l\'ajout du capteur ' + payload.nom + ' !'
         )
         throw error
       })
