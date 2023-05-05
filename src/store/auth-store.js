@@ -123,7 +123,8 @@ const actions = {
       .catch(function (error) {
         // Affiche un message d'erreur
         displayErrorMessage(
-          'Erreur lors de la déconnexion'
+          'Erreur lors de la déconnexion',
+          Object.values(error.response.data)
         )
         throw error
       })

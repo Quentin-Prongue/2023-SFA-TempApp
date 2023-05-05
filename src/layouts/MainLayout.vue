@@ -2,7 +2,9 @@
   <q-layout view="hHh Lpr lff">
     <q-header elevated>
       <q-toolbar>
+        <!-- BOUTON MENU -->
         <q-btn aria-label="Menu" class="bt-menu" dense flat icon="menu" round @click="toggleLeftDrawer"/>
+        <!-- NOM SUR LA TOOLBAR -->
         <q-toolbar-title class="absolute-center">
           Temp App
         </q-toolbar-title>
@@ -20,6 +22,7 @@
                   <div class="text-h6 q-mb-md">Paramètres</div>
                   <div class="cursor-pointer text-primary" @click="displayEditDialog = true">
                     Modifier mon compte
+                    <!-- DIALOG MODIFICATION -->
                     <q-dialog v-model="displayEditDialog" persistent transition-hide="jump-down"
                               transition-show="jump-up">
                       <q-card style="min-width: 800px">
@@ -73,10 +76,12 @@
       @mouseout="miniState = true"
       @mouseover="miniState = false"
     >
+      <!-- LIENS DE L'APPLICATION -->
       <q-list>
         <q-item v-for="link in (isAdmin ? adminLinks : userLinks)" :key="link.id" :to="link.path"
                 class="text-grey-4" clickable exact>
           <q-item-section avatar>
+            <!-- ICONES -->
             <q-icon :name="link.icon"/>
           </q-item-section>
 
@@ -91,6 +96,7 @@
       <router-view/>
     </q-page-container>
 
+    <!-- LIENS DANS LE FOOTER (Mobile) -->
     <q-footer bordered elevated>
       <q-tabs>
         <q-route-tab v-for="link in (isAdmin ? adminLinks : userLinks)" :key="link.id" :label="link.text"

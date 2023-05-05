@@ -9,6 +9,7 @@
     </div>
 
     <div>
+      <!-- TABS -->
       <q-tabs
         v-if="sensors.length > 0"
         v-model="sensorsTab"
@@ -56,7 +57,7 @@
       </q-page-sticky>
 
       <!-- DIALOG POUR AJOUT -->
-      <q-dialog v-model="displayAddDialog" transition-show="jump-up" transition-hide="jump-down">
+      <q-dialog v-model="displayAddDialog" transition-hide="jump-down" transition-show="jump-up">
         <q-card style="min-width: 800px">
           <q-card-section>
             <div class="text-h6">Ajout d'un capteur</div>
@@ -110,7 +111,9 @@ export default defineComponent({
     // Récupère les capteurs de l'api
     this.getAllSensorsApi()
 
+    // S'il y a des favoris
     if (this.favoritesSensors.length > 0) {
+      // Le tab actuel est sur les favoris
       this.sensorsTab = 'favorites'
     }
   }

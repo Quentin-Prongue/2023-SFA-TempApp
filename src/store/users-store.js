@@ -57,7 +57,8 @@ const actions = {
       })
       .catch(function (error) {
         displayErrorMessage(
-          'Erreur lors de la récupération des utilisateurs !'
+          'Erreur lors de la récupération des utilisateurs !',
+          Object.values(error.response.data)
         )
         throw error
       })
@@ -84,7 +85,8 @@ const actions = {
       })
       .catch(function (error) {
         displayErrorMessage(
-          'Erreur lors de l\'ajout de l\'utilisateur' + payload.prenom + ' !'
+          'Erreur lors de l\'ajout de l\'utilisateur' + payload.prenom + ' !',
+          Object.values(error.response.data)
         )
         throw error
       })

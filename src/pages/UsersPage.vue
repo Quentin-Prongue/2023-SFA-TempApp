@@ -9,9 +9,10 @@
     </div>
 
     <div v-if="users.length > 0">
+      <!-- LISTE DES UTILISATEURS -->
       <q-list bordered separator>
         <q-item v-for="user in users" :key="user.id">
-          <!-- Avatar -->
+          <!-- AVATAR -->
           <q-item-section avatar>
             <q-avatar>
               <q-img
@@ -22,7 +23,7 @@
             </q-avatar>
           </q-item-section>
 
-          <!-- Nom, prénom et email de l'utilisateur -->
+          <!-- NOM, PRENOM ET EMAIL DE L'UTILISATEUR -->
           <q-item-section>
             <q-item-label lines="1">
               {{ user.nom + ' ' + user.prenom }}
@@ -42,10 +43,12 @@
       </q-list>
     </div>
 
+    <!-- SI AUCUN UTILISATEUR -->
     <p v-else>Aucun utilisateur</p>
 
     <!-- BOUTON FLOTTANT -->
     <q-page-sticky :offset="[18, 18]" position="bottom-right">
+      <!-- BOUTON AJOUTER -->
       <q-btn color="primary" direction="up" fab icon="add" @click="addOtherUser">
         <q-tooltip :offset="[0, 0]" class="bg-primary">Ajouter un utilisateur</q-tooltip>
       </q-btn>

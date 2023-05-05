@@ -1,6 +1,7 @@
 <template>
   <q-page v-if="currentSensor !== null" padding>
     <q-btn color="primary" flat icon="arrow_back" @click="this.$router.go(-1)"/>
+    <!-- COMPOSANT CAPTEUR -->
     <sensor-component :full="true" :sensor="currentSensor"/>
   </q-page>
 </template>
@@ -21,7 +22,9 @@ export default {
     ...mapActions('sensors', ['getCurrentSensor'])
   },
   beforeMount () {
+    // Récupère l'id du capteur
     const sensorId = this.$route.params.id
+    // Récupère le capteur actuel
     this.getCurrentSensor(sensorId)
   }
 }

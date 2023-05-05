@@ -1,4 +1,5 @@
 <template>
+  <!-- FORMULAIRE -->
   <q-form @submit.prevent="submitForm">
     <div class="q-gutter-xl row q-pa-md">
       <!-- NOM -->
@@ -9,6 +10,7 @@
         label="Nom *"
         lazy-rules
       >
+        <!-- ICONE PERSONNE -->
         <template v-slot:append>
           <q-icon name="person"/>
         </template>
@@ -22,6 +24,7 @@
         label="Prénom *"
         lazy-rules
       >
+        <!-- ICONE PERSONNE -->
         <template v-slot:append>
           <q-icon name="person"/>
         </template>
@@ -37,6 +40,7 @@
         label="Email *"
         lazy-rules
       >
+        <!-- ICONE EMAIL -->
         <template v-slot:append>
           <q-icon name="email"/>
         </template>
@@ -48,8 +52,10 @@
                lazy-rules
                @keyup.enter="prompt = false">
         <template v-slot:append>
+          <!-- PERMET D'AFFICHER LE MDP -->
           <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
                   @click="isPwd = !isPwd"/>
+          <!-- ICONE CADENAS -->
           <q-icon name="lock"/>
         </template>
       </q-input>
@@ -61,7 +67,9 @@
     </div>
 
     <div class="q-mt-md q-gutter-md" style="text-align: right">
+      <!-- BOUTON ANNULER -->
       <q-btn v-close-popup color="red" label="Annuler" outline/>
+      <!-- BOUTON AJOUTER -->
       <q-btn color="primary" label="Ajouter" outline type="submit"/>
     </div>
   </q-form>

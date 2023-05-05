@@ -1,4 +1,5 @@
 <template>
+  <!-- FORMULAIRE -->
   <q-form @submit.prevent="submitForm">
     <!-- NOM -->
     <q-input
@@ -8,6 +9,7 @@
       label="Nom *"
       lazy-rules
     >
+      <!-- ICONE CAPTEUR -->
       <template v-slot:append>
         <q-icon name="sensors"/>
       </template>
@@ -21,6 +23,7 @@
       label="Photo"
       lazy-rules
     >
+      <!-- IMAGE ACTUELLE CAPTEUR -->
       <template v-slot:before>
         <q-avatar>
           <img :src="sensor.logo" alt="Photo du capteur">
@@ -28,11 +31,14 @@
       </template>
 
       <template v-slot:append>
+        <!-- PERMET DE SUPPRIMER LE CONTENU -->
         <q-icon v-if="picture !== ''" class="cursor-pointer" name="close"
                 @click="picture = ''"/>
+        <!-- ICONE IMAGE -->
         <q-icon name="image"/>
       </template>
 
+      <!-- INDICE -->
       <template v-slot:hint>
         URL du logo
       </template>
@@ -46,13 +52,16 @@
       label="Code *"
       lazy-rules
     >
+      <!-- ICONE CODE -->
       <template v-slot:append>
         <q-icon name="tag"/>
       </template>
     </q-input>
 
     <div class="q-mt-md q-gutter-md" style="text-align: right">
+      <!-- BOUTON ANNULER -->
       <q-btn v-close-popup color="red" label="Annuler" outline/>
+      <!-- BOUTON ENREGISTRER -->
       <q-btn color="primary" label="Enregistrer" outline type="submit"/>
     </div>
   </q-form>
@@ -102,6 +111,7 @@ export default defineComponent({
     }
   },
   mounted () {
+    // Si le capteur n'est pas null
     if (this.sensor !== null) {
       // Charge les données
       this.form.nom = this.sensor.nom

@@ -1,4 +1,5 @@
 <template>
+  <!-- FORMULAIRE -->
   <q-form @submit.prevent="submitForm">
     <div class="q-gutter-xl row q-pa-md">
       <!-- NOM -->
@@ -9,6 +10,7 @@
         label="Nom *"
         lazy-rules
       >
+        <!-- ICONE CAPTEUR -->
         <template v-slot:append>
           <q-icon name="sensors"/>
         </template>
@@ -22,6 +24,7 @@
         label="Code *"
         lazy-rules
       >
+        <!-- ICONE CODE -->
         <template v-slot:append>
           <q-icon name="tag"/>
         </template>
@@ -37,6 +40,7 @@
         label="Photo"
         lazy-rules
       >
+        <!-- IMAGE ACTUELLE CAPTEUR -->
         <template v-slot:before>
           <q-avatar>
             <img :src="this.form.logo" alt="Photo du capteur">
@@ -44,11 +48,14 @@
         </template>
 
         <template v-slot:append>
+          <!-- PERMET DE SUPPRIMER LE CONTENU -->
           <q-icon v-if="picture !== ''" class="cursor-pointer" name="close"
                   @click="picture = ''"/>
+          <!-- ICONE IMAGE -->
           <q-icon name="image"/>
         </template>
 
+        <!-- INDICE -->
         <template v-slot:hint>
           URL du logo
         </template>
@@ -60,6 +67,7 @@
                 option-label="nom"
                 transition-hide="jump-down"
                 transition-show="jump-up">
+        <!-- ICONE SALLE -->
         <template v-slot:append>
           <q-icon name="meeting_room"/>
         </template>
@@ -67,8 +75,10 @@
     </div>
 
     <div class="q-mt-md q-gutter-md" style="text-align: right">
+      <!-- BOUTON ANNULER -->
       <q-btn v-close-popup color="red" label="Annuler" outline/>
-      <q-btn color="primary" label="Enregistrer" type="submit" outline/>
+      <!-- BOUTON ENREGISTRER -->
+      <q-btn color="primary" label="Enregistrer" outline type="submit"/>
     </div>
   </q-form>
 </template>
@@ -108,7 +118,7 @@ export default defineComponent({
         salle_id: this.form.salle.id
       }
       this.addSensor(payload)
-      // Emet une évènement de fermeture
+      // Emet un évènement de fermeture
       this.$emit('close')
     }
   },
