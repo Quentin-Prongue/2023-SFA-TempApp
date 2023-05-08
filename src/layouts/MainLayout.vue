@@ -5,7 +5,7 @@
         <!-- BOUTON MENU -->
         <q-btn aria-label="Menu" class="bt-menu" dense flat icon="menu" round @click="toggleLeftDrawer"/>
         <!-- NOM SUR LA TOOLBAR -->
-        <q-toolbar-title class="absolute-center">
+        <q-toolbar-title class="absolute-center toolbar-title" @click="this.$router.push('/')">
           Temp App
         </q-toolbar-title>
         <!-- BOUTON CONNEXION -->
@@ -238,4 +238,7 @@ export default defineComponent({
 .bt-logout
   position: absolute
   bottom: 20px
+
+.toolbar-title
+  cursor: pointer
 </style>
