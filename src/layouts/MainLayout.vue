@@ -3,13 +3,13 @@
     <q-header elevated>
       <q-toolbar>
         <!-- BOUTON MENU -->
-        <q-btn aria-label="Menu" class="bt-menu" dense flat icon="menu" round @click="toggleLeftDrawer"/>
+        <q-btn aria-label="Menu" class="bt-menu" dense flat icon="menu" round @click="toggleMiniState"/>
         <!-- NOM SUR LA TOOLBAR -->
         <q-toolbar-title class="absolute-center toolbar-title" @click="this.$router.push('/')">
           Temp App
         </q-toolbar-title>
         <!-- BOUTON CONNEXION -->
-        <q-btn v-if="!user" class="absolute-right" flat icon-right="account_circle" label="Se connecter" to="/login"/>
+        <q-btn v-if="!user" class="absolute-right" flat icon-right="account_circle" to="/login"/>
 
         <!-- BOUTON GÉRER COMPTE -->
         <div class="q-pa-md">
@@ -64,18 +64,12 @@
     </q-header>
 
     <q-drawer
-      v-model="leftDrawerOpen"
       :breakpoint="500"
-
       :mini="miniState"
       :width="200"
       bordered
       class="bg-primary"
-
-      mini-to-overlay
       show-if-above
-      @mouseout="miniState = true"
-      @mouseover="miniState = false"
     >
       <!-- LIENS DE L'APPLICATION -->
       <q-list>
@@ -161,15 +155,14 @@ export default defineComponent({
     }
   },
   setup () {
-    const leftDrawerOpen = ref(false)
+    const miniState = ref(true)
     return {
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
+      miniState,
+      toggleMiniState () {
+        miniState.value = !miniState.value
       },
       displayEditDialog: ref(false),
-      drawer: ref(false),
-      miniState: ref(true)
+      drawer: ref(false)
     }
   },
   computed: {
