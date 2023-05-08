@@ -3,10 +3,12 @@
     <q-card :class="full ? 'sensor-card-full' : 'sensor-card-base'" bordered>
       <q-card-section vertical>
         <!-- NOM DU CAPTEUR -->
-        <div :class="full ? 'text-h4 sensor-clickable' : 'text-h6 sensor-clickable'"
+        <div :class="full ? 'text-h4' : 'text-h6'" class="sensor-clickable"
              @click="showSensorDetails(sensor.id)">
           {{ sensor.nom }}
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Afficher les détails du capteur</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Afficher les
+            détails du capteur
+          </q-tooltip>
         </div>
 
         <!-- BOUTON GERER CAPTEUR -->
@@ -16,13 +18,17 @@
               <!-- BOUTON MODIFIER -->
               <q-btn v-show="isAdmin()" color="primary" flat icon="edit"
                      @click="displayEditForm = true">
-                <q-tooltip :offset="[0, 0]" class="bg-primary">Modifier le capteur</q-tooltip>
+                <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Modifier
+                  le capteur
+                </q-tooltip>
               </q-btn>
 
               <!-- BOUTON SUPPRIMER -->
               <q-btn v-show="isAdmin()" color="negative" flat icon="delete"
                      @click="displayDeleteDialog = true">
-                <q-tooltip :offset="[0, 0]" class="bg-primary">Supprimer le capteur</q-tooltip>
+                <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Supprimer
+                  le capteur
+                </q-tooltip>
               </q-btn>
             </div>
           </q-list>
@@ -65,10 +71,12 @@
         </q-dialog>
 
         <!-- NOM DE LA SALLE -->
-        <div :class="full ? 'text-h6 sensor-clickable' : 'text-subtitle2 sensor-clickable'"
+        <div :class="full ? 'text-h6' : 'text-subtitle2'" class="sensor-clickable"
              @click="this.$router.push('/rooms/' + sensor.salle.nom)">
           Salle : {{ sensor.salle.nom }}
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Afficher la salle</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Afficher la
+            salle
+          </q-tooltip>
         </div>
       </q-card-section>
 

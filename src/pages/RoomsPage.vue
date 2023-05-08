@@ -38,7 +38,9 @@
           class="text-grey"
           dense
           indicator-color="primary"
+          mobile-arrows
           narrow-indicator
+          outside-arrows
         >
           <q-tab v-for="room in rooms" :key="room.id" :label="room.nom" :name="room.nom"
                  @click="getSensorsOfRoomByID(room.id); roomTab = room.nom"/>
@@ -51,15 +53,15 @@
       <q-fab color="primary" direction="up" icon="settings">
         <!-- BOUTON MODIFIER -->
         <q-fab-action color="primary" icon="edit" @click="editCurrentRoom">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Modifier cette salle</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Modifier cette salle</q-tooltip>
         </q-fab-action>
         <!-- BOUTON SUPPRIMER -->
         <q-fab-action color="negative" icon="delete" @click="displayDeleteDialog = true">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Supprimer cette salle</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Supprimer cette salle</q-tooltip>
         </q-fab-action>
         <!-- BOUTON AJOUTER -->
         <q-fab-action color="primary" icon="add" @click="addOtherRoom">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Ajouter une salle</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Ajouter une salle</q-tooltip>
         </q-fab-action>
       </q-fab>
     </q-page-sticky>

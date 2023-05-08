@@ -6,6 +6,7 @@ export function displayLoadingMessage (message) {
   // Crée et affiche un loading
   Loading.show({
     spinner: QSpinnerCube,
+    spinnerColor: 'primary',
     message
   })
 }

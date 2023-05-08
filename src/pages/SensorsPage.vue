@@ -19,11 +19,15 @@
         indicator-color="primary"
         narrow-indicator
       >
-        <q-tab v-if="favoritesSensors.length > 0" icon="favorite" label="Capteurs favoris" name="favorites"/>
-        <q-tab icon="sensors" label="Tous les capteurs" name="all"/>
+        <q-tab v-if="favoritesSensors.length > 0" icon="favorite" label="Capteurs favoris" name="favorites">
+          <q-badge color="primary" floating>{{ favoritesSensors.length }}</q-badge>
+        </q-tab>
+        <q-tab icon="sensors" label="Tous les capteurs" name="all">
+          <q-badge color="primary" floating>{{ sensors.length }}</q-badge>
+        </q-tab>
       </q-tabs>
 
-      <q-tab-panels v-model="sensorsTab" animated>
+      <q-tab-panels v-model="sensorsTab" animated transition-next="jump-down" transition-prev="jump-up">
         <!-- CAPTEURS FAVORIS -->
         <q-tab-panel v-if="favoritesSensors.length > 0" name="favorites">
           <!-- COMPOSANT CAPTEUR -->
@@ -52,7 +56,7 @@
       <!-- BOUTON FLOTTANT -->
       <q-page-sticky :offset="[18, 18]" position="bottom-right">
         <q-btn color="primary" direction="up" fab icon="add" @click="addOtherSensor">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Ajouter un capteur</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Ajouter un capteur</q-tooltip>
         </q-btn>
       </q-page-sticky>
 
