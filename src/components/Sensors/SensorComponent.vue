@@ -20,7 +20,7 @@
               </q-btn>
 
               <!-- BOUTON SUPPRIMER -->
-              <q-btn v-show="isAdmin()" color="red" flat icon="delete"
+              <q-btn v-show="isAdmin()" color="negative" flat icon="delete"
                      @click="displayDeleteDialog = true">
                 <q-tooltip :offset="[0, 0]" class="bg-primary">Supprimer le capteur</q-tooltip>
               </q-btn>
@@ -58,7 +58,7 @@
                 <!-- BOUTON ANNULER -->
                 <q-btn v-close-popup color="primary" label="Annuler" outline/>
                 <!-- BOUTON SUPPRIMER -->
-                <q-btn v-close-popup color="red" label="Supprimer" outline @click="deleteSensor(this.sensor.id)"/>
+                <q-btn v-close-popup color="negative" label="Supprimer" outline @click="deleteSensor(this.sensor.id)"/>
               </div>
             </q-card-section>
           </q-card>
@@ -78,7 +78,7 @@
           v-model="fav"
           checked-icon="favorite"
           class="flex-center"
-          color="red"
+          color="negative"
           indeterminate-icon="help"
           size="lg"
           unchecked-icon="favorite_border"

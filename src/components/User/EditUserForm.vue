@@ -1,7 +1,7 @@
 <template>
   <!-- FORMULAIRE -->
   <q-form @submit.prevent="submitForm">
-    <div class="q-gutter-xl row q-pa-md">
+    <div :class="{'q-gutter-xl row q-pa-md': $q.screen.width >= 768}">
       <!-- NOM -->
       <q-input
         v-model="form.nom"
@@ -32,7 +32,7 @@
       </q-input>
     </div>
 
-    <div class="q-gutter-xl row q-pa-md">
+    <div :class="{'q-gutter-xl row q-pa-md': $q.screen.width >= 768}">
       <!-- EMAIL -->
       <q-input
         v-model="form.email"
@@ -79,7 +79,7 @@
 
     <div class="q-mt-md q-gutter-md" style="text-align: right">
       <!-- BOUTON ANNULER -->
-      <q-btn v-close-popup color="red" label="Annuler" outline/>
+      <q-btn v-close-popup color="negative" label="Annuler" outline/>
       <!-- BOUTON MODIFIER -->
       <q-btn color="primary" label="Modifier" outline type="submit"/>
     </div>

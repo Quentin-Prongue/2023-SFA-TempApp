@@ -18,7 +18,7 @@
 
     <div class="q-mt-md q-gutter-md" style="text-align: right">
       <!-- BOUTON ANNULER -->
-      <q-btn v-close-popup color="red" label="Annuler" outline/>
+      <q-btn v-close-popup color="negative" label="Annuler" outline/>
       <!-- BOUTON MODIFIER OU AJOUTER -->
       <q-btn :label="action === 'edit' ? 'Modifier' : 'Ajouter'"
              color="primary" outline type="submit"/>

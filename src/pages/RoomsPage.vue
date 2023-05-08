@@ -54,7 +54,7 @@
           <q-tooltip :offset="[0, 0]" class="bg-primary">Modifier cette salle</q-tooltip>
         </q-fab-action>
         <!-- BOUTON SUPPRIMER -->
-        <q-fab-action color="red" icon="delete" @click="displayDeleteDialog = true">
+        <q-fab-action color="negative" icon="delete" @click="displayDeleteDialog = true">
           <q-tooltip :offset="[0, 0]" class="bg-primary">Supprimer cette salle</q-tooltip>
         </q-fab-action>
         <!-- BOUTON AJOUTER -->
@@ -108,7 +108,7 @@
             <!-- BOUTON ANNULER -->
             <q-btn v-close-popup color="primary" label="Annuler" outline/>
             <!-- BOUTON SUPPRIMER -->
-            <q-btn v-close-popup color="red" label="Supprimer" outline @click="deleteCurrentRoom"/>
+            <q-btn v-close-popup color="negative" label="Supprimer" outline @click="deleteCurrentRoom"/>
           </div>
         </q-card-section>
       </q-card>

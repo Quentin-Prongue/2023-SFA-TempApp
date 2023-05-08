@@ -25,7 +25,8 @@
                     <!-- DIALOG MODIFICATION -->
                     <q-dialog v-model="displayEditDialog" persistent transition-hide="jump-down"
                               transition-show="jump-up">
-                      <q-card style="min-width: 800px">
+                      <q-card
+                        :style="{'min-width-350': $q.screen.width < 768, 'min-width-800': $q.screen.width >= 768}">
                         <q-card-section>
                           <div class="text-h5">Modification de compte</div>
                         </q-card-section>
@@ -193,7 +194,7 @@ export default defineComponent({
     logout () {
       Dialog.create({
         title: 'Déconnexion',
-        message: 'Voulez-vous vraiment vous déconnecter',
+        message: 'Voulez-vous vraiment vous déconnecter ?',
         cancel: {
           label: 'Annuler',
           focus: true,
@@ -241,4 +242,10 @@ export default defineComponent({
 
 .toolbar-title
   cursor: pointer
+
+.min-width-350
+  min-width: 350px
+
+.min-width-800
+  min-width: 800px
 </style>
