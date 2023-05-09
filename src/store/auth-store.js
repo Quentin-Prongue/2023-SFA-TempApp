@@ -83,16 +83,16 @@ const actions = {
    * @param commit
    * @param dispatch
    * @param state
-   * @param data contient les données
+   * @param payload contient les données
    */
   setUser ({
     commit,
     dispatch,
     state
-  }, data) {
+  }, payload) {
     // Sauvegarde, commite, les données dans le magasin
-    commit('SET_USER', data.user)
-    commit('SET_TOKEN', data.access_token)
+    commit('SET_USER', payload.user)
+    commit('SET_TOKEN', payload.access_token)
     // Sauvegarde les données de l'utilisateur dans le localStorage
     LocalStorage.set('user', state.user)
     LocalStorage.set('token', state.token)
@@ -122,10 +122,7 @@ const actions = {
     api.post('/logout', {}, config)
       .catch(function (error) {
         // Affiche un message d'erreur
-        displayErrorMessage(
-          'Erreur lors de la déconnexion',
-          Object.values(error.response.data)
-        )
+        displayErrorMessage('Erreur lors de la déconnexion')
         throw error
       })
       .finally(function () {

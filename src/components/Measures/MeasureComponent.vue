@@ -49,8 +49,6 @@ export default {
       loading: false,
       // Pagination
       pagination: {
-        sortBy: 'date',
-        descending: true,
         rowsPerPage: this.full ? 50 : 5
       },
       // Colonnes de base
@@ -61,7 +59,8 @@ export default {
           required: true,
           label: 'Date',
           align: 'center',
-          field: row => this.formatDate(row.date),
+          field: row => row.date,
+          format: date => this.formatDate(date),
           sortable: true
         },
         {

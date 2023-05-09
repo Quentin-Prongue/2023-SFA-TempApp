@@ -241,6 +241,15 @@ const actions = {
       })
   },
   /**
+   * Permet d'effacer le capteur actuel
+   * @param commit
+   */
+  clearCurrentSensor ({
+    commit
+  }) {
+    commit('SET_CURRENT_SENSOR', null)
+  },
+  /**
    * Permet de modifier un capteur
    * @param dispatch
    * @param rootState
