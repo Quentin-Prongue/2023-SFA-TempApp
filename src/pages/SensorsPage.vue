@@ -54,9 +54,11 @@
       </q-tab-panels>
 
       <!-- BOUTON FLOTTANT -->
-      <q-page-sticky :offset="[18, 18]" position="bottom-right">
+      <q-page-sticky v-if="isAdmin" :offset="[18, 18]" position="bottom-right">
         <q-btn color="primary" direction="up" fab icon="add" @click="addOtherSensor">
-          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Ajouter un capteur</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Ajouter un
+            capteur
+          </q-tooltip>
         </q-btn>
       </q-page-sticky>
 
@@ -97,6 +99,7 @@ export default defineComponent({
   computed: {
     // Mappage des getters
     ...mapGetters('sensors', ['sensors', 'favoritesSensors']),
+    ...mapGetters('auth', ['isAdmin']),
     // Mappage des données
     ...mapState('sensors', ['sensorsLoaded'])
   },

@@ -3,20 +3,20 @@
     <q-card :class="full ? 'sensor-card-full' : 'sensor-card-base'" bordered>
       <q-card-section vertical>
         <!-- NOM DU CAPTEUR -->
-        <div :class="full ? 'text-h4' : 'text-h6'" class="sensor-clickable"
-             @click="showSensorDetails(sensor.id)">
+        <div :class="full ? 'text-h4' : 'text-h6 sensor-clickable'" @click="!full && showSensorDetails(sensor.id)">
           {{ sensor.nom }}
-          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Afficher les
-            détails du capteur
+          <q-tooltip v-if="!full" :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">
+            Afficher les détails du capteur
           </q-tooltip>
         </div>
 
         <!-- BOUTON GERER CAPTEUR -->
-        <q-btn-dropdown class="absolute-top-right bt-manage-sensor" color="primary" flat icon="settings">
+        <q-btn-dropdown v-if="isAdmin()" class="absolute-top-right bt-manage-sensor" color="primary" flat
+                        icon="settings">
           <q-list>
             <div class="column">
               <!-- BOUTON MODIFIER -->
-              <q-btn v-show="isAdmin()" color="primary" flat icon="edit"
+              <q-btn color="primary" flat icon="edit"
                      @click="displayEditForm = true">
                 <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Modifier
                   le capteur
@@ -24,7 +24,7 @@
               </q-btn>
 
               <!-- BOUTON SUPPRIMER -->
-              <q-btn v-show="isAdmin()" color="negative" flat icon="delete"
+              <q-btn color="negative" flat icon="delete"
                      @click="displayDeleteDialog = true">
                 <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Supprimer
                   le capteur
@@ -71,11 +71,11 @@
         </q-dialog>
 
         <!-- NOM DE LA SALLE -->
-        <div :class="full ? 'text-h6' : 'text-subtitle2'" class="sensor-clickable"
-             @click="this.$router.push('/rooms/' + sensor.salle.nom)">
+        <div :class="[full ? 'text-h6' : 'text-subtitle2', {'sensor-clickable': displayClickLink}]"
+             @click="displayClickLink && this.$router.push('/rooms/' + sensor.salle.nom)">
           Salle : {{ sensor.salle.nom }}
-          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Afficher la
-            salle
+          <q-tooltip v-if="displayClickLink" :offset="[0, 0]" class="bg-primary" transition-hide="scale"
+                     transition-show="scale">Afficher la salle
           </q-tooltip>
         </div>
       </q-card-section>
@@ -153,13 +153,15 @@ export default {
      */
     classes () {
       return {
-        'q-pa-md': this.$q.screen.width > 767,
-        row: this.$q.screen.width > 767,
-        'items-start': this.$q.screen.width > 767,
-        'q-gutter-md': this.$q.screen.width > 767,
-        'q-gutter-sm': this.$q.screen.width < 767,
-        'q-py-sm': this.$q.screen.width < 767
+        // Ecran plus grand que 767px
+        'q-pa-md row items-start q-gutter-md': this.$q.screen.width > 767,
+        // Ecran plus petit que 767px
+        'q-gutter-sm q-py-sm': this.$q.screen.width < 767
       }
+    },
+    displayClickLink () {
+      console.log(this.$route.path)
+      return this.$route.path !== ('/rooms/' + this.sensor.salle.nom)
     }
   },
   computed: {

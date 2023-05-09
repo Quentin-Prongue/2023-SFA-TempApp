@@ -49,19 +49,25 @@
     </div>
 
     <!-- BOUTON FLOTTANT -->
-    <q-page-sticky :offset="[18, 100]" position="bottom-right">
+    <q-page-sticky v-if="isAdmin" :offset="[18, 100]" position="bottom-right">
       <q-fab color="primary" direction="up" icon="settings">
         <!-- BOUTON MODIFIER -->
         <q-fab-action color="primary" icon="edit" @click="editCurrentRoom">
-          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Modifier cette salle</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Modifier cette
+            salle
+          </q-tooltip>
         </q-fab-action>
         <!-- BOUTON SUPPRIMER -->
         <q-fab-action color="negative" icon="delete" @click="displayDeleteDialog = true">
-          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Supprimer cette salle</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Supprimer cette
+            salle
+          </q-tooltip>
         </q-fab-action>
         <!-- BOUTON AJOUTER -->
         <q-fab-action color="primary" icon="add" @click="addOtherRoom">
-          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Ajouter une salle</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Ajouter une
+            salle
+          </q-tooltip>
         </q-fab-action>
       </q-fab>
     </q-page-sticky>
@@ -154,6 +160,7 @@ export default defineComponent({
     // Mappage des getters
     ...mapGetters('rooms', ['rooms']),
     ...mapGetters('sensors', ['sensorsOfRoom', 'sensors']),
+    ...mapGetters('auth', ['isAdmin']),
     // Mappage des données
     ...mapState('rooms', ['roomsLoaded']),
     ...mapState('sensors', ['sensorsOfRoomLoaded'])
