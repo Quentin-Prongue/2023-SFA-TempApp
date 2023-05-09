@@ -325,7 +325,6 @@ const actions = {
       headers: { Authorization: 'Bearer ' + rootState.auth.token }
     }
 
-    console.log(payload)
     api.post('capteurs', payload, config)
       .then(function (response) {
         dispatch('getAllSensorsApi')

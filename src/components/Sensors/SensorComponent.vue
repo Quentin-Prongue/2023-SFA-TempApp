@@ -96,6 +96,11 @@
 
       <q-separator inset/>
 
+      <!-- GRAPHIQUE -->
+      <LineChartComponent v-if="full" :measures="sensor.mesures"/>
+
+      <q-separator inset/>
+
       <!-- COMPOSANT DES MESURES -->
       <measure-component :full="full" :measures="sensor.mesures">
       </measure-component>
@@ -107,7 +112,6 @@
 <script>
 import { ref } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
-import EditSensorForm from 'components/Sensors/EditSensorForm.vue'
 
 export default {
   name: 'SensorComponent',
@@ -160,7 +164,6 @@ export default {
       }
     },
     displayClickLink () {
-      console.log(this.$route.path)
       return this.$route.path !== ('/rooms/' + this.sensor.salle.nom)
     }
   },
@@ -192,8 +195,9 @@ export default {
     }
   },
   components: {
-    EditSensorForm,
-    measureComponent: require('components/Measures/MeasureComponent.vue').default
+    EditSensorForm: require('components/Sensors/EditSensorForm.vue').default,
+    measureComponent: require('components/Measures/MeasureComponent.vue').default,
+    LineChartComponent: require('components/Charts/LineChartComponent.vue').default
   }
 }
 </script>
