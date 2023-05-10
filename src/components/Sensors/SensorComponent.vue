@@ -3,26 +3,32 @@
     <q-card :class="full ? 'sensor-card-full' : 'sensor-card-base'" bordered>
       <q-card-section vertical>
         <!-- NOM DU CAPTEUR -->
-        <div :class="full ? 'text-h4 sensor-clickable' : 'text-h6 sensor-clickable'"
-             @click="showSensorDetails(sensor.id)">
+        <div :class="full ? 'text-h4' : 'text-h6 sensor-clickable'" @click="!full && showSensorDetails(sensor.id)">
           {{ sensor.nom }}
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Afficher les détails du capteur</q-tooltip>
+          <q-tooltip v-if="!full" :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">
+            Afficher les détails du capteur
+          </q-tooltip>
         </div>
 
         <!-- BOUTON GERER CAPTEUR -->
-        <q-btn-dropdown class="absolute-top-right bt-manage-sensor" color="primary" flat icon="settings">
+        <q-btn-dropdown v-if="isAdmin()" class="absolute-top-right bt-manage-sensor" color="primary" flat
+                        icon="settings">
           <q-list>
             <div class="column">
               <!-- BOUTON MODIFIER -->
-              <q-btn v-show="isAdmin()" color="primary" flat icon="edit"
+              <q-btn color="primary" flat icon="edit"
                      @click="displayEditForm = true">
-                <q-tooltip :offset="[0, 0]" class="bg-primary">Modifier le capteur</q-tooltip>
+                <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Modifier
+                  le capteur
+                </q-tooltip>
               </q-btn>
 
               <!-- BOUTON SUPPRIMER -->
-              <q-btn v-show="isAdmin()" color="red" flat icon="delete"
+              <q-btn color="negative" flat icon="delete"
                      @click="displayDeleteDialog = true">
-                <q-tooltip :offset="[0, 0]" class="bg-primary">Supprimer le capteur</q-tooltip>
+                <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Supprimer
+                  le capteur
+                </q-tooltip>
               </q-btn>
             </div>
           </q-list>
@@ -58,17 +64,19 @@
                 <!-- BOUTON ANNULER -->
                 <q-btn v-close-popup color="primary" label="Annuler" outline/>
                 <!-- BOUTON SUPPRIMER -->
-                <q-btn v-close-popup color="red" label="Supprimer" outline @click="deleteSensor(this.sensor.id)"/>
+                <q-btn v-close-popup color="negative" label="Supprimer" outline @click="deleteSensor(this.sensor.id)"/>
               </div>
             </q-card-section>
           </q-card>
         </q-dialog>
 
         <!-- NOM DE LA SALLE -->
-        <div :class="full ? 'text-h6 sensor-clickable' : 'text-subtitle2 sensor-clickable'"
-             @click="this.$router.push('/rooms/' + sensor.salle.nom)">
+        <div :class="[full ? 'text-h6' : 'text-subtitle2', {'sensor-clickable': displayClickLink}]"
+             @click="displayClickLink && this.$router.push('/romos/' + sensor.salle.nom)">
           Salle : {{ sensor.salle.nom }}
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Afficher la salle</q-tooltip>
+          <q-tooltip v-if="displayClickLink" :offset="[0, 0]" class="bg-primary" transition-hide="scale"
+                     transition-show="scale">Afficher la salle
+          </q-tooltip>
         </div>
       </q-card-section>
 
@@ -78,13 +86,18 @@
           v-model="fav"
           checked-icon="favorite"
           class="flex-center"
-          color="red"
+          color="negative"
           indeterminate-icon="help"
           size="lg"
           unchecked-icon="favorite_border"
           @click="toggleFavorite(this.sensor.id)"
         />
       </q-card-actions>
+
+      <q-separator inset/>
+
+      <!-- GRAPHIQUE -->
+      <LineChartComponent v-if="full" :catchLegendEvents="true" :measures="sensor.mesures"/>
 
       <q-separator inset/>
 
@@ -99,7 +112,6 @@
 <script>
 import { ref } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
-import EditSensorForm from 'components/Sensors/EditSensorForm.vue'
 
 export default {
   name: 'SensorComponent',
@@ -145,13 +157,14 @@ export default {
      */
     classes () {
       return {
-        'q-pa-md': this.$q.screen.width > 767,
-        row: this.$q.screen.width > 767,
-        'items-start': this.$q.screen.width > 767,
-        'q-gutter-md': this.$q.screen.width > 767,
-        'q-gutter-sm': this.$q.screen.width < 767,
-        'q-py-sm': this.$q.screen.width < 767
+        // Ecran plus grand que 767px
+        'q-pa-md row items-start q-gutter-md': this.$q.screen.width > 767,
+        // Ecran plus petit que 767px
+        'q-gutter-sm q-py-sm': this.$q.screen.width < 767
       }
+    },
+    displayClickLink () {
+      return this.$route.path !== ('/rooms/' + this.sensor.salle.nom)
     }
   },
   computed: {
@@ -182,8 +195,9 @@ export default {
     }
   },
   components: {
-    EditSensorForm,
-    measureComponent: require('components/Measures/MeasureComponent.vue').default
+    EditSensorForm: require('components/Sensors/EditSensorForm.vue').default,
+    measureComponent: require('components/Measures/MeasureComponent.vue').default,
+    LineChartComponent: require('components/Charts/LineChartComponent.vue').default
   }
 }
 </script>

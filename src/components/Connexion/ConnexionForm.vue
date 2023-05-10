@@ -9,6 +9,7 @@
       label="E-mail"
       lazy-rules
     >
+      <!-- ICONE EMAIL -->
       <template v-slot:append>
         <q-icon name="email"/>
       </template>
@@ -24,8 +25,10 @@
       lazy-rules
     >
       <template v-slot:append>
+        <!-- ICONE POUR AFFICHER LE MDP -->
         <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
                 @click="isPwd = !isPwd"/>
+        <!-- ICONE CADENAS -->
         <q-icon name="lock"/>
       </template>
     </q-input>
@@ -76,7 +79,7 @@ export default defineComponent({
      */
     validateEmail (email) {
       // Source : https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(String(email).toLowerCase())
     }
   }

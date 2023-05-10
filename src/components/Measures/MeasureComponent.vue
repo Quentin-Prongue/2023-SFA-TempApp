@@ -24,6 +24,7 @@
 
 <script>
 import { ref } from 'vue'
+import { date } from 'quasar'
 
 export default {
   name: 'MeasureComponent',
@@ -48,8 +49,6 @@ export default {
       loading: false,
       // Pagination
       pagination: {
-        sortBy: 'date',
-        descending: true,
         rowsPerPage: this.full ? 50 : 5
       },
       // Colonnes de base
@@ -61,6 +60,7 @@ export default {
           label: 'Date',
           align: 'center',
           field: row => row.date,
+          format: date => this.formatDate(date),
           sortable: true
         },
         {
@@ -98,7 +98,7 @@ export default {
           required: true,
           label: 'Date',
           align: 'center',
-          field: row => row.date,
+          field: row => this.formatDate(row.date),
           sortable: true
         },
         {
@@ -128,6 +128,18 @@ export default {
           sortable: true
         }
       ]
+    }
+  },
+  methods: {
+    /**
+     * Permet de formater une date au format (JJ.MM.AAAA - HH:MM)
+     * @param dateString la date en string
+     * @returns {string} la date formatée
+     */
+    formatDate (dateString) {
+      // Source : https://quasar.dev/quasar-utils/date-utils/#format-for-display
+      const dateToFormat = new Date(dateString)
+      return date.formatDate(dateToFormat, 'DD.MM.YYYY - HH:MM')
     }
   },
   mounted () {

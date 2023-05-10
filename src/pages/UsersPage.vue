@@ -9,9 +9,10 @@
     </div>
 
     <div v-if="users.length > 0">
+      <!-- LISTE DES UTILISATEURS -->
       <q-list bordered separator>
         <q-item v-for="user in users" :key="user.id">
-          <!-- Avatar -->
+          <!-- AVATAR -->
           <q-item-section avatar>
             <q-avatar>
               <q-img
@@ -22,7 +23,7 @@
             </q-avatar>
           </q-item-section>
 
-          <!-- Nom, prénom et email de l'utilisateur -->
+          <!-- NOM, PRENOM ET EMAIL DE L'UTILISATEUR -->
           <q-item-section>
             <q-item-label lines="1">
               {{ user.nom + ' ' + user.prenom }}
@@ -42,18 +43,20 @@
       </q-list>
     </div>
 
+    <!-- SI AUCUN UTILISATEUR -->
     <p v-else>Aucun utilisateur</p>
 
     <!-- BOUTON FLOTTANT -->
     <q-page-sticky :offset="[18, 18]" position="bottom-right">
+      <!-- BOUTON AJOUTER -->
       <q-btn color="primary" direction="up" fab icon="add" @click="addOtherUser">
-        <q-tooltip :offset="[0, 0]" class="bg-primary">Ajouter un utilisateur</q-tooltip>
+        <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Ajouter un utilisateur</q-tooltip>
       </q-btn>
     </q-page-sticky>
 
     <!-- DIALOG POUR AJOUT -->
     <q-dialog v-model="displayAddDialog" transition-hide="jump-down" transition-show="jump-up">
-      <q-card style="min-width: 800px">
+      <q-card :class="{'min-width-350': $q.screen.width < 768, 'min-width-800': $q.screen.width >= 768}">
         <q-card-section>
           <div class="text-h6">Ajout d'un utilisateur</div>
         </q-card-section>
@@ -107,5 +110,9 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
+.min-width-350
+  min-width: 350px
 
+.min-width-800
+  min-width: 800px
 </style>

@@ -9,6 +9,7 @@
     </div>
 
     <div>
+      <!-- TABS -->
       <q-tabs
         v-if="sensors.length > 0"
         v-model="sensorsTab"
@@ -18,11 +19,15 @@
         indicator-color="primary"
         narrow-indicator
       >
-        <q-tab v-if="favoritesSensors.length > 0" icon="favorite" label="Capteurs favoris" name="favorites"/>
-        <q-tab icon="sensors" label="Tous les capteurs" name="all"/>
+        <q-tab v-if="favoritesSensors.length > 0" icon="favorite" label="Capteurs favoris" name="favorites">
+          <q-badge color="primary" floating>{{ favoritesSensors.length }}</q-badge>
+        </q-tab>
+        <q-tab icon="sensors" label="Tous les capteurs" name="all">
+          <q-badge color="primary" floating>{{ sensors.length }}</q-badge>
+        </q-tab>
       </q-tabs>
 
-      <q-tab-panels v-model="sensorsTab" animated>
+      <q-tab-panels v-model="sensorsTab" animated transition-next="jump-down" transition-prev="jump-up">
         <!-- CAPTEURS FAVORIS -->
         <q-tab-panel v-if="favoritesSensors.length > 0" name="favorites">
           <!-- COMPOSANT CAPTEUR -->
@@ -49,15 +54,17 @@
       </q-tab-panels>
 
       <!-- BOUTON FLOTTANT -->
-      <q-page-sticky :offset="[18, 18]" position="bottom-right">
+      <q-page-sticky v-if="isAdmin" :offset="[18, 18]" position="bottom-right">
         <q-btn color="primary" direction="up" fab icon="add" @click="addOtherSensor">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Ajouter un capteur</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Ajouter un
+            capteur
+          </q-tooltip>
         </q-btn>
       </q-page-sticky>
 
       <!-- DIALOG POUR AJOUT -->
-      <q-dialog v-model="displayAddDialog" transition-show="jump-up" transition-hide="jump-down">
-        <q-card style="min-width: 800px">
+      <q-dialog v-model="displayAddDialog" transition-hide="jump-down" transition-show="jump-up">
+        <q-card :class="{'min-width-350': $q.screen.width < 768, 'min-width-800': $q.screen.width >= 768}">
           <q-card-section>
             <div class="text-h6">Ajout d'un capteur</div>
           </q-card-section>
@@ -92,6 +99,7 @@ export default defineComponent({
   computed: {
     // Mappage des getters
     ...mapGetters('sensors', ['sensors', 'favoritesSensors']),
+    ...mapGetters('auth', ['isAdmin']),
     // Mappage des données
     ...mapState('sensors', ['sensorsLoaded'])
   },
@@ -110,7 +118,9 @@ export default defineComponent({
     // Récupère les capteurs de l'api
     this.getAllSensorsApi()
 
+    // S'il y a des favoris
     if (this.favoritesSensors.length > 0) {
+      // Le tab actuel est sur les favoris
       this.sensorsTab = 'favorites'
     }
   }
@@ -120,4 +130,10 @@ export default defineComponent({
 <style lang="sass" scoped>
 .div-sensors
   text-align: center
+
+.min-width-350
+  min-width: 350px
+
+.min-width-800
+  min-width: 800px
 </style>

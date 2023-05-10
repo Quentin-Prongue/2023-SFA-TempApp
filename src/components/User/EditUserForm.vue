@@ -1,6 +1,7 @@
 <template>
+  <!-- FORMULAIRE -->
   <q-form @submit.prevent="submitForm">
-    <div class="q-gutter-xl row q-pa-md">
+    <div :class="{'q-gutter-xl row q-pa-md': $q.screen.width >= 768}">
       <!-- NOM -->
       <q-input
         v-model="form.nom"
@@ -10,6 +11,7 @@
         label="Nom *"
         lazy-rules
       >
+        <!-- ICONE PERSONNE -->
         <template v-slot:append>
           <q-icon name="person"/>
         </template>
@@ -23,13 +25,14 @@
         label="Prénom *"
         lazy-rules
       >
+        <!-- ICONE PERSONNE -->
         <template v-slot:append>
           <q-icon name="person"/>
         </template>
       </q-input>
     </div>
 
-    <div class="q-gutter-xl row q-pa-md">
+    <div :class="{'q-gutter-xl row q-pa-md': $q.screen.width >= 768}">
       <!-- EMAIL -->
       <q-input
         v-model="form.email"
@@ -38,6 +41,7 @@
         label="Email *"
         lazy-rules
       >
+        <!-- ICONE EMAIL -->
         <template v-slot:append>
           <q-icon name="email"/>
         </template>
@@ -52,6 +56,7 @@
       label="Photo"
       lazy-rules
     >
+      <!-- PHOTO ACTUELLE DE L'UTILISATEUR -->
       <template v-slot:before>
         <q-avatar>
           <img :src="user.photo" alt="Photo de profil">
@@ -59,18 +64,23 @@
       </template>
 
       <template v-slot:append>
+        <!-- PERMET DE SUPPRIMER LE CONTENU -->
         <q-icon v-if="picture !== ''" class="cursor-pointer" name="close"
                 @click="picture = ''"/>
+        <!-- ICONE IMAGE -->
         <q-icon name="image"/>
       </template>
 
+      <!-- INDICE -->
       <template v-slot:hint>
         URL de la photo
       </template>
     </q-input>
 
     <div class="q-mt-md q-gutter-md" style="text-align: right">
-      <q-btn v-close-popup color="red" label="Annuler" outline/>
+      <!-- BOUTON ANNULER -->
+      <q-btn v-close-popup color="negative" label="Annuler" outline/>
+      <!-- BOUTON MODIFIER -->
       <q-btn color="primary" label="Modifier" outline type="submit"/>
     </div>
   </q-form>
@@ -128,8 +138,7 @@ export default defineComponent({
         nom: this.form.nom,
         prenom: this.form.prenom,
         email: this.form.email,
-        password: this.form.password,
-        photo: this.form.password
+        photo: this.form.photo
       }
       this.editUser(payload)
       // Emet un évènement de fermeture
@@ -137,7 +146,9 @@ export default defineComponent({
     }
   },
   mounted () {
+    // Si l'utilisateur n'est pas null
     if (this.user !== null) {
+      // Charge les données
       this.form.nom = this.user.nom
       this.form.prenom = this.user.prenom
       this.form.email = this.user.email

@@ -1,6 +1,7 @@
 <template>
+  <!-- FORMULAIRE -->
   <q-form @submit.prevent="submitForm">
-    <div class="q-gutter-xl row q-pa-md">
+    <div :class="{'q-gutter-xl row q-pa-md': $q.screen.width >= 768}">
       <!-- NOM -->
       <q-input
         v-model="form.nom"
@@ -9,6 +10,7 @@
         label="Nom *"
         lazy-rules
       >
+        <!-- ICONE PERSONNE -->
         <template v-slot:append>
           <q-icon name="person"/>
         </template>
@@ -22,13 +24,14 @@
         label="Prénom *"
         lazy-rules
       >
+        <!-- ICONE PERSONNE -->
         <template v-slot:append>
           <q-icon name="person"/>
         </template>
       </q-input>
     </div>
 
-    <div class="q-gutter-xl row q-pa-md">
+    <div :class="{'q-gutter-xl row q-pa-md': $q.screen.width >= 768}">
       <!-- EMAIL -->
       <q-input
         v-model="form.email"
@@ -37,6 +40,7 @@
         label="Email *"
         lazy-rules
       >
+        <!-- ICONE EMAIL -->
         <template v-slot:append>
           <q-icon name="email"/>
         </template>
@@ -44,24 +48,28 @@
 
       <!-- MOT DE PASSE -->
       <q-input v-model="form.password" :rules="[ val => val.length >= 4 || 'Minimum 4 caractère']"
-               :type="isPwd ? 'password' : 'text'" class="col" label="Mot de passe"
+               :type="isPwd ? 'password' : 'text'" class="col" label="Mot de passe *"
                lazy-rules
                @keyup.enter="prompt = false">
         <template v-slot:append>
+          <!-- PERMET D'AFFICHER LE MDP -->
           <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
                   @click="isPwd = !isPwd"/>
+          <!-- ICONE CADENAS -->
           <q-icon name="lock"/>
         </template>
       </q-input>
     </div>
 
-    <div class="q-pa-md">
+    <div :class="{'q-pa-md': $q.screen.width >= 768}">
       <!-- ADMINISTRATEUR -->
       <q-checkbox v-model="isAdmin" false-value="0" label="Administrateur" left-label true-value="1"/>
     </div>
 
     <div class="q-mt-md q-gutter-md" style="text-align: right">
-      <q-btn v-close-popup color="red" label="Annuler" outline/>
+      <!-- BOUTON ANNULER -->
+      <q-btn v-close-popup color="negative" label="Annuler" outline/>
+      <!-- BOUTON AJOUTER -->
       <q-btn color="primary" label="Ajouter" outline type="submit"/>
     </div>
   </q-form>

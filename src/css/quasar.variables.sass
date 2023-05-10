@@ -5,14 +5,21 @@
 
 // Check documentation for full list of Quasar variables
 
-// Your own variables (that are declaWred here) and Quasar's own
+// Your own variables (that are declared here) and Quasar's own
 // ones will be available out of the box in your .vue/.scss/.sass files
 
 // It's highly recommended to change the default colors
 // to match your app's branding.
 // Tip: Use the "Theme Builder" on Quasar's documentation website.
 
-$primary   : #00487C
+// Importation de la police
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap')
+
+// Change la police par défaut
+$typography-font-family: 'Montserrat', sans-serif !default
+
+
+$primary   : #185ABD
 $secondary : #4BB3FD
 $accent    : #995D81
 
@@ -20,6 +27,6 @@ $dark      : #1D1D1D
 $dark-page : #121212
 
 $positive  : #21BA45
-$negative  : #C10015
+$negative  : #F44336
 $info      : #31CCEC
 $warning   : #F2C037

@@ -121,7 +121,8 @@ const actions = {
       })
       .catch(function (error) {
         displayErrorMessage(
-          'Erreur lors de la récupération des capteurs !'
+          'Erreur lors de la récupération des capteurs !',
+          Object.values(error.response.data)
         )
         throw error
       })
@@ -201,7 +202,8 @@ const actions = {
       })
       .catch(function (error) {
         displayErrorMessage(
-          'Erreur lors de la récupération des capteurs de la salle !'
+          'Erreur lors de la récupération des capteurs de la salle !',
+          Object.values(error.response.data)
         )
         throw error
       })
@@ -232,10 +234,20 @@ const actions = {
       })
       .catch(function (error) {
         displayErrorMessage(
-          'Erreur lors de la récupération du capteur actuel !'
+          'Erreur lors de la récupération du capteur actuel !',
+          Object.values(error.response.data)
         )
         throw error
       })
+  },
+  /**
+   * Permet d'effacer le capteur actuel
+   * @param commit
+   */
+  clearCurrentSensor ({
+    commit
+  }) {
+    commit('SET_CURRENT_SENSOR', null)
   },
   /**
    * Permet de modifier un capteur
@@ -265,7 +277,8 @@ const actions = {
       })
       .catch(function (error) {
         displayErrorMessage(
-          'Erreur lors de la modification du capteur ' + newPayload.nom + ' !'
+          'Erreur lors de la modification du capteur ' + newPayload.nom + ' !',
+          Object.values(error.response.data)
         )
         throw error
       })
@@ -292,7 +305,8 @@ const actions = {
       })
       .catch(function (error) {
         displayErrorMessage(
-          'Erreur lors de la suppression du capteur !'
+          'Erreur lors de la suppression du capteur !',
+          Object.values(error.response.data)
         )
         throw error
       })
@@ -311,7 +325,6 @@ const actions = {
       headers: { Authorization: 'Bearer ' + rootState.auth.token }
     }
 
-    console.log(payload)
     api.post('capteurs', payload, config)
       .then(function (response) {
         dispatch('getAllSensorsApi')
@@ -320,7 +333,8 @@ const actions = {
       })
       .catch(function (error) {
         displayErrorMessage(
-          'Erreur lors de l\'ajout du capteur ' + payload.nom + ' !'
+          'Erreur lors de l\'ajout du capteur ' + payload.nom + ' !',
+          Object.values(error.response.data)
         )
         throw error
       })

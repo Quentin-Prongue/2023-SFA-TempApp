@@ -1,4 +1,5 @@
 <template>
+  <!-- FORMULAIRE -->
   <q-form @submit.prevent="submitForm">
     <!-- NOM -->
     <q-input
@@ -9,13 +10,16 @@
       label="Nom de la salle *"
       lazy-rules
     >
+      <!-- ICONE SALLE -->
       <template v-slot:append>
         <q-icon name="meeting_room"/>
       </template>
     </q-input>
 
     <div class="q-mt-md q-gutter-md" style="text-align: right">
-      <q-btn v-close-popup color="red" label="Annuler" outline/>
+      <!-- BOUTON ANNULER -->
+      <q-btn v-close-popup color="negative" label="Annuler" outline/>
+      <!-- BOUTON MODIFIER OU AJOUTER -->
       <q-btn :label="action === 'edit' ? 'Modifier' : 'Ajouter'"
              color="primary" outline type="submit"/>
     </div>
@@ -73,6 +77,7 @@ export default defineComponent({
     }
   },
   mounted () {
+    // Si room contient quelque chose et que l'action est edit
     if (this.room !== null && this.action === 'edit') {
       // Charge les données
       this.form.nom = this.room.nom

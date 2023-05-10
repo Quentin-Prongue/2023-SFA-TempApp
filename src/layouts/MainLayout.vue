@@ -2,12 +2,14 @@
   <q-layout view="hHh Lpr lff">
     <q-header elevated>
       <q-toolbar>
-        <q-btn aria-label="Menu" class="bt-menu" dense flat icon="menu" round @click="toggleLeftDrawer"/>
-        <q-toolbar-title class="absolute-center">
+        <!-- BOUTON MENU -->
+        <q-btn aria-label="Menu" class="bt-menu" dense flat icon="menu" round @click="toggleMiniState"/>
+        <!-- NOM SUR LA TOOLBAR -->
+        <q-toolbar-title class="absolute-center toolbar-title" @click="this.$router.push('/')">
           Temp App
         </q-toolbar-title>
         <!-- BOUTON CONNEXION -->
-        <q-btn v-if="!user" class="absolute-right" flat icon-right="account_circle" label="Se connecter" to="/login"/>
+        <q-btn v-if="!user" class="absolute-right" flat icon-right="account_circle" to="/login"/>
 
         <!-- BOUTON GÉRER COMPTE -->
         <div class="q-pa-md">
@@ -20,9 +22,11 @@
                   <div class="text-h6 q-mb-md">Paramètres</div>
                   <div class="cursor-pointer text-primary" @click="displayEditDialog = true">
                     Modifier mon compte
+                    <!-- DIALOG MODIFICATION -->
                     <q-dialog v-model="displayEditDialog" persistent transition-hide="jump-down"
                               transition-show="jump-up">
-                      <q-card style="min-width: 800px">
+                      <q-card
+                        :style="{'min-width-350': $q.screen.width < 768, 'min-width-800': $q.screen.width >= 768}">
                         <q-card-section>
                           <div class="text-h5">Modification de compte</div>
                         </q-card-section>
@@ -60,23 +64,19 @@
     </q-header>
 
     <q-drawer
-      v-model="leftDrawerOpen"
       :breakpoint="500"
-
       :mini="miniState"
       :width="200"
       bordered
       class="bg-primary"
-
-      mini-to-overlay
       show-if-above
-      @mouseout="miniState = true"
-      @mouseover="miniState = false"
     >
+      <!-- LIENS DE L'APPLICATION -->
       <q-list>
         <q-item v-for="link in (isAdmin ? adminLinks : userLinks)" :key="link.id" :to="link.path"
                 class="text-grey-4" clickable exact>
           <q-item-section avatar>
+            <!-- ICONES -->
             <q-icon :name="link.icon"/>
           </q-item-section>
 
@@ -91,6 +91,7 @@
       <router-view/>
     </q-page-container>
 
+    <!-- LIENS DANS LE FOOTER (Mobile) -->
     <q-footer bordered elevated>
       <q-tabs>
         <q-route-tab v-for="link in (isAdmin ? adminLinks : userLinks)" :key="link.id" :label="link.text"
@@ -154,15 +155,14 @@ export default defineComponent({
     }
   },
   setup () {
-    const leftDrawerOpen = ref(false)
+    const miniState = ref(true)
     return {
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
+      miniState,
+      toggleMiniState () {
+        miniState.value = !miniState.value
       },
       displayEditDialog: ref(false),
-      drawer: ref(false),
-      miniState: ref(true)
+      drawer: ref(false)
     }
   },
   computed: {
@@ -187,7 +187,7 @@ export default defineComponent({
     logout () {
       Dialog.create({
         title: 'Déconnexion',
-        message: 'Voulez-vous vraiment vous déconnecter',
+        message: 'Voulez-vous vraiment vous déconnecter ?',
         cancel: {
           label: 'Annuler',
           focus: true,
@@ -232,4 +232,13 @@ export default defineComponent({
 .bt-logout
   position: absolute
   bottom: 20px
+
+.toolbar-title
+  cursor: pointer
+
+.min-width-350
+  min-width: 350px
+
+.min-width-800
+  min-width: 800px
 </style>

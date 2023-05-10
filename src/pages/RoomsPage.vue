@@ -38,7 +38,9 @@
           class="text-grey"
           dense
           indicator-color="primary"
+          mobile-arrows
           narrow-indicator
+          outside-arrows
         >
           <q-tab v-for="room in rooms" :key="room.id" :label="room.nom" :name="room.nom"
                  @click="getSensorsOfRoomByID(room.id); roomTab = room.nom"/>
@@ -47,19 +49,25 @@
     </div>
 
     <!-- BOUTON FLOTTANT -->
-    <q-page-sticky :offset="[18, 100]" position="bottom-right">
+    <q-page-sticky v-if="isAdmin" :offset="[18, 100]" position="bottom-right">
       <q-fab color="primary" direction="up" icon="settings">
         <!-- BOUTON MODIFIER -->
         <q-fab-action color="primary" icon="edit" @click="editCurrentRoom">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Modifier cette salle</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Modifier cette
+            salle
+          </q-tooltip>
+        </q-fab-action>
+        <!-- BOUTON SUPPRIMER -->
+        <q-fab-action color="negative" icon="delete" @click="displayDeleteDialog = true">
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Supprimer cette
+            salle
+          </q-tooltip>
         </q-fab-action>
         <!-- BOUTON AJOUTER -->
         <q-fab-action color="primary" icon="add" @click="addOtherRoom">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Ajouter une salle</q-tooltip>
-        </q-fab-action>
-        <!-- BOUTON SUPPRIMER -->
-        <q-fab-action color="red" icon="delete" @click="displayDeleteDialog = true">
-          <q-tooltip :offset="[0, 0]" class="bg-primary">Supprimer une salle</q-tooltip>
+          <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Ajouter une
+            salle
+          </q-tooltip>
         </q-fab-action>
       </q-fab>
     </q-page-sticky>
@@ -108,7 +116,7 @@
             <!-- BOUTON ANNULER -->
             <q-btn v-close-popup color="primary" label="Annuler" outline/>
             <!-- BOUTON SUPPRIMER -->
-            <q-btn v-close-popup color="red" label="Supprimer" outline @click="deleteCurrentRoom"/>
+            <q-btn v-close-popup color="negative" label="Supprimer" outline @click="deleteCurrentRoom"/>
           </div>
         </q-card-section>
       </q-card>
@@ -152,6 +160,7 @@ export default defineComponent({
     // Mappage des getters
     ...mapGetters('rooms', ['rooms']),
     ...mapGetters('sensors', ['sensorsOfRoom', 'sensors']),
+    ...mapGetters('auth', ['isAdmin']),
     // Mappage des données
     ...mapState('rooms', ['roomsLoaded']),
     ...mapState('sensors', ['sensorsOfRoomLoaded'])
