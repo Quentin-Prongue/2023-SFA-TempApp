@@ -192,7 +192,7 @@ const actions = {
     // Teste s'il y a des capteurs dans la salle et si l'id de la salle est différent que l'id actuel
     if (state.sensorsOfRoom.length === 0 || (state.sensorsOfRoom.length !== 0 && state.sensorsOfRoom.id !== roomID)) {
       // Affiche un loading
-      displayLoadingMessage('')
+      displayLoadingMessage('Chargement en cours')
     }
 
     api.get(`salles/${roomID}/capteurs`, config)
@@ -225,7 +225,7 @@ const actions = {
     // Teste s'il y a un capteur actuel et que son id est pareil que l'id du capteur
     if ((state.currentSensor && state.currentSensor.id.toString() !== sensorID) || !state.currentSensor) {
       // Affiche un loading
-      displayLoadingMessage('')
+      displayLoadingMessage('Chargement en cours')
     }
 
     api.get(`capteurs/${sensorID}/all`, config)

@@ -7,7 +7,7 @@ export default ({ router }) => {
   router.beforeEach((to, from, next) => {
     // Récupère l'utilisateur depuis le localStorage
     const user = LocalStorage.getItem('user')
-    // Si PAS connecté et ne vas par vers /login, on force la redirection
+    // Vérifie si l'utilisateur est connecté
     if (!user && to.path !== '/login') {
       // Affiche un message d'erreur uniquement si utilisateur tente d'accéder
       // à une autre page après avoir été redirigé vers la connexion une 1re fois.
@@ -16,7 +16,17 @@ export default ({ router }) => {
       }
       next('/login') // Redirige vers /login
     } else {
-      next() // Continue la navigation normalement
+      // Vérifie si l'utilisateur est administrateur
+      const isAdmin = user && user.is_admin
+
+      // Vérifie si l'utilisateur tente d'accéder à la page "/users"
+      if (to.path === '/users' && !isAdmin) {
+        // Affiche un message d'erreur
+        displayErrorMessage('Page réservée aux administrateurs, accès non autorisé !')
+        next('/') // Redirige vers une autre page, par exemple la page d'accueil
+      } else {
+        next() // Continue la navigation normalement
+      }
     }
   })
 }
