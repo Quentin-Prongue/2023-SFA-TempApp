@@ -1,6 +1,7 @@
 <template>
   <div>
     <div :class="{'duration-selector': $q.screen.width > 767}" class="flex flex-center">
+      <!-- BOUTONS -->
       <div v-for="option in durationOptions" :key="option.value" class="q-ma-xs">
         <q-btn :class="{
         'duration-button': true,
@@ -50,6 +51,7 @@ export default {
       measure.temperature
     ]))
 
+    // Toutes les durées
     const durationOptions = [
       {
         value: '24h',
@@ -84,8 +86,11 @@ export default {
     ]
 
     return {
+      // Options de durée
       durationOptions,
+      // Durée sélectionnée
       selectedDuration: 'all',
+      // Options du graphique
       chartOptions: {
         chart: {
           zoomType: 'x',
