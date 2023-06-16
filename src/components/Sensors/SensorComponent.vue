@@ -72,7 +72,7 @@
 
         <!-- NOM DE LA SALLE -->
         <div :class="[full ? 'text-h6' : 'text-subtitle2', {'sensor-clickable': displayClickLink}]"
-             @click="displayClickLink && this.$router.push('/romos/' + sensor.salle.nom)">
+             @click="displayClickLink && this.$router.push('/rooms/' + sensor.salle.nom)">
           Salle : {{ sensor.salle.nom }}
           <q-tooltip v-if="displayClickLink" :offset="[0, 0]" class="bg-primary" transition-hide="scale"
                      transition-show="scale">Afficher la salle
