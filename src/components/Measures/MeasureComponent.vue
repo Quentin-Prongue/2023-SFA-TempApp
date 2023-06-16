@@ -59,8 +59,7 @@ export default {
           required: true,
           label: 'Date',
           align: 'center',
-          field: row => row.date,
-          format: date => this.formatDate(date),
+          field: row => this.formatDate(row.date),
           sortable: true
         },
         {
@@ -132,14 +131,14 @@ export default {
   },
   methods: {
     /**
-     * Permet de formater une date au format (JJ.MM.AAAA - HH:MM)
+     * Permet de formater une date au format (JJ.MM.AAAA - HH:mm)
      * @param dateString la date en string
      * @returns {string} la date formatée
      */
     formatDate (dateString) {
       // Source : https://quasar.dev/quasar-utils/date-utils/#format-for-display
       const dateToFormat = new Date(dateString)
-      return date.formatDate(dateToFormat, 'DD.MM.YYYY - HH:MM')
+      return date.formatDate(dateToFormat, 'DD.MM.YYYY - HH:mm')
     }
   },
   mounted () {
