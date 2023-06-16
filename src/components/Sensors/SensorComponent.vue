@@ -3,11 +3,8 @@
     <q-card :class="full ? 'sensor-card-full' : 'sensor-card-base'" bordered>
       <q-card-section vertical>
         <!-- NOM DU CAPTEUR -->
-        <div :class="full ? 'text-h4' : 'text-h6 sensor-clickable'" @click="!full && showSensorDetails(sensor.id)">
+        <div :class="full ? 'text-h4' : 'text-h6'">
           {{ sensor.nom }}
-          <q-tooltip v-if="!full" :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">
-            Afficher les détails du capteur
-          </q-tooltip>
         </div>
 
         <!-- BOUTON GERER CAPTEUR -->
@@ -71,21 +68,16 @@
         </q-dialog>
 
         <!-- NOM DE LA SALLE -->
-        <div :class="[full ? 'text-h6' : 'text-subtitle2', {'sensor-clickable': displayClickLink}]"
-             @click="displayClickLink && this.$router.push('/rooms/' + sensor.salle.nom)">
+        <div :class="[full ? 'text-h6' : 'text-subtitle2']">
           Salle : {{ sensor.salle.nom }}
-          <q-tooltip v-if="displayClickLink" :offset="[0, 0]" class="bg-primary" transition-hide="scale"
-                     transition-show="scale">Afficher la salle
-          </q-tooltip>
         </div>
       </q-card-section>
 
       <!-- AJOUTER AUX FAVORIS -->
-      <q-card-actions class="justify-around q-px-md" vertical>
+      <q-card-actions class="absolute-top-right q-px-md" vertical>
         <q-checkbox
           v-model="fav"
           checked-icon="favorite"
-          class="flex-center"
           color="negative"
           indeterminate-icon="help"
           size="lg"
@@ -96,14 +88,45 @@
 
       <q-separator inset/>
 
-      <!-- GRAPHIQUE -->
-      <LineChartComponent v-if="full" :catchLegendEvents="true" :measures="sensor.mesures"/>
+      <!-- Température et humidité actuelle -->
+      <div class="flex flex-center div-temp-humid">
+        <div class="q-px-md">
+          <q-icon color="primary" name="device_thermostat"/>
+          {{ sensor.mesures[0].temperature + '°' }}
+        </div>
+
+        <div class="q-px-md">
+          <q-icon color="primary" name="water_drop"/>
+          {{ sensor.mesures[0].humidite + '%' }}
+        </div>
+      </div>
 
       <q-separator inset/>
 
-      <!-- COMPOSANT DES MESURES -->
-      <measure-component :full="full" :measures="sensor.mesures">
-      </measure-component>
+      <!-- GRAPHIQUE -->
+      <div v-if="!full" class="q-pb-md">
+        <LineChartComponent :catchLegendEvents="true" :full="false" :measures="sensor.mesures.slice(0, 5)"/>
+      </div>
+
+      <div v-else class="q-pb-md">
+        <LineChartComponent :catchLegendEvents="true" :full="full" :measures="sensor.mesures"/>
+      </div>
+
+      <q-separator inset/>
+
+      <!-- Boutons d'actions -->
+      <q-card-actions v-if="!full" align="center">
+        <!-- Bouton des détails -->
+        <q-btn color="primary" flat @click="!full && showSensorDetails(sensor.id)">
+          <q-icon left name="info"/>
+          <div>Détails</div>
+        </q-btn>
+        <!-- Bouton de la salle -->
+        <q-btn color="primary" flat @click="displayClickLink && this.$router.push('/rooms/' + sensor.salle.nom)">
+          <q-icon left name="meeting_room"/>
+          <div>Salle</div>
+        </q-btn>
+      </q-card-actions>
 
     </q-card>
   </div>
@@ -196,7 +219,6 @@ export default {
   },
   components: {
     EditSensorForm: require('components/Sensors/EditSensorForm.vue').default,
-    measureComponent: require('components/Measures/MeasureComponent.vue').default,
     LineChartComponent: require('components/Charts/LineChartComponent.vue').default
   }
 }
@@ -210,7 +232,7 @@ export default {
     max-width: 450px
     border-color: $primary
     border-radius: 15px
-    text-align: center
+    text-align: left
     box-shadow: 9px 7px 10px -6px rgba(0, 0, 0, 0.25)
 
   .sensor-card-full
@@ -218,6 +240,10 @@ export default {
     border-color: $primary
     border-radius: 15px
     text-align: center
+
+  .div-temp-humid
+    padding: 30px
+    font-size: 30px
 
 /* Applique les règles de ce bloc uniquement aux écrans <= 768px */
 @media screen and (max-width: 767px)
@@ -237,4 +263,8 @@ export default {
 .bt-manage-sensor
   margin-top: 15px
   margin-right: 10px
+
+.div-temp-humid
+  padding: 30px
+  font-size: 30px
 </style>

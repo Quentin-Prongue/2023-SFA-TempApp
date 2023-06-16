@@ -1,20 +1,22 @@
 <template>
   <div>
-    <div :class="{'duration-selector': $q.screen.width > 767}" class="flex flex-center">
+    <div :class="{'duration-selector': $q.screen.width > 767}">
       <!-- BOUTONS -->
-      <div v-for="option in durationOptions" :key="option.value" class="q-ma-xs">
-        <q-btn :class="{
+      <div v-if="full" class="flex flex-center">
+        <div v-for="option in durationOptions" :key="option.value" class="q-ma-xs">
+          <q-btn :class="{
         'duration-button': true,
         'active': selectedDuration === option.value,
         'disabled': option.disabled
       }"
-               :disable="option.disabled"
-               dense
-               flat
-               @click="changeDuration(option.value)"
-        >
-          {{ option.label }}
-        </q-btn>
+                 :disable="option.disabled"
+                 dense
+                 flat
+                 @click="changeDuration(option.value)"
+          >
+            {{ option.label }}
+          </q-btn>
+        </div>
       </div>
     </div>
     <highcharts ref="lineCharts" :options="chartOptions"></highcharts>
@@ -39,6 +41,10 @@ export default {
     },
     measures: {
       type: Array,
+      required: true
+    },
+    full: {
+      Type: Boolean,
       required: true
     }
   },
@@ -89,7 +95,7 @@ export default {
       // Options de durée
       durationOptions,
       // Durée sélectionnée
-      selectedDuration: 'all',
+      selectedDuration: '24h',
       // Options du graphique
       chartOptions: {
         chart: {
@@ -98,14 +104,11 @@ export default {
           height: 250
         },
         title: {
-          text: 'Graphique températures'
+          text: ''
         },
         xAxis: {
           type: 'datetime',
           labels: {
-            formatter: function () {
-              return Highcharts.dateFormat('%e %b %Y', this.value)
-            }
           }
         },
         yAxis: {
@@ -124,7 +127,7 @@ export default {
         plotOptions: {
           line: {
             marker: {
-              enabled: false // Désactive les marqueurs de points
+              enabled: true // Active les marqueurs de points
             }
           }
         },
