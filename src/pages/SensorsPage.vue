@@ -87,6 +87,8 @@
 import { defineComponent, ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import AddSensorForm from 'components/Sensors/AddSensorForm.vue'
+import { api } from 'boot/axios'
+import router from 'src/router'
 
 export default defineComponent({
   name: 'SensorsPage',
@@ -106,6 +108,7 @@ export default defineComponent({
   methods: {
     // Mappage des actions
     ...mapActions('sensors', ['getAllSensorsApi']),
+    ...mapActions('auth', ['disconnectUser']),
     addOtherSensor () {
       this.displayAddDialog = true
     }
@@ -123,14 +126,30 @@ export default defineComponent({
       // Le tab actuel est sur les favoris
       this.sensorsTab = 'favorites'
     }
+  },
+  created () {
+    // Intercepteur pour les erreurs
+    api.interceptors.response.use(
+      response => response,
+      error => {
+        // S'il y a une erreur 401 (Pas autorisé), cela veut dire que le token n'est plus valide
+        if (error.response && error.response.status === 401) {
+          // Déconnecte l'utilisateur
+          this.disconnectUser()
+
+          // Redirection vers la page de connexion
+          router.push('/login')
+        }
+
+        // Retourne l'erreur
+        return Promise.reject(error)
+      }
+    )
   }
 })
 </script>
 
 <style lang="sass" scoped>
-.div-sensors
-  text-align: center
-
 .min-width-350
   min-width: 350px
 
