@@ -8,7 +8,7 @@ import axios from 'axios'
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: 'http://tempapi.divtec.me/api',
+  baseURL: 'https://tempapi.divtec.me/api',
   timeout: 3000,
   headers: {
     Accept: 'application/json',
