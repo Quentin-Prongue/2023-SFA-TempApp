@@ -100,20 +100,22 @@ export default {
       chartOptions: {
         chart: {
           zoomType: 'x',
-          type: 'line',
+          type: 'spline',
           height: 250
         },
         title: {
           text: ''
         },
         xAxis: {
-          type: 'datetime',
-          labels: {
-          }
+          type: 'datetime'
         },
         yAxis: {
+          tickInterval: 1, // 1 degré par ligne
           title: {
             text: 'Température (°C)'
+          },
+          labels: {
+            format: '{value}°'
           }
         },
         tooltip: {
@@ -124,13 +126,6 @@ export default {
           name: 'Température',
           data
         }],
-        plotOptions: {
-          line: {
-            marker: {
-              enabled: true // Active les marqueurs de points
-            }
-          }
-        },
         credits: {
           enabled: false // Masque la mention de crédit dans le coin inférieur droit du graphique
         }
