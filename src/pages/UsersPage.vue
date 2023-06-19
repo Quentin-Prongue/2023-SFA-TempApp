@@ -50,7 +50,9 @@
     <q-page-sticky :offset="[18, 18]" position="bottom-right">
       <!-- BOUTON AJOUTER -->
       <q-btn color="primary" direction="up" fab icon="add" @click="addOtherUser">
-        <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Ajouter un utilisateur</q-tooltip>
+        <q-tooltip :offset="[0, 0]" class="bg-primary" transition-show="scale" transition-hide="scale">Ajouter un
+          utilisateur
+        </q-tooltip>
       </q-btn>
     </q-page-sticky>
 
