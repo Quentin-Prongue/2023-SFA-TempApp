@@ -1,35 +1,50 @@
 <template>
   <div :class="classes()">
     <q-card :class="full ? 'sensor-card-full' : 'sensor-card-base'" bordered>
-      <q-card-section vertical>
+      <q-card-section class="card-section-top" vertical>
         <!-- NOM DU CAPTEUR -->
         <div :class="full ? 'text-h4' : 'text-h6'">
           {{ sensor.nom }}
         </div>
 
-        <!-- BOUTON GERER CAPTEUR -->
-        <q-btn-dropdown v-if="isAdmin()" class="absolute-top-right bt-manage-sensor" color="primary" flat
-                        icon="settings">
-          <q-list>
-            <div class="column">
-              <!-- BOUTON MODIFIER -->
-              <q-btn color="primary" flat icon="edit"
-                     @click="displayEditForm = true">
-                <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Modifier
-                  le capteur
-                </q-tooltip>
-              </q-btn>
+        <!-- Boutons d'actions en haut à droite -->
+        <q-card-actions class="absolute-top-right" vertical>
+          <!-- AJOUTER AUX FAVORIS -->
+          <q-checkbox
+            v-model="fav"
+            checked-icon="favorite"
+            color="negative"
+            indeterminate-icon="help"
+            size="lg"
+            unchecked-icon="favorite_border"
+            @click="toggleFavorite(this.sensor.id)"
+          />
+          <!-- BOUTON GERER CAPTEUR (ADMIN)-->
+          <q-btn-dropdown v-if="isAdmin()" color="primary" flat
+                          icon="settings">
+            <q-list>
+              <div class="column">
+                <!-- BOUTON MODIFIER -->
+                <q-btn color="primary" flat icon="edit"
+                       @click="displayEditForm = true">
+                  <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">
+                    Modifier
+                    le capteur
+                  </q-tooltip>
+                </q-btn>
 
-              <!-- BOUTON SUPPRIMER -->
-              <q-btn color="negative" flat icon="delete"
-                     @click="displayDeleteDialog = true">
-                <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">Supprimer
-                  le capteur
-                </q-tooltip>
-              </q-btn>
-            </div>
-          </q-list>
-        </q-btn-dropdown>
+                <!-- BOUTON SUPPRIMER -->
+                <q-btn color="negative" flat icon="delete"
+                       @click="displayDeleteDialog = true">
+                  <q-tooltip :offset="[0, 0]" class="bg-primary" transition-hide="scale" transition-show="scale">
+                    Supprimer
+                    le capteur
+                  </q-tooltip>
+                </q-btn>
+              </div>
+            </q-list>
+          </q-btn-dropdown>
+        </q-card-actions>
 
         <!-- DIALOG POUR MODIFICATION -->
         <q-dialog v-model="displayEditForm" transition-hide="jump-down" transition-show="jump-up">
@@ -73,19 +88,6 @@
         </div>
       </q-card-section>
 
-      <!-- AJOUTER AUX FAVORIS -->
-      <q-card-actions class="absolute-top-right q-px-md" vertical>
-        <q-checkbox
-          v-model="fav"
-          checked-icon="favorite"
-          color="negative"
-          indeterminate-icon="help"
-          size="lg"
-          unchecked-icon="favorite_border"
-          @click="toggleFavorite(this.sensor.id)"
-        />
-      </q-card-actions>
-
       <q-separator inset/>
 
       <!-- Température et humidité actuelle -->
@@ -114,15 +116,22 @@
 
       <q-separator inset/>
 
+      <!-- COMPOSANT DES MESURES -->
+      <measure-component v-if="full" :full="full" :measures="sensor.mesures">
+      </measure-component>
+
+      <q-separator inset/>
+
       <!-- Boutons d'actions -->
-      <q-card-actions v-if="!full" align="center">
+      <q-card-actions align="center">
         <!-- Bouton des détails -->
-        <q-btn color="primary" flat @click="!full && showSensorDetails(sensor.id)">
+        <q-btn v-if="!full" color="primary" flat @click="!full && showSensorDetails(sensor.id)">
           <q-icon left name="info"/>
           <div>Détails</div>
         </q-btn>
         <!-- Bouton de la salle -->
-        <q-btn color="primary" flat @click="displayClickLink && this.$router.push('/rooms/' + sensor.salle.nom)">
+        <q-btn v-if="this.$route.path !== '/rooms/' + sensor.salle.nom" color="primary" flat
+               @click="displayClickLink && this.$router.push('/rooms/' + sensor.salle.nom)">
           <q-icon left name="meeting_room"/>
           <div>Salle</div>
         </q-btn>
@@ -135,6 +144,7 @@
 <script>
 import { ref } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
+import MeasureComponent from 'components/Measures/MeasureComponent.vue'
 
 export default {
   name: 'SensorComponent',
@@ -218,6 +228,7 @@ export default {
     }
   },
   components: {
+    MeasureComponent,
     EditSensorForm: require('components/Sensors/EditSensorForm.vue').default,
     LineChartComponent: require('components/Charts/LineChartComponent.vue').default
   }
@@ -252,7 +263,7 @@ export default {
     max-width: max-content
     border-color: $primary
     border-radius: 15px
-    text-align: center
+    text-align: left
     box-shadow: 9px 7px 10px -6px rgba(0, 0, 0, 0.25)
 
 .sensor-clickable
@@ -260,9 +271,8 @@ export default {
     cursor: pointer
     color: $primary
 
-.bt-manage-sensor
-  margin-top: 15px
-  margin-right: 10px
+.card-section-top
+  margin-bottom: 20px
 
 .div-temp-humid
   padding: 30px
