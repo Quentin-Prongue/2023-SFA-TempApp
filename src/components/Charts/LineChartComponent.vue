@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="{'duration-selector': $q.screen.width > 767}">
-      <!-- BOUTONS -->
+      <!-- BOUTONS POUR LA DURÉE -->
       <div v-if="full" class="flex flex-center">
         <div v-for="option in durationOptions" :key="option.value" class="q-ma-xs">
           <q-btn :class="{
@@ -19,6 +19,7 @@
         </div>
       </div>
     </div>
+    <!-- GRAPHIQUE -->
     <highcharts ref="lineCharts" :options="chartOptions"></highcharts>
   </div>
 </template>
@@ -52,6 +53,7 @@ export default {
     highcharts: Chart
   },
   data () {
+    // Construit les data avec les dates des mesures et les températures
     const data = this.measures.map(measure => ([
       this.formatDateToUTC(measure.date),
       measure.temperature
@@ -103,29 +105,40 @@ export default {
           type: 'spline',
           height: 250
         },
+        // Titre du graphique
         title: {
           text: ''
         },
+        // Axe x
         xAxis: {
           type: 'datetime'
         },
+        // Axe y
         yAxis: {
           tickInterval: 1, // 1 degré par ligne
+          // Titre de l'axe y
           title: {
             text: 'Température (°C)'
           },
+          // Labels de l'axe y
           labels: {
             format: '{value}°'
           }
         },
+        // Info-bulle
         tooltip: {
+          // Formate la date
           xDateFormat: '%e %b %Y %H:%M',
           valueSuffix: '°C'
         },
+        // Séries de données
         series: [{
+          // Nom de la série
           name: 'Température',
+          // Données de la série
           data
         }],
+        // Crédits
         credits: {
           enabled: false // Masque la mention de crédit dans le coin inférieur droit du graphique
         }

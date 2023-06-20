@@ -7,7 +7,7 @@
           {{ sensor.nom }}
         </div>
 
-        <!-- Boutons d'actions en haut à droite -->
+        <!-- BOUTONS D'ACTIONS EN HAUT À DROITE -->
         <q-card-actions class="absolute-top-right" vertical>
           <!-- AJOUTER AUX FAVORIS -->
           <q-checkbox
@@ -19,7 +19,7 @@
             unchecked-icon="favorite_border"
             @click="toggleFavorite(this.sensor.id)"
           />
-          <!-- BOUTON GERER CAPTEUR (ADMIN)-->
+          <!-- BOUTON GÉRER CAPTEUR (ADMIN)-->
           <q-btn-dropdown v-if="isAdmin()" color="primary" flat
                           icon="settings">
             <q-list>
@@ -90,14 +90,14 @@
 
       <q-separator inset/>
 
-      <!-- Température et humidité actuelle -->
+      <!-- TEMPÉRATURE ET HUMIDITÉ ACTUELLE -->
       <div class="flex flex-center div-temp-humid">
         <div class="q-px-md">
           <q-icon color="primary" name="device_thermostat"/>
           {{ sensor.mesures[0].temperature + '°' }}
         </div>
 
-        <div class="q-px-md">
+        <div align="center" class="q-px-md">
           <q-icon color="primary" name="water_drop"/>
           {{ sensor.mesures[0].humidite + '%' }}
         </div>
@@ -122,14 +122,14 @@
 
       <q-separator inset/>
 
-      <!-- Boutons d'actions -->
+      <!-- BOUTONS D'ACTIONS EN HAUT À DROITE -->
       <q-card-actions align="center">
-        <!-- Bouton des détails -->
+        <!-- BOUTON DES DÉTAILS DU CAPTEUR -->
         <q-btn v-if="!full" color="primary" flat @click="!full && showSensorDetails(sensor.id)">
           <q-icon left name="info"/>
           <div>Détails</div>
         </q-btn>
-        <!-- Bouton de la salle -->
+        <!-- BOUTON DE LA SALLE DU CAPTEUR -->
         <q-btn v-if="this.$route.path !== '/rooms/' + sensor.salle.nom" color="primary" flat
                @click="displayClickLink && this.$router.push('/rooms/' + sensor.salle.nom)">
           <q-icon left name="meeting_room"/>
@@ -196,6 +196,10 @@ export default {
         'q-gutter-sm q-py-sm': this.$q.screen.width < 767
       }
     },
+    /**
+     * Teste si le lien doit être affiché
+     * @returns {boolean} true ou false en fonction du test
+     */
     displayClickLink () {
       return this.$route.path !== ('/rooms/' + this.sensor.salle.nom)
     }
